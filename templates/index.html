@@ -1,38 +1,45 @@
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#080808">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07080d">
   <title>Two Chance</title>
 
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="/static/app.js?v=20261115fix3" defer></script>
+  <script src="/static/app.js?v=20261115premium1" defer></script>
 
   <style>
     :root {
       color-scheme: dark;
-      --bg: #080808;
-      --card: #222225;
-      --text: #f7f7f8;
-      --muted: #a2a2aa;
-      --blue: #0877eb;
+      --background: #07080d;
+      --foreground: #f8f9ff;
+      --muted: #989ba9;
+      --blue: #337cff;
+      --purple: #7764f7;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html {
-      background: var(--bg);
+      background: var(--background);
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont,
-        "SF Pro Display", "Segoe UI", Arial, sans-serif;
+      overflow-x: hidden;
+      background: var(--background);
+      color: var(--foreground);
+      font-family:
+        -apple-system, BlinkMacSystemFont,
+        "SF Pro Display", "Segoe UI",
+        Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -41,7 +48,6 @@
     }
 
     button {
-      font: inherit;
       cursor: pointer;
     }
 
@@ -49,7 +55,7 @@
       display: none !important;
     }
 
-    /* ЗАГРУЗКА */
+    /* SPLASH */
 
     .splash {
       position: fixed;
@@ -57,9 +63,11 @@
       z-index: 1000;
       display: grid;
       place-items: center;
-      overflow: hidden;
       background: #000;
-      transition: opacity .5s ease, visibility .5s ease;
+      overflow: hidden;
+      transition:
+        opacity .5s ease,
+        visibility .5s ease;
     }
 
     .splash.out {
@@ -68,24 +76,23 @@
     }
 
     .splash-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 100%;
       min-height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: logoIn .7s ease both;
+      animation: logoAppear .9s ease both;
     }
 
     .crystal-splash-logo {
       display: block;
-      width: min(100vw, 480px);
+      width: min(100vw, 470px);
+      max-height: 85dvh;
       height: auto;
-      max-height: calc(100dvh - 110px);
       object-fit: contain;
-      object-position: center;
     }
 
-    @keyframes logoIn {
+    @keyframes logoAppear {
       from {
         opacity: 0;
         transform: scale(.92);
@@ -96,9 +103,11 @@
       }
     }
 
-    /* ОСНОВА */
+    /* BACKGROUND */
 
     .app {
+      position: relative;
+      isolation: isolate;
       max-width: 740px;
       min-height: 100vh;
       margin: 0 auto;
@@ -107,50 +116,73 @@
       flex-direction: column;
     }
 
+    .app::before {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      top: 130px;
+      left: -120px;
+      width: 450px;
+      height: 500px;
+      border-radius: 50%;
+      background: rgba(37, 65, 158, .13);
+      filter: blur(110px);
+      pointer-events: none;
+    }
+
+    /* TOP BAR */
+
     .topbar {
       display: flex;
       align-items: center;
-      gap: 11px;
-      min-height: 76px;
-      border-bottom: 1px solid #242428;
+      justify-content: space-between;
+      min-height: 86px;
+      border-bottom:
+        1px solid rgba(255,255,255,.075);
     }
 
     .brand-symbol {
-      display: grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      flex: none;
-      border: 1px solid #505057;
-      border-radius: 12px;
-      color: #e8e8ed;
-      font-size: 23px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #29292e, #111114);
+      display: block;
+      color: #fff;
+      font-size: 51px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -.09em;
+      text-shadow:
+        0 0 25px rgba(137,161,255,.15);
     }
 
     .brand {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: .19em;
-      color: #fff;
+      display: none;
     }
 
     .top-pill {
-      margin-left: auto;
-      border: 1px solid #35353b;
-      border-radius: 50px;
-      padding: 9px 11px;
-      color: #a5a5ae;
-      font-size: 9px;
-      font-weight: 650;
-      letter-spacing: .13em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 41px;
+      padding: 0 17px;
+      border:
+        1px solid rgba(255,255,255,.19);
+      border-radius: 999px;
+      background: rgba(255,255,255,.055);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 8px 25px rgba(0,0,0,.15);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      color: #d9dce9;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .16em;
       white-space: nowrap;
     }
 
+    /* PAGES */
+
     main {
       flex: 1;
-      padding-top: 42px;
+      padding-top: 53px;
     }
 
     .page {
@@ -162,13 +194,13 @@
     }
 
     .page.enter {
-      animation: pageIn .3s ease both;
+      animation: pageEnter .35s ease both;
     }
 
-    @keyframes pageIn {
+    @keyframes pageEnter {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(13px);
       }
       to {
         opacity: 1;
@@ -176,179 +208,257 @@
       }
     }
 
-    /* ЗАГОЛОВОК */
+    /* INTRO */
 
     .intro {
-      margin-bottom: 34px;
+      margin-bottom: 49px;
     }
 
     .intro h1 {
       margin: 0;
-      font-size: clamp(31px, 7.8vw, 46px);
-      font-weight: 800;
-      line-height: 1.14;
-      letter-spacing: -.045em;
+      max-width: 640px;
+      font-size: clamp(34px, 8.2vw, 53px);
+      font-weight: 850;
+      letter-spacing: -.052em;
+      line-height: 1.12;
+      color: #fff;
     }
 
     .intro h1 span {
       display: block;
-      color: #d4d4dc;
+      color: #f1f2fa;
     }
 
     .intro p {
-      display: block;
-      margin: 18px 0 0;
-      color: #9b9ba5;
+      margin: 22px 0 0;
+      color: #a3a5b4;
       font-size: 14px;
-      line-height: 1.6;
+      font-weight: 450;
+      line-height: 1.7;
     }
 
-    .intro .eyebrow {
-      display: none;
-    }
-
-    /* КАРТОЧКИ */
+    /* CARD GRID */
 
     .cards {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 18px;
+      gap: 24px;
     }
 
     .feature-card {
       position: relative;
+      isolation: isolate;
       display: flex;
       flex-direction: column;
-      min-height: 340px;
-      padding: 23px 23px 22px;
-      overflow: hidden;
-      border: 1px solid #343439;
-      border-radius: 28px;
-      background: linear-gradient(
-        155deg,
-        #29292d 0%,
-        #212124 62%,
-        #1e1e21 100%
-      );
+      min-height: 375px;
+      padding: 26px;
+      border:
+        1px solid rgba(208,219,255,.15);
+      border-radius: 30px;
+      background:
+        linear-gradient(
+          155deg,
+          rgba(48,51,68,.96) 0%,
+          rgba(29,31,43,.98) 48%,
+          rgba(21,23,33,.99) 100%
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.09),
+        0 20px 50px rgba(0,0,0,.24);
     }
 
-    .feature-card.knowledge {
+    /* AURORA BEHIND THE FIRST CARD */
+
+    .knowledge::before {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      inset: -26px;
+      border-radius: 55px;
       background:
         radial-gradient(
-          ellipse at 90% 0%,
-          rgba(50, 67, 97, .15),
-          transparent 60%
+          ellipse at 80% 20%,
+          rgba(91,87,255,.35),
+          transparent 48%
         ),
-        linear-gradient(155deg, #29292d, #1e1e21);
+        radial-gradient(
+          ellipse at 15% 75%,
+          rgba(18,123,255,.28),
+          transparent 52%
+        ),
+        radial-gradient(
+          ellipse at 80% 90%,
+          rgba(132,57,255,.2),
+          transparent 50%
+        );
+      filter: blur(37px);
+      opacity: .8;
+      pointer-events: none;
+      animation: auroraMove 9s ease-in-out infinite alternate;
     }
 
-    .feature-card.book {
-      min-height: 340px;
+    .knowledge::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        radial-gradient(
+          ellipse at 95% 0%,
+          rgba(99,99,222,.13),
+          transparent 55%
+        ),
+        linear-gradient(
+          125deg,
+          rgba(255,255,255,.065),
+          transparent 38%
+        );
+      pointer-events: none;
     }
+
+    @keyframes auroraMove {
+      0% {
+        transform: translate(-7px, 7px) scale(.97);
+        opacity: .6;
+      }
+      100% {
+        transform: translate(9px, -9px) scale(1.05);
+        opacity: .95;
+      }
+    }
+
+    /* SECOND CARD */
+
+    .feature-card.book {
+      min-height: 350px;
+      background:
+        radial-gradient(
+          ellipse at 85% 5%,
+          rgba(61,88,153,.14),
+          transparent 55%
+        ),
+        linear-gradient(
+          155deg,
+          #292b36,
+          #191b25
+        );
+    }
+
+    /* CARD HEADER */
 
     .card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 22px;
-      min-height: 44px;
+      margin-bottom: 28px;
     }
 
     .card-icon {
       display: grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 13px;
-      background: #33343b;
-      border: 1px solid #484950;
-      color: #d9dce5;
-      font-size: 25px;
+      width: 48px;
+      height: 48px;
+      border:
+        1px solid rgba(255,255,255,.15);
+      border-radius: 15px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.12),
+          rgba(255,255,255,.025)
+        );
+      color: #c5d4ff;
+      font-size: 26px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.1);
+      backdrop-filter: blur(12px);
     }
 
     .help {
       display: grid;
       place-items: center;
-      width: 31px;
-      height: 31px;
+      width: 34px;
+      height: 34px;
+      border:
+        1px solid rgba(255,255,255,.16);
       border-radius: 50%;
-      border: 1px solid #4c4d55;
-      background: #34343a;
-      color: #e3e3e9;
-      font-size: 17px;
+      background: rgba(255,255,255,.07);
+      color: #e5e8f5;
+      font-size: 16px;
+      backdrop-filter: blur(12px);
     }
 
     .free-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 11px;
-      border: 1px solid rgba(85, 183, 132, .24);
-      border-radius: 30px;
-      background: rgba(38, 119, 77, .15);
-      color: #86d5a8;
+      padding: 9px 12px;
+      border:
+        1px solid rgba(88,214,151,.25);
+      border-radius: 999px;
+      background: rgba(39,135,87,.13);
+      color: #85dfb0;
       font-size: 10px;
-      font-weight: 750;
-      letter-spacing: .12em;
+      font-weight: 800;
+      letter-spacing: .11em;
     }
 
     .card-label {
       display: block;
-      margin: 0 0 10px;
-      color: #a5a8b5;
+      margin-bottom: 11px;
+      color: #adb9dc;
       font-size: 10px;
-      font-weight: 750;
-      letter-spacing: .2em;
+      font-weight: 800;
+      letter-spacing: .21em;
     }
 
     .feature-card h2 {
       position: relative;
       z-index: 1;
-      margin: 0 0 12px;
+      margin: 0 0 13px;
       max-width: 430px;
-      font-size: clamp(23px, 6vw, 30px);
-      font-weight: 750;
-      line-height: 1.16;
-      letter-spacing: -.035em;
+      color: #fff;
+      font-size: clamp(24px, 6vw, 32px);
+      font-weight: 780;
+      letter-spacing: -.04em;
+      line-height: 1.15;
     }
 
     .feature-card p {
       position: relative;
       z-index: 1;
-      display: block;
-      margin: 0 0 24px;
+      margin: 0 0 28px;
       max-width: 420px;
-      color: #b2b2bb;
+      color: #b0b4c5;
       font-size: 13px;
       line-height: 1.65;
     }
 
-    /* ДЕКОРАТИВНЫЙ КРИСТАЛЛ */
+    /* DECORATIVE CRYSTAL */
 
     .crystal-animation {
       position: absolute;
-      top: 68px;
-      right: 25px;
-      width: 65px;
-      height: 65px;
+      top: 75px;
+      right: 27px;
+      width: 72px;
+      height: 72px;
       display: grid;
       place-items: center;
       pointer-events: none;
-      opacity: .42;
+      opacity: .4;
     }
 
     .crystal-object {
-      color: #a4bce5;
-      font-size: 53px;
-      text-shadow: 0 0 20px rgba(75, 133, 222, .3);
-      animation: crystalRotate 7s linear infinite;
+      color: #9cb8ff;
+      font-size: 56px;
+      text-shadow:
+        0 0 22px rgba(83,122,255,.5);
+      animation: crystalRotate 8s linear infinite;
     }
 
     @keyframes crystalRotate {
-      from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
 
-    /* КНОПКИ */
+    /* PREMIUM BUTTONS */
 
     .primary,
     .secondary,
@@ -358,83 +468,106 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 13px;
       width: 100%;
-      min-height: 56px;
+      min-height: 58px;
       margin-top: auto;
-      padding: 12px 18px;
-      border: 0;
-      border-radius: 16px;
-      background: var(--blue);
+      padding: 13px 20px;
+      border:
+        1px solid rgba(255,255,255,.15);
+      border-radius: 17px;
+      background:
+        linear-gradient(
+          110deg,
+          #1676f5 0%,
+          #416ef7 55%,
+          #7156e9 100%
+        );
+      box-shadow:
+        0 9px 28px rgba(37,91,244,.26),
+        inset 0 1px 0 rgba(255,255,255,.22);
       color: #fff;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 750;
       text-decoration: none;
-      transition: transform .2s, background .2s;
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+    }
+
+    .primary:active,
+    .secondary:active,
+    .link-button:active {
+      transform: scale(.975);
+      filter: brightness(.92);
     }
 
     .primary span,
     .secondary span {
-      font-size: 21px;
+      font-size: 22px;
+      font-weight: 500;
     }
 
-    .primary:active,
-    .secondary:active {
-      transform: scale(.98);
-      background: #0866cb;
-    }
-
-    /* ВНУТРЕННИЕ СТРАНИЦЫ */
+    /* DETAIL PAGES */
 
     .back {
-      margin: 0 0 32px;
-      padding: 12px 0;
+      margin-bottom: 32px;
+      padding: 10px 0;
       border: 0;
-      background: none;
-      color: #b7b7c0;
+      background: transparent;
+      color: #b7bdce;
       font-size: 15px;
     }
 
     .detail-icon {
       display: grid;
       place-items: center;
-      width: 56px;
-      height: 56px;
-      margin-bottom: 24px;
-      border: 1px solid #343439;
-      border-radius: 16px;
-      background: #242429;
-      color: #d5d9e5;
-      font-size: 29px;
+      width: 58px;
+      height: 58px;
+      margin-bottom: 25px;
+      border:
+        1px solid rgba(255,255,255,.13);
+      border-radius: 18px;
+      background: #232637;
+      color: #afc2ff;
+      font-size: 32px;
     }
 
     .eyebrow {
       display: block;
-      color: #7b9fd2;
+      color: #96aef8;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .17em;
+      font-weight: 750;
+      letter-spacing: .18em;
     }
 
     .page h1 {
       margin: 16px 0;
-      font-size: clamp(30px, 8vw, 44px);
-      line-height: 1.12;
-      letter-spacing: -.035em;
+      font-size: clamp(30px, 8vw, 45px);
+      font-weight: 800;
+      line-height: 1.13;
+      letter-spacing: -.04em;
     }
 
     .detail-text {
-      color: var(--muted);
-      line-height: 1.7;
+      color: #a7aabb;
       font-size: 15px;
+      line-height: 1.7;
     }
 
     .info-box {
-      margin: 26px 0;
-      padding: 22px;
-      background: var(--card);
-      border: 1px solid #343439;
-      border-radius: 20px;
+      margin: 28px 0;
+      padding: 23px;
+      border:
+        1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      background:
+        linear-gradient(
+          145deg,
+          #262837,
+          #191b25
+        );
     }
 
     .info-box strong {
@@ -442,9 +575,10 @@
     }
 
     .info-box p {
-      color: var(--muted);
-      line-height: 1.6;
+      margin-bottom: 0;
+      color: #a7aabb;
       font-size: 14px;
+      line-height: 1.65;
     }
 
     .buy-button {
@@ -456,8 +590,8 @@
     .pdf-skeleton {
       padding: 24px;
       border-radius: 20px;
-      background: var(--card);
-      color: var(--muted);
+      background: #222432;
+      color: #a7aabb;
     }
 
     .skeleton-line {
@@ -465,7 +599,7 @@
       height: 12px;
       margin-bottom: 12px;
       border-radius: 6px;
-      background: #38383d;
+      background: #3a3d4c;
       animation: pulse 1.4s infinite alternate;
     }
 
@@ -476,8 +610,8 @@
     .skeleton-sheet {
       height: 220px;
       margin: 20px 0;
-      background: #333339;
       border-radius: 10px;
+      background: #303341;
       animation: pulse 1.4s infinite alternate;
     }
 
@@ -487,9 +621,10 @@
 
     .pdf-container {
       margin-top: 20px;
-      border-radius: 16px;
+      border:
+        1px solid rgba(255,255,255,.14);
+      border-radius: 17px;
       overflow: hidden;
-      border: 1px solid #333;
     }
 
     .pdf-container iframe {
@@ -498,14 +633,14 @@
       height: 68vh;
       min-height: 420px;
       border: 0;
-      background: white;
+      background: #fff;
     }
 
     #pdfLink {
       margin-top: 16px;
     }
 
-    /* МОДАЛЬНОЕ ОКНО */
+    /* MODAL */
 
     .modal {
       position: fixed;
@@ -514,51 +649,59 @@
       display: grid;
       place-items: center;
       padding: 22px;
-      background: rgba(0, 0, 0, .78);
-      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,.8);
+      backdrop-filter: blur(14px);
     }
 
     .modal-panel {
       width: 100%;
       max-width: 400px;
-      padding: 26px;
-      border-radius: 24px;
-      background: #222225;
-      border: 1px solid #37373b;
+      padding: 27px;
+      border:
+        1px solid rgba(255,255,255,.14);
+      border-radius: 25px;
+      background: #202230;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.4);
     }
 
     .modal-panel h2 {
       margin: 0 0 12px;
+      font-size: 22px;
     }
 
     .modal-panel p {
-      color: var(--muted);
-      line-height: 1.6;
+      color: #adb1c1;
+      line-height: 1.65;
     }
 
     .modal-panel .primary {
       margin-top: 24px;
     }
 
-    /* УВЕДОМЛЕНИЯ */
+    /* TOAST */
 
     .toast {
       position: fixed;
       z-index: 1200;
       bottom: 30px;
       left: 50%;
-      transform: translate(-50%, 15px);
-      max-width: calc(100% - 35px);
       width: max-content;
-      padding: 14px 20px;
-      border-radius: 14px;
-      background: #303037;
+      max-width: calc(100% - 36px);
+      padding: 15px 20px;
+      border:
+        1px solid rgba(255,255,255,.12);
+      border-radius: 15px;
+      background: #292d3d;
       color: #fff;
-      text-align: center;
       font-size: 13px;
+      text-align: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .25s, transform .25s;
+      transform: translate(-50%, 15px);
+      transition:
+        opacity .25s,
+        transform .25s;
     }
 
     .toast.visible {
@@ -567,29 +710,44 @@
     }
 
     footer {
-      padding: 45px 0 24px;
-      color: #55555a;
+      padding: 46px 0 26px;
+      color: #666b7b;
       font-size: 10px;
       text-align: center;
-      letter-spacing: .1em;
+      letter-spacing: .13em;
     }
+
+    /* RESPONSIVE */
 
     @media (min-width: 620px) {
       .cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
       }
 
       .feature-card,
       .feature-card.book {
-        min-height: 390px;
+        min-height: 420px;
       }
     }
 
     @media (max-width: 370px) {
-      .app { padding: 0 15px; }
-      .feature-card { padding: 20px; }
-      .intro h1 { font-size: 31px; }
-      .top-pill { font-size: 8px; padding: 8px; }
+      .app {
+        padding: 0 15px;
+      }
+
+      .feature-card {
+        padding: 21px;
+      }
+
+      .intro h1 {
+        font-size: 31px;
+      }
+
+      .top-pill {
+        padding: 0 12px;
+        font-size: 9px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -603,19 +761,27 @@
 
 <body>
 
-  <!-- ЗАГРУЗКА -->
-  <div id="splash" class="splash" aria-label="Загрузка приложения">
+  <!-- ЗАГРУЗКА С 3D ЛОГОТИПОМ -->
+
+  <div
+    id="splash"
+    class="splash"
+    aria-label="Загрузка приложения"
+  >
     <div class="splash-content">
       <img
         class="crystal-splash-logo"
-        src="/static/logo.png?v=3"
+        src="/static/logo.png?v=4"
         alt="2 CHANCE"
       >
     </div>
   </div>
 
   <!-- ПРИЛОЖЕНИЕ -->
+
   <div id="application" class="app hidden">
+
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
 
     <header class="topbar">
       <span class="brand-symbol">2</span>
@@ -626,6 +792,7 @@
     <main>
 
       <!-- ГЛАВНАЯ -->
+
       <section id="home" class="page active">
 
         <div class="intro">
@@ -633,112 +800,180 @@
             Твой второй шанс
             <span>начинается здесь.</span>
           </h1>
-          <p>Знания. Развитие. Новые возможности.</p>
+
+          <p>
+            Знания. Развитие. Новые возможности.
+          </p>
         </div>
 
         <div class="cards">
 
-          <!-- МАТЕРИАЛЫ -->
+          <!-- КАРТОЧКА МАТЕРИАЛОВ -->
+
           <article class="feature-card knowledge">
 
             <div class="card-top">
+
               <span class="card-icon">✧</span>
+
               <button
-                class="help"
                 id="helpBtn"
+                class="help"
                 type="button"
                 aria-label="О разделе знаний"
-              >?</button>
+              >
+                ?
+              </button>
+
             </div>
 
-            <div class="crystal-animation" aria-hidden="true">
+            <div
+              class="crystal-animation"
+              aria-hidden="true"
+            >
               <div class="crystal-object">✦</div>
             </div>
 
-            <span class="card-label">EXCLUSIVE ACCESS</span>
+            <span class="card-label">
+              EXCLUSIVE ACCESS
+            </span>
 
-            <h2>Покупка драгоценных материалов</h2>
+            <h2>
+              Покупка драгоценных материалов
+            </h2>
 
             <p>
-              Особые знания для тех, кто стремится к большему.
+              Особые знания для тех,
+              кто стремится к большему.
             </p>
 
-            <button class="primary" data-go="knowledge" type="button">
-              Исследовать <span aria-hidden="true">↗</span>
+            <button
+              class="primary"
+              data-go="knowledge"
+              type="button"
+            >
+              Исследовать
+              <span aria-hidden="true">↗</span>
             </button>
 
           </article>
 
-          <!-- КНИГА -->
+          <!-- КАРТОЧКА КНИГИ -->
+
           <article class="feature-card book">
 
             <div class="card-top">
+
               <span class="card-icon">▤</span>
-              <span class="free-pill">FREE ACCESS</span>
+
+              <span class="free-pill">
+                FREE ACCESS
+              </span>
+
             </div>
 
-            <span class="card-label">PERSONAL GROWTH</span>
+            <span class="card-label">
+              PERSONAL GROWTH
+            </span>
 
-            <h2>Почитать книгу: как стать лучше</h2>
+            <h2>
+              Почитать книгу: как стать лучше
+            </h2>
 
             <p>
-              Всего прочитав это ты можешь стать в 2 раза лучше
+              Всего прочитав это ты можешь
+              стать в 2 раза лучше.
             </p>
 
-            <button class="secondary" data-go="reader" type="button">
-              Начать чтение <span aria-hidden="true">↗</span>
+            <button
+              class="secondary"
+              data-go="reader"
+              type="button"
+            >
+              Начать чтение
+              <span aria-hidden="true">↗</span>
             </button>
 
           </article>
 
         </div>
+
       </section>
 
-      <!-- МАТЕРИАЛЫ -->
+      <!-- СТРАНИЦА МАТЕРИАЛОВ -->
+
       <section id="knowledge" class="page">
 
-        <button class="back" data-go="home" type="button">
+        <button
+          class="back"
+          data-go="home"
+          type="button"
+        >
           ‹ На главную
         </button>
 
         <div class="detail-icon">✧</div>
 
-        <span class="eyebrow">EXCLUSIVE MATERIALS</span>
+        <span class="eyebrow">
+          EXCLUSIVE MATERIALS
+        </span>
 
         <h1>Драгоценные материалы</h1>
 
         <p class="detail-text">
-          Коллекция знаний, способных изменить твой подход
-          к жизни и развитию.
+          Коллекция знаний, способных изменить
+          твой подход к жизни и развитию.
         </p>
 
         <div class="info-box">
           <strong>Материалы готовятся</strong>
-          <p>Скоро здесь появятся новые возможности.</p>
+          <p>
+            Скоро здесь появятся новые возможности.
+          </p>
         </div>
 
-        <button id="buyBtn" class="primary buy-button" type="button">
+        <button
+          id="buyBtn"
+          class="primary buy-button"
+          type="button"
+        >
           Перейти к оплате
         </button>
 
       </section>
 
-      <!-- КНИГА -->
+      <!-- СТРАНИЦА КНИГИ -->
+
       <section id="reader" class="page">
 
-        <button class="back" data-go="home" type="button">
+        <button
+          class="back"
+          data-go="home"
+          type="button"
+        >
           ‹ На главную
         </button>
 
-        <span class="eyebrow">THE BOOK / FREE</span>
+        <span class="eyebrow">
+          THE BOOK / FREE
+        </span>
 
-        <h1>Бесплатный самоучитель счастья</h1>
+        <h1>
+          Бесплатный самоучитель счастья
+        </h1>
 
-        <p class="detail-text">Дмитрий Гаун</p>
+        <p class="detail-text">
+          Дмитрий Гаун
+        </p>
 
-        <div id="pdfMissing" class="info-box hidden">
+        <div
+          id="pdfMissing"
+          class="info-box hidden"
+        >
           <strong>Книга пока не загружена</strong>
-          <p>Книга появится здесь в ближайшее время.</p>
+          <p>
+            Книга появится здесь в ближайшее время.
+          </p>
         </div>
 
         <div
@@ -753,7 +988,10 @@
           <span>Загружаем книгу…</span>
         </div>
 
-        <div id="pdfContainer" class="pdf-container hidden">
+        <div
+          id="pdfContainer"
+          class="pdf-container hidden"
+        >
           <iframe
             id="pdfFrame"
             title="Чтение книги"
@@ -775,14 +1013,23 @@
 
     </main>
 
-    <footer>TWO CHANCE · THE SECOND CHANCE</footer>
+    <footer>
+      TWO CHANCE · THE SECOND CHANCE
+    </footer>
 
   </div>
 
-  <!-- УВЕДОМЛЕНИЕ -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <!-- УВЕДОМЛЕНИЯ -->
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
 
   <!-- ИНФОРМАЦИЯ О РАЗДЕЛЕ -->
+
   <div
     id="modal"
     class="modal hidden"
@@ -790,16 +1037,28 @@
     aria-modal="true"
     aria-labelledby="modalTitle"
   >
+
     <div class="modal-panel">
-      <h2 id="modalTitle">О разделе</h2>
+
+      <h2 id="modalTitle">
+        О разделе
+      </h2>
+
       <p>
-        Здесь будут доступны эксклюзивные материалы
-        для личного развития.
+        Здесь будут доступны эксклюзивные
+        материалы для личного развития.
       </p>
-      <button id="modalClose" class="primary" type="button">
+
+      <button
+        id="modalClose"
+        class="primary"
+        type="button"
+      >
         Понятно
       </button>
+
     </div>
+
   </div>
 
 </body>
