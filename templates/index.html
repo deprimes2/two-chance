@@ -1,73 +1,69 @@
 
 <!doctype html>
-<html lang="ru" class="dark">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07080d">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080809">
   <title>Two Chance</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="/static/app.js?v=20261115premium1" defer></script>
+  <script src="/static/app.js?v=20261115final" defer></script>
 
   <style>
     :root {
       color-scheme: dark;
-      --background: #07080d;
-      --foreground: #f8f9ff;
-      --muted: #989ba9;
-      --blue: #337cff;
-      --purple: #7764f7;
+      --bg: #080809;
+      --text: #f7f7f8;
+      --muted: #aaa7ae;
+      --silver: #c3c1ca;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html {
-      background: var(--background);
-    }
-
-    body {
+    html, body {
       margin: 0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      background: var(--background);
-      color: var(--foreground);
-      font-family:
-        -apple-system, BlinkMacSystemFont,
-        "SF Pro Display", "Segoe UI",
-        Arial, sans-serif;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont,
+        "SF Pro Display", "Segoe UI", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
-    button, a {
-      -webkit-tap-highlight-color: transparent;
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
     button {
+      font: inherit;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      -webkit-tap-highlight-color: transparent;
     }
 
     .hidden {
       display: none !important;
     }
 
-    /* SPLASH */
+    /* ЗАГРУЗКА */
 
     .splash {
       position: fixed;
       inset: 0;
       z-index: 1000;
-      display: grid;
-      place-items: center;
-      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
-      transition:
-        opacity .5s ease,
-        visibility .5s ease;
+      background: #000;
+      transition: opacity .5s ease, visibility .5s ease;
     }
 
     .splash.out {
@@ -76,12 +72,12 @@
     }
 
     .splash-content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       width: 100%;
       min-height: 100%;
-      animation: logoAppear .9s ease both;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: logoAppear .8s ease both;
     }
 
     .crystal-splash-logo {
@@ -95,7 +91,7 @@
     @keyframes logoAppear {
       from {
         opacity: 0;
-        transform: scale(.92);
+        transform: scale(.93);
       }
       to {
         opacity: 1;
@@ -103,86 +99,74 @@
       }
     }
 
-    /* BACKGROUND */
+    /* ОСНОВА */
 
     .app {
-      position: relative;
-      isolation: isolate;
       max-width: 740px;
       min-height: 100vh;
       margin: 0 auto;
       padding: 0 20px;
       display: flex;
       flex-direction: column;
+      background: #080809;
     }
 
-    .app::before {
-      content: "";
-      position: absolute;
-      z-index: -2;
-      top: 130px;
-      left: -120px;
-      width: 450px;
-      height: 500px;
-      border-radius: 50%;
-      background: rgba(37, 65, 158, .13);
-      filter: blur(110px);
-      pointer-events: none;
-    }
-
-    /* TOP BAR */
+    /* ВЕРХНЯЯ ПАНЕЛЬ */
 
     .topbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 12px;
       min-height: 86px;
-      border-bottom:
-        1px solid rgba(255,255,255,.075);
+      border-bottom: 1px solid #28272b;
     }
 
     .brand-symbol {
-      display: block;
-      color: #fff;
-      font-size: 51px;
+      width: 41px;
+      height: 41px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border: 1px solid #525057;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #28272b, #111114);
+      color: #e8e7ed;
+      font-size: 27px;
+      font-weight: 850;
       line-height: 1;
-      font-weight: 900;
-      letter-spacing: -.09em;
-      text-shadow:
-        0 0 25px rgba(137,161,255,.15);
     }
 
     .brand {
-      display: none;
+      color: #f5f5f7;
+      font-size: 17px;
+      font-weight: 850;
+      letter-spacing: .21em;
     }
 
     .top-pill {
+      margin-left: auto;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 41px;
-      padding: 0 17px;
-      border:
-        1px solid rgba(255,255,255,.19);
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid #38353b;
       border-radius: 999px;
-      background: rgba(255,255,255,.055);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.12),
-        0 8px 25px rgba(0,0,0,.15);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      color: #d9dce9;
-      font-size: 10px;
-      font-weight: 750;
-      letter-spacing: .16em;
+      background: rgba(255,255,255,.025);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: #b9b4be;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .15em;
       white-space: nowrap;
     }
 
-    /* PAGES */
+    /* СТРАНИЦЫ */
 
     main {
       flex: 1;
-      padding-top: 53px;
+      padding-top: 49px;
     }
 
     .page {
@@ -194,13 +178,13 @@
     }
 
     .page.enter {
-      animation: pageEnter .35s ease both;
+      animation: pageEnter .3s ease both;
     }
 
     @keyframes pageEnter {
       from {
         opacity: 0;
-        transform: translateY(13px);
+        transform: translateY(12px);
       }
       to {
         opacity: 1;
@@ -208,171 +192,81 @@
       }
     }
 
-    /* INTRO */
+    /* ЗАГОЛОВОК */
 
     .intro {
-      margin-bottom: 49px;
+      margin-bottom: 58px;
     }
 
     .intro h1 {
       margin: 0;
-      max-width: 640px;
-      font-size: clamp(34px, 8.2vw, 53px);
+      font-size: clamp(34px, 8vw, 49px);
       font-weight: 850;
-      letter-spacing: -.052em;
-      line-height: 1.12;
-      color: #fff;
+      line-height: 1.16;
+      letter-spacing: -.05em;
+      color: #f6f6f7;
     }
 
     .intro h1 span {
       display: block;
-      color: #f1f2fa;
+      color: #b8b5bd;
     }
 
-    .intro p {
-      margin: 22px 0 0;
-      color: #a3a5b4;
-      font-size: 14px;
-      font-weight: 450;
-      line-height: 1.7;
-    }
-
-    /* CARD GRID */
+    /* КАРТОЧКИ */
 
     .cards {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 20px;
     }
 
     .feature-card {
       position: relative;
-      isolation: isolate;
       display: flex;
       flex-direction: column;
       min-height: 375px;
       padding: 26px;
-      border:
-        1px solid rgba(208,219,255,.15);
-      border-radius: 30px;
-      background:
-        linear-gradient(
-          155deg,
-          rgba(48,51,68,.96) 0%,
-          rgba(29,31,43,.98) 48%,
-          rgba(21,23,33,.99) 100%
-        );
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.09),
-        0 20px 50px rgba(0,0,0,.24);
+      overflow: hidden;
+      border: 1px solid rgba(181,111,130,.25);
+      border-radius: 29px;
+      background: linear-gradient(
+        145deg,
+        #292629 0%,
+        #201c20 45%,
+        #151416 100%
+      );
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
     }
-
-    /* AURORA BEHIND THE FIRST CARD */
-
-    .knowledge::before {
-      content: "";
-      position: absolute;
-      z-index: -2;
-      inset: -26px;
-      border-radius: 55px;
-      background:
-        radial-gradient(
-          ellipse at 80% 20%,
-          rgba(91,87,255,.35),
-          transparent 48%
-        ),
-        radial-gradient(
-          ellipse at 15% 75%,
-          rgba(18,123,255,.28),
-          transparent 52%
-        ),
-        radial-gradient(
-          ellipse at 80% 90%,
-          rgba(132,57,255,.2),
-          transparent 50%
-        );
-      filter: blur(37px);
-      opacity: .8;
-      pointer-events: none;
-      animation: auroraMove 9s ease-in-out infinite alternate;
-    }
-
-    .knowledge::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      inset: 0;
-      border-radius: inherit;
-      background:
-        radial-gradient(
-          ellipse at 95% 0%,
-          rgba(99,99,222,.13),
-          transparent 55%
-        ),
-        linear-gradient(
-          125deg,
-          rgba(255,255,255,.065),
-          transparent 38%
-        );
-      pointer-events: none;
-    }
-
-    @keyframes auroraMove {
-      0% {
-        transform: translate(-7px, 7px) scale(.97);
-        opacity: .6;
-      }
-      100% {
-        transform: translate(9px, -9px) scale(1.05);
-        opacity: .95;
-      }
-    }
-
-    /* SECOND CARD */
 
     .feature-card.book {
-      min-height: 350px;
-      background:
-        radial-gradient(
-          ellipse at 85% 5%,
-          rgba(61,88,153,.14),
-          transparent 55%
-        ),
-        linear-gradient(
-          155deg,
-          #292b36,
-          #191b25
-        );
+      min-height: 355px;
+      border-color: #3b3a3e;
+      background: linear-gradient(
+        145deg,
+        #2b2b2d,
+        #1b1b1e 75%,
+        #151517
+      );
     }
-
-    /* CARD HEADER */
 
     .card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 28px;
+      min-height: 46px;
+      margin-bottom: 27px;
     }
 
     .card-icon {
       display: grid;
       place-items: center;
-      width: 48px;
-      height: 48px;
-      border:
-        1px solid rgba(255,255,255,.15);
+      width: 47px;
+      height: 47px;
+      border: 1px solid #535057;
       border-radius: 15px;
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255,255,255,.12),
-          rgba(255,255,255,.025)
-        );
-      color: #c5d4ff;
-      font-size: 26px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.1);
-      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,.065);
+      color: #d5d1d9;
+      font-size: 27px;
     }
 
     .help {
@@ -380,31 +274,17 @@
       place-items: center;
       width: 34px;
       height: 34px;
-      border:
-        1px solid rgba(255,255,255,.16);
+      border: 1px solid #514c53;
       border-radius: 50%;
-      background: rgba(255,255,255,.07);
-      color: #e5e8f5;
-      font-size: 16px;
-      backdrop-filter: blur(12px);
-    }
-
-    .free-pill {
-      padding: 9px 12px;
-      border:
-        1px solid rgba(88,214,151,.25);
-      border-radius: 999px;
-      background: rgba(39,135,87,.13);
-      color: #85dfb0;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .11em;
+      background: rgba(255,255,255,.045);
+      color: #ddd8df;
+      font-size: 17px;
     }
 
     .card-label {
       display: block;
-      margin-bottom: 11px;
-      color: #adb9dc;
+      margin-bottom: 13px;
+      color: #b99ca6;
       font-size: 10px;
       font-weight: 800;
       letter-spacing: .21em;
@@ -413,52 +293,53 @@
     .feature-card h2 {
       position: relative;
       z-index: 1;
-      margin: 0 0 13px;
-      max-width: 430px;
-      color: #fff;
-      font-size: clamp(24px, 6vw, 32px);
-      font-weight: 780;
+      margin: 0 0 15px;
+      max-width: 450px;
+      color: #f7f7f8;
+      font-size: clamp(24px, 6vw, 31px);
+      font-weight: 800;
+      line-height: 1.17;
       letter-spacing: -.04em;
-      line-height: 1.15;
     }
 
     .feature-card p {
       position: relative;
       z-index: 1;
-      margin: 0 0 28px;
+      margin: 0 0 29px;
       max-width: 420px;
-      color: #b0b4c5;
-      font-size: 13px;
+      color: #aaa6ae;
+      font-size: 14px;
       line-height: 1.65;
     }
 
-    /* DECORATIVE CRYSTAL */
+    /* КРИСТАЛЛ */
 
     .crystal-animation {
       position: absolute;
-      top: 75px;
+      top: 77px;
       right: 27px;
-      width: 72px;
-      height: 72px;
       display: grid;
       place-items: center;
+      width: 69px;
+      height: 69px;
       pointer-events: none;
-      opacity: .4;
+      opacity: .78;
     }
 
     .crystal-object {
-      color: #9cb8ff;
+      color: #b76b80;
       font-size: 56px;
-      text-shadow:
-        0 0 22px rgba(83,122,255,.5);
-      animation: crystalRotate 8s linear infinite;
+      text-shadow: 0 0 22px rgba(185,107,128,.18);
+      animation: crystalRotate 9s linear infinite;
     }
 
     @keyframes crystalRotate {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
-    /* PREMIUM BUTTONS */
+    /* КНОПКИ */
 
     .primary,
     .secondary,
@@ -472,51 +353,57 @@
       width: 100%;
       min-height: 58px;
       margin-top: auto;
-      padding: 13px 20px;
-      border:
-        1px solid rgba(255,255,255,.15);
-      border-radius: 17px;
-      background:
-        linear-gradient(
-          110deg,
-          #1676f5 0%,
-          #416ef7 55%,
-          #7156e9 100%
-        );
-      box-shadow:
-        0 9px 28px rgba(37,91,244,.26),
-        inset 0 1px 0 rgba(255,255,255,.22);
-      color: #fff;
+      padding: 13px 18px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 16px;
+      background: linear-gradient(
+        110deg,
+        #c4c2cb 0%,
+        #a7a5af 45%,
+        #85838f 100%
+      );
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.32);
+      color: #101015;
       font-size: 16px;
-      font-weight: 750;
+      font-weight: 800;
       text-decoration: none;
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        filter .2s ease;
+      transition: transform .2s ease, filter .2s ease;
     }
 
     .primary:active,
     .secondary:active,
     .link-button:active {
-      transform: scale(.975);
-      filter: brightness(.92);
+      transform: scale(.98);
+      filter: brightness(.93);
     }
 
     .primary span,
     .secondary span {
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 23px;
+      font-weight: 600;
     }
 
-    /* DETAIL PAGES */
+    .free-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 12px;
+      border: 1px solid #49474d;
+      border-radius: 999px;
+      background: rgba(255,255,255,.025);
+      color: #d0ccd3;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .12em;
+    }
+
+    /* ВНУТРЕННИЕ РАЗДЕЛЫ */
 
     .back {
-      margin-bottom: 32px;
+      margin: 0 0 32px;
       padding: 10px 0;
       border: 0;
-      background: transparent;
-      color: #b7bdce;
+      background: none;
+      color: #b8b3bb;
       font-size: 15px;
     }
 
@@ -526,32 +413,32 @@
       width: 58px;
       height: 58px;
       margin-bottom: 25px;
-      border:
-        1px solid rgba(255,255,255,.13);
-      border-radius: 18px;
-      background: #232637;
-      color: #afc2ff;
-      font-size: 32px;
+      border: 1px solid #454047;
+      border-radius: 17px;
+      background: #282429;
+      color: #d5c7d0;
+      font-size: 30px;
     }
 
     .eyebrow {
       display: block;
-      color: #96aef8;
+      color: #b99ca6;
       font-size: 11px;
       font-weight: 750;
-      letter-spacing: .18em;
+      letter-spacing: .17em;
     }
 
     .page h1 {
       margin: 16px 0;
+      color: #f7f7f8;
       font-size: clamp(30px, 8vw, 45px);
       font-weight: 800;
-      line-height: 1.13;
+      line-height: 1.14;
       letter-spacing: -.04em;
     }
 
     .detail-text {
-      color: #a7aabb;
+      color: #aaa6ae;
       font-size: 15px;
       line-height: 1.7;
     }
@@ -559,15 +446,9 @@
     .info-box {
       margin: 28px 0;
       padding: 23px;
-      border:
-        1px solid rgba(255,255,255,.12);
+      border: 1px solid #3d393f;
       border-radius: 22px;
-      background:
-        linear-gradient(
-          145deg,
-          #262837,
-          #191b25
-        );
+      background: linear-gradient(145deg, #29262b, #19171a);
     }
 
     .info-box strong {
@@ -575,8 +456,7 @@
     }
 
     .info-box p {
-      margin-bottom: 0;
-      color: #a7aabb;
+      color: #aaa6ae;
       font-size: 14px;
       line-height: 1.65;
     }
@@ -590,8 +470,8 @@
     .pdf-skeleton {
       padding: 24px;
       border-radius: 20px;
-      background: #222432;
-      color: #a7aabb;
+      background: #222124;
+      color: #aaa6ae;
     }
 
     .skeleton-line {
@@ -599,7 +479,7 @@
       height: 12px;
       margin-bottom: 12px;
       border-radius: 6px;
-      background: #3a3d4c;
+      background: #3b383d;
       animation: pulse 1.4s infinite alternate;
     }
 
@@ -611,20 +491,21 @@
       height: 220px;
       margin: 20px 0;
       border-radius: 10px;
-      background: #303341;
+      background: #333136;
       animation: pulse 1.4s infinite alternate;
     }
 
     @keyframes pulse {
-      to { opacity: .4; }
+      to {
+        opacity: .4;
+      }
     }
 
     .pdf-container {
       margin-top: 20px;
-      border:
-        1px solid rgba(255,255,255,.14);
-      border-radius: 17px;
       overflow: hidden;
+      border: 1px solid #3c393e;
+      border-radius: 17px;
     }
 
     .pdf-container iframe {
@@ -640,7 +521,7 @@
       margin-top: 16px;
     }
 
-    /* MODAL */
+    /* МОДАЛЬНОЕ ОКНО */
 
     .modal {
       position: fixed;
@@ -650,28 +531,24 @@
       place-items: center;
       padding: 22px;
       background: rgba(0,0,0,.8);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(12px);
     }
 
     .modal-panel {
       width: 100%;
       max-width: 400px;
-      padding: 27px;
-      border:
-        1px solid rgba(255,255,255,.14);
-      border-radius: 25px;
-      background: #202230;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,.4);
+      padding: 26px;
+      border: 1px solid #49444c;
+      border-radius: 24px;
+      background: #242126;
     }
 
     .modal-panel h2 {
       margin: 0 0 12px;
-      font-size: 22px;
     }
 
     .modal-panel p {
-      color: #adb1c1;
+      color: #aaa6ae;
       line-height: 1.65;
     }
 
@@ -679,7 +556,7 @@
       margin-top: 24px;
     }
 
-    /* TOAST */
+    /* УВЕДОМЛЕНИЯ */
 
     .toast {
       position: fixed;
@@ -689,19 +566,16 @@
       width: max-content;
       max-width: calc(100% - 36px);
       padding: 15px 20px;
-      border:
-        1px solid rgba(255,255,255,.12);
+      border: 1px solid #4a454d;
       border-radius: 15px;
-      background: #292d3d;
+      background: #302c33;
       color: #fff;
       font-size: 13px;
       text-align: center;
       opacity: 0;
       pointer-events: none;
       transform: translate(-50%, 15px);
-      transition:
-        opacity .25s,
-        transform .25s;
+      transition: opacity .25s, transform .25s;
     }
 
     .toast.visible {
@@ -710,19 +584,16 @@
     }
 
     footer {
-      padding: 46px 0 26px;
-      color: #666b7b;
+      padding: 45px 0 25px;
+      color: #6d6870;
       font-size: 10px;
       text-align: center;
-      letter-spacing: .13em;
+      letter-spacing: .12em;
     }
-
-    /* RESPONSIVE */
 
     @media (min-width: 620px) {
       .cards {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .feature-card,
@@ -745,8 +616,8 @@
       }
 
       .top-pill {
-        padding: 0 12px;
-        font-size: 9px;
+        padding: 0 9px;
+        font-size: 8px;
       }
     }
 
@@ -761,17 +632,13 @@
 
 <body>
 
-  <!-- ЗАГРУЗКА С 3D ЛОГОТИПОМ -->
+  <!-- ЗАГРУЗКА -->
 
-  <div
-    id="splash"
-    class="splash"
-    aria-label="Загрузка приложения"
-  >
+  <div id="splash" class="splash" aria-label="Загрузка приложения">
     <div class="splash-content">
       <img
         class="crystal-splash-logo"
-        src="/static/logo.png?v=4"
+        src="/static/logo.png?v=5"
         alt="2 CHANCE"
       >
     </div>
@@ -780,8 +647,6 @@
   <!-- ПРИЛОЖЕНИЕ -->
 
   <div id="application" class="app hidden">
-
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
 
     <header class="topbar">
       <span class="brand-symbol">2</span>
@@ -800,20 +665,15 @@
             Твой второй шанс
             <span>начинается здесь.</span>
           </h1>
-
-          <p>
-            Знания. Развитие. Новые возможности.
-          </p>
         </div>
 
         <div class="cards">
 
-          <!-- КАРТОЧКА МАТЕРИАЛОВ -->
+          <!-- МАТЕРИАЛЫ -->
 
           <article class="feature-card knowledge">
 
             <div class="card-top">
-
               <span class="card-icon">✧</span>
 
               <button
@@ -821,16 +681,10 @@
                 class="help"
                 type="button"
                 aria-label="О разделе знаний"
-              >
-                ?
-              </button>
-
+              >?</button>
             </div>
 
-            <div
-              class="crystal-animation"
-              aria-hidden="true"
-            >
+            <div class="crystal-animation" aria-hidden="true">
               <div class="crystal-object">✦</div>
             </div>
 
@@ -843,8 +697,7 @@
             </h2>
 
             <p>
-              Особые знания для тех,
-              кто стремится к большему.
+              Особые знания для тех, кто стремится к большему.
             </p>
 
             <button
@@ -858,18 +711,13 @@
 
           </article>
 
-          <!-- КАРТОЧКА КНИГИ -->
+          <!-- КНИГА -->
 
           <article class="feature-card book">
 
             <div class="card-top">
-
               <span class="card-icon">▤</span>
-
-              <span class="free-pill">
-                FREE ACCESS
-              </span>
-
+              <span class="free-pill">FREE ACCESS</span>
             </div>
 
             <span class="card-label">
@@ -881,8 +729,7 @@
             </h2>
 
             <p>
-              Всего прочитав это ты можешь
-              стать в 2 раза лучше.
+              Всего прочитав это ты можешь стать в 2 раза лучше
             </p>
 
             <button
@@ -900,15 +747,11 @@
 
       </section>
 
-      <!-- СТРАНИЦА МАТЕРИАЛОВ -->
+      <!-- РАЗДЕЛ МАТЕРИАЛОВ -->
 
       <section id="knowledge" class="page">
 
-        <button
-          class="back"
-          data-go="home"
-          type="button"
-        >
+        <button class="back" data-go="home" type="button">
           ‹ На главную
         </button>
 
@@ -921,8 +764,8 @@
         <h1>Драгоценные материалы</h1>
 
         <p class="detail-text">
-          Коллекция знаний, способных изменить
-          твой подход к жизни и развитию.
+          Коллекция знаний, способных изменить твой подход
+          к жизни и развитию.
         </p>
 
         <div class="info-box">
@@ -942,15 +785,11 @@
 
       </section>
 
-      <!-- СТРАНИЦА КНИГИ -->
+      <!-- РАЗДЕЛ КНИГИ -->
 
       <section id="reader" class="page">
 
-        <button
-          class="back"
-          data-go="home"
-          type="button"
-        >
+        <button class="back" data-go="home" type="button">
           ‹ На главную
         </button>
 
@@ -958,22 +797,15 @@
           THE BOOK / FREE
         </span>
 
-        <h1>
-          Бесплатный самоучитель счастья
-        </h1>
+        <h1>Бесплатный самоучитель счастья</h1>
 
         <p class="detail-text">
           Дмитрий Гаун
         </p>
 
-        <div
-          id="pdfMissing"
-          class="info-box hidden"
-        >
+        <div id="pdfMissing" class="info-box hidden">
           <strong>Книга пока не загружена</strong>
-          <p>
-            Книга появится здесь в ближайшее время.
-          </p>
+          <p>Книга появится здесь в ближайшее время.</p>
         </div>
 
         <div
@@ -988,10 +820,7 @@
           <span>Загружаем книгу…</span>
         </div>
 
-        <div
-          id="pdfContainer"
-          class="pdf-container hidden"
-        >
+        <div id="pdfContainer" class="pdf-container hidden">
           <iframe
             id="pdfFrame"
             title="Чтение книги"
@@ -1019,7 +848,7 @@
 
   </div>
 
-  <!-- УВЕДОМЛЕНИЯ -->
+  <!-- УВЕДОМЛЕНИЕ -->
 
   <div
     id="toast"
@@ -1028,7 +857,7 @@
     aria-live="polite"
   ></div>
 
-  <!-- ИНФОРМАЦИЯ О РАЗДЕЛЕ -->
+  <!-- МОДАЛЬНОЕ ОКНО -->
 
   <div
     id="modal"
@@ -1037,16 +866,12 @@
     aria-modal="true"
     aria-labelledby="modalTitle"
   >
-
     <div class="modal-panel">
-
-      <h2 id="modalTitle">
-        О разделе
-      </h2>
+      <h2 id="modalTitle">О разделе</h2>
 
       <p>
-        Здесь будут доступны эксклюзивные
-        материалы для личного развития.
+        Здесь будут доступны эксклюзивные материалы
+        для личного развития.
       </p>
 
       <button
@@ -1056,9 +881,7 @@
       >
         Понятно
       </button>
-
     </div>
-
   </div>
 
 </body>
