@@ -21,6 +21,7 @@ def get_webapp_url():
     return url
 
 
+
 @router.message(CommandStart())
 async def start(message: Message):
     if message.from_user:
@@ -37,12 +38,10 @@ async def start(message: Message):
     )
 
     await message.answer(
-        await message.answer(
-    "Добро пожаловать в Two Chance!",
-    reply_markup=keyboard,
-)
+        "Добро пожаловать в Two Chance!",
         reply_markup=keyboard,
     )
+
 
 
 def create_dispatcher():
