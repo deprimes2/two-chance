@@ -387,7 +387,7 @@ if (tg?.initData) {
 }
 
 /* ОБОЛОЧКА И ЗАСТАВКА */
-// Логотип загружается из /static/logo.jpg в HTML-шаблоне.
+// Одинаковая рубиновая двойка на главной и на экране загрузки.
 const app = document.getElementById('application');
 const splash = document.getElementById('splash');
 let splashTimer;
@@ -409,7 +409,6 @@ function showSplash() {
     splashRunning = false;
   }, 1800);
 }
-document.getElementById('privateBtn').addEventListener('click', () => openInfo('Private Space', 'Личное пространство готовится. Здесь появятся сохранённые материалы и твой прогресс.'));
 tg?.BackButton?.onClick(() => { if (splashRunning) return; if (!modal.classList.contains('hidden')) closeModal(); else navigate('home'); });
 if (tg?.initData) tg.BackButton?.hide();
 document.querySelectorAll('.page').forEach(page => { page.inert = !page.classList.contains('active'); });
