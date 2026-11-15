@@ -1,0 +1,65 @@
+# Two Chance
+
+Telegram-бот + Mini App. Весь пользовательский интерфейс — на русском.
+
+## Состав
+
+- `bot.py` — aiogram 3, команда `/start` и кнопка меню.
+- `app.py` — FastAPI, отдача интерфейса и проверка подписи Telegram `initData`.
+- `templates/index.html` — интерфейс Mini App.
+- `static/style.css` — Apple-style оформление.
+- `static/app.js` — навигация, splash, просмотр книги.
+- `static/book.pdf` — **добавьте самостоятельно**, файл не включён в архив.
+
+## Быстрый запуск
+
+1. Создайте бота через `@BotFather` и получите токен.
+2. Разместите веб-приложение на HTTPS-домене. Для тестов можно использовать HTTPS-туннель.
+3. Установите Python 3.11+ и зависимости:
+
+   ```bash
+   python -m venv .venv
+   # Windows: .venv\Scripts\activate
+   # Linux/macOS: source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+4. Скопируйте `.env.example` в `.env`, укажите `BOT_TOKEN` и `WEBAPP_URL` (публичный HTTPS-адрес без завершающего слеша).
+5. Положите PDF «Бесплатный самоучитель счастья» Дмитрия Гауна в `static/book.pdf`, предварительно убедившись в праве размещать конкретную копию.
+6. Запустите веб-сервер:
+
+   ```bash
+   uvicorn app:app --host 0.0.0.0 --port 8000
+   ```
+
+7. Во втором терминале запустите бота:
+
+   ```bash
+   python bot.py
+   ```
+
+8. Откройте чат с ботом и отправьте `/start`. Бот автоматически устанавливает кнопку меню при запуске. При желании укажите домен и меню через `@BotFather` (`/setmenubutton`).
+
+## Развёртывание
+
+На Railway или VPS запустите **два процесса** из одного репозитория:
+
+- Web: `uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}`
+- Worker: `python bot.py`
+
+Оба процесса должны получить одинаковые `BOT_TOKEN` и `WEBAPP_URL`. В Railway можно создать два сервиса с одним исходным репозиторием. Веб-сервису назначьте публичный HTTPS-домен; у worker публичный домен не нужен. На Render для polling-бота нужен постоянно работающий worker (проверьте условия тарифа).
+
+Не публикуйте `.env` и токен в репозитории. Не запускайте несколько копий polling-бота с одним токеном. HTTPS обязателен для Telegram Mini App.
+
+## Примечания
+
+- Экран платных материалов — заглушка. Оплата, каталог, база данных и административная панель не реализованы.
+- `/api/auth` проверяет `initData`, но пока не создаёт сессию: закрытых API-операций в этом демо нет. Для будущих платных функций потребуется серверная авторизация на каждом защищённом запросе.
+- Встроенный PDF зависит от возможностей браузера Telegram; предусмотрена кнопка открытия файла отдельно.
+- В обычном браузере интерфейс доступен для просмотра без Telegram-авторизации.
+
+## Updated features
+
+- Payment placeholder: `Перейти к оплате` shows a Russian toast and does not initiate a charge. Integration point is marked in `static/app.js`.
+- Telegram haptic feedback, Telegram/system dark mode, screen transitions, shimmer splash, PDF skeleton loader, focus-visible styling and responsive layout.
+- **Complete free/free-tier deployment tutorial (English):** [`DEPLOY_EN.md`](DEPLOY_EN.md).
