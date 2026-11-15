@@ -24,7 +24,69 @@ from pydantic import BaseModel
 
 load_dotenv()
 BASE = Path(__file__).resolve().parent
-app = FastAPI(title="Two Chance", docs_url=None, redoc_url=None)
+
+bot = None
+dp = create_dispatcher()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global bot
+
+    await connect_db()
+
+    bot = Bot(token=os.environ["BOT_TOKEN"])
+
+    try:
+        await configure_bot(bot)
+
+        await bot.set_webhook(
+            url=os.environ["WEBAPP_URL"].rstrip("/")
+                + "/telegram/webhook",
+            secret_token=os.environ["WEBHOOK_SECRET"],
+            drop_pending_updates=False,
+        )
+
+        yield
+    finally:
+        if bot is not None:
+            await bot.session.close()
+
+        await close_db()
+
+
+app = FastAPI(
+    title="Two Chance",
+    docs_url=None,
+    redoc_url=None,
+    lifespan=lifespan,
+)
+
+
+@app.post("/telegram/webhook")
+async def telegram_webhook(request: Request):
+    secret = request.headers.get(
+        "X-Telegram-Bot-Api-Secret-Token", ""
+    )
+
+    if not hmac.compare_digest(
+        secret,
+        os.environ["WEBHOOK_SECRET"],
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Доступ запрещён",
+        )
+
+    update = Update.model_validate(
+        await request.json(),
+        context={"bot": bot},
+    )
+
+    await dp.feed_update(bot, update)
+
+    return {"ok": True}
+
 app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
 templates = Jinja2Templates(directory=str(BASE / "templates"))
 
