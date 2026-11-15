@@ -1,10 +1,10 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#09080a">
-
   <title>Two Chance</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -19,13 +19,8 @@
       --border: rgba(255,255,255,.13);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--bg);
-    }
+    * { box-sizing: border-box; }
+    html { background: var(--bg); }
 
     body {
       margin: 0;
@@ -41,13 +36,8 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    button {
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none !important;
-    }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
 
     /* ЗАГРУЗКА */
 
@@ -93,13 +83,11 @@
         transform: scale(.94);
         filter: brightness(.65) blur(4px);
       }
-
       55% {
         opacity: 1;
         transform: scale(.98);
         filter: brightness(1.08) blur(0);
       }
-
       100% {
         opacity: 1;
         transform: scale(1);
@@ -159,17 +147,10 @@
       white-space: nowrap;
     }
 
-    main {
-      padding-top: 68px;
-    }
+    main { padding-top: 68px; }
 
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
+    .page { display: none; }
+    .page.active { display: block; }
 
     .page.enter {
       animation: pageEnter .35s ease both;
@@ -180,7 +161,6 @@
         opacity: 0;
         transform: translateY(10px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -189,9 +169,7 @@
 
     /* ЗАГОЛОВОК */
 
-    .intro {
-      margin-bottom: 48px;
-    }
+    .intro { margin-bottom: 48px; }
 
     .intro h1 {
       margin: 0;
@@ -201,9 +179,7 @@
       letter-spacing: -.055em;
     }
 
-    .intro h1 span {
-      color: #c5c1c9;
-    }
+    .intro h1 span { color: #c5c1c9; }
 
     /* КАРТОЧКИ */
 
@@ -238,17 +214,63 @@
         inset 0 1px 0 rgba(255,255,255,.06);
     }
 
-    .feature-card.knowledge::after {
-      content: "✦";
+    /* ДВЕ АНИМИРОВАННЫЕ СТЕКЛЯННЫЕ ДВОЙКИ */
+
+    .feature-card.knowledge::after,
+    .feature-card.book::after {
+      content: "2";
       position: absolute;
       top: 112px;
       right: 44px;
-      color: #b75a70;
-      font-size: 76px;
+      font-size: 82px;
       line-height: 1;
-      opacity: .85;
-      text-shadow: 0 0 25px rgba(180,60,95,.20);
+      font-weight: 900;
+      letter-spacing: -.08em;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      color: #c47790;
+      background: linear-gradient(
+        135deg,
+        #ffe2ed 5%,
+        #e5a2b8 23%,
+        #b75a79 48%,
+        #6e2948 72%,
+        #f0b6ca 96%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter:
+        drop-shadow(0 5px 9px rgba(15,0,8,.5))
+        drop-shadow(0 0 16px rgba(190,68,111,.36));
+      opacity: .95;
+      transform-origin: 50% 50%;
+      animation: floatingCrystalTwo 3.8s ease-in-out infinite;
       pointer-events: none;
+      will-change: transform, filter;
+    }
+
+    @keyframes floatingCrystalTwo {
+      0%, 100% {
+        transform: translateY(0) rotate(-5deg) scale(1);
+        filter:
+          drop-shadow(0 5px 9px rgba(15,0,8,.5))
+          drop-shadow(0 0 12px rgba(190,68,111,.30));
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(5deg) scale(1.06);
+        filter:
+          drop-shadow(0 13px 13px rgba(15,0,8,.4))
+          drop-shadow(0 0 25px rgba(215,94,139,.58));
+      }
+    }
+
+    /* ДВОЙКА В КАРТОЧКЕ КНИГИ */
+
+    .feature-card.book::after {
+      top: 108px;
+      right: 44px;
+      animation-delay: -1.3s;
     }
 
     .feature-card.book {
@@ -426,9 +448,7 @@
       line-height: 1.6;
     }
 
-    .buy-button {
-      margin-top: 24px;
-    }
+    .buy-button { margin-top: 24px; }
 
     /* PDF */
 
@@ -470,9 +490,7 @@
       margin-bottom: 12px;
     }
 
-    .skeleton-line.short {
-      width: 60%;
-    }
+    .skeleton-line.short { width: 60%; }
 
     .skeleton-sheet {
       height: 230px;
@@ -480,9 +498,7 @@
     }
 
     @keyframes skeleton {
-      to {
-        background-position: -200% 0;
-      }
+      to { background-position: -200% 0; }
     }
 
     /* УВЕДОМЛЕНИЯ */
@@ -538,9 +554,7 @@
       background: #242027;
     }
 
-    .modal-panel h2 {
-      margin: 0 0 12px;
-    }
+    .modal-panel h2 { margin: 0 0 12px; }
 
     .modal-panel p {
       color: #b5afb8;
@@ -557,17 +571,9 @@
     }
 
     @media (max-width: 380px) {
-      .app {
-        padding-inline: 17px;
-      }
-
-      .feature-card {
-        padding: 22px;
-      }
-
-      .intro h1 {
-        font-size: 34px;
-      }
+      .app { padding-inline: 17px; }
+      .feature-card { padding: 22px; }
+      .intro h1 { font-size: 34px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -578,7 +584,10 @@
         filter: none;
       }
 
-      .page.enter {
+      .page.enter { animation: none; }
+
+      .feature-card.knowledge::after,
+      .feature-card.book::after {
         animation: none;
       }
     }
@@ -662,7 +671,7 @@
             <h2>Почитать книгу:<br>как стать лучше</h2>
 
             <p>
-              Всего прочитав это ты можешь стать в 2 раза лучше
+              Прочитав это - ты можешь стать в 2 раза лучше.
             </p>
 
             <button class="secondary" type="button" data-go="reader">
