@@ -37,9 +37,10 @@ async def start(message: Message):
     )
 
     await message.answer(
-        "Добро пожаловать в Two Chance! ✨\n\n"
-        "Здесь вы можете изучить полезные материалы "
-        "и бесплатно почитать книгу.",
+        await message.answer(
+    "Добро пожаловать в Two Chance!",
+    reply_markup=keyboard,
+)
         reply_markup=keyboard,
     )
 
