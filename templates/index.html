@@ -2,834 +2,251 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#09080a">
-
-  <title>Two Chance</title>
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="/static/app.js?v=redcrystal5" defer></script>
-
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #09080a;
-      --text: #f7f7f9;
-      --muted: #a7a3ac;
-      --border: rgba(255,255,255,.13);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--bg);
-    }
-
-    body {
-      margin: 0;
-      min-height: 100dvh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    button, a {
-      font: inherit;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* ЗАГРУЗКА */
-
-    .splash {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background: #000;
-      opacity: 1;
-      transition: opacity .9s ease, visibility .9s ease;
-    }
-
-    .splash.out {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .splash-content {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .crystal-splash-logo {
-      display: block;
-      width: min(100vw, 470px);
-      max-height: 85dvh;
-      object-fit: contain;
-      opacity: 0;
-      transform: scale(.94);
-      filter: brightness(.65) blur(4px);
-      animation: logoReveal 1.9s cubic-bezier(.16,1,.3,1) forwards;
-    }
-
-    @keyframes logoReveal {
-      0% {
-        opacity: 0;
-        transform: scale(.94);
-        filter: brightness(.65) blur(4px);
-      }
-
-      55% {
-        opacity: 1;
-        transform: scale(.98);
-        filter: brightness(1.08) blur(0);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1);
-        filter: brightness(1) blur(0);
-      }
-    }
-
-    /* ПРИЛОЖЕНИЕ */
-
-    .app {
-      position: relative;
-      isolation: isolate;
-      width: 100%;
-      max-width: 680px;
-      min-height: 100dvh;
-      margin: 0 auto;
-      padding: 24px 20px 32px;
-      background:
-        radial-gradient(ellipse at 95% 22%, rgba(110,20,45,.15), transparent 42%),
-        radial-gradient(ellipse at 0% 75%, rgba(85,15,35,.09), transparent 48%),
-        #09080a;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding-bottom: 25px;
-      border-bottom: 1px solid rgba(255,255,255,.14);
-    }
-
-    .brand-symbol {
-      font-size: 48px;
-      line-height: 1;
-      font-weight: 900;
-      letter-spacing: -.07em;
-      color: #f4f4f6;
-      text-shadow: 0 0 25px rgba(255,255,255,.12);
-    }
-
-    .top-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      padding: 0 18px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 999px;
-      background: rgba(255,255,255,.035);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      color: #c7c3cb;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .19em;
-      white-space: nowrap;
-    }
-
-    main {
-      padding-top: 68px;
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .page.enter {
-      animation: pageEnter .35s ease both;
-    }
-
-    @keyframes pageEnter {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* ЗАГОЛОВОК */
-
-    .intro {
-      margin-bottom: 48px;
-    }
-
-    .intro h1 {
-      margin: 0;
-      font-size: clamp(35px, 8vw, 51px);
-      line-height: 1.13;
-      font-weight: 850;
-      letter-spacing: -.055em;
-    }
-
-    .intro h1 span {
-      color: #c5c1c9;
-    }
-
-    /* КАРТОЧКИ */
-
-    .cards {
-      display: grid;
-      gap: 20px;
-    }
-
-    .feature-card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      min-height: 365px;
-      padding: 26px;
-      overflow: hidden;
-      border-radius: 29px;
-      border: 1px solid var(--border);
-      background: linear-gradient(145deg, #29272b, #18171b);
-      box-shadow:
-        0 20px 45px rgba(0,0,0,.24),
-        inset 0 1px 0 rgba(255,255,255,.05);
-    }
-
-    .feature-card.knowledge {
-      background:
-        radial-gradient(ellipse at 85% 30%, rgba(125,35,60,.20), transparent 65%),
-        linear-gradient(145deg, #2b2529 0%, #1c191d 55%, #121114 100%);
-      border-color: rgba(176,87,108,.30);
-      box-shadow:
-        0 20px 50px rgba(0,0,0,.28),
-        0 0 35px rgba(110,25,48,.07),
-        inset 0 1px 0 rgba(255,255,255,.06);
-    }
-
-    /* ПАРЯЩИЕ ЗВЁЗДЫ — ПО ВСЕЙ ПЛОЩАДИ ОБЕИХ КАРТОЧЕК */
-
-    .feature-card.knowledge::after,
-    .feature-card.book::after {
-      content: "✦";
-      position: absolute;
-      top: 65px;
-      right: 35px;
-      z-index: 0;
-      font-family: Arial, sans-serif;
-      font-size: 43px;
-      font-weight: 900;
-      line-height: 1;
-      color: #ff8d9d;
-      text-shadow:
-        0 1px 0 #ffd0d7,
-        0 3px 0 #bc4a64,
-        0 5px 9px rgba(75, 10, 30, .35),
-        0 0 20px rgba(255, 111, 143, .42);
-      opacity: .85;
-      pointer-events: none;
-      transform-origin: center;
-      animation: starWander 9s ease-in-out infinite;
-      will-change: transform;
-    }
-
-    @keyframes starWander {
-      0%, 100% {
-        transform: translate(0, 0) rotate(-12deg) scale(1);
-      }
-
-      25% {
-        transform: translate(-125px, 55px) rotate(20deg) scale(1.13);
-      }
-
-      50% {
-        transform: translate(-155px, 170px) rotate(55deg) scale(.9);
-      }
-
-      75% {
-        transform: translate(-30px, 205px) rotate(90deg) scale(1.08);
-      }
-    }
-
-    .feature-card.book::after {
-      animation-delay: -4.5s;
-      animation-duration: 10.5s;
-    }
-
-    .feature-card.book {
-      background: linear-gradient(145deg, #2b292d, #19181c 75%);
-    }
-
-    .card-top {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-
-    .card-icon {
-      display: grid;
-      place-items: center;
-      width: 54px;
-      height: 54px;
-      border-radius: 17px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.055);
-      color: #e7e3e9;
-      font-size: 29px;
-    }
-
-    .help {
-      display: grid;
-      place-items: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 50%;
-      background: rgba(255,255,255,.055);
-      color: #e8e4e9;
-      font-size: 21px;
-    }
-
-    .eyebrow {
-      position: relative;
-      z-index: 1;
-      display: block;
-      margin-bottom: 18px;
-      color: #b99aa5;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .23em;
-    }
-
-    .feature-card h2 {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 15px;
-      font-size: clamp(27px, 6vw, 35px);
-      line-height: 1.15;
-      letter-spacing: -.04em;
-      font-weight: 850;
-    }
-
-    .feature-card p {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 30px;
-      color: #b2adb5;
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    /* КНОПКИ */
-
-    .primary,
-    .secondary,
-    .link-button {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      width: 100%;
-      min-height: 60px;
-      padding: 14px 20px;
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 18px;
-      background: linear-gradient(115deg, #c9c8d0, #a9a8b2 48%, #858490);
-      color: #101014;
-      text-decoration: none;
-      font-size: 17px;
-      font-weight: 750;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.45),
-        0 8px 24px rgba(0,0,0,.20);
-      transition: transform .2s ease, filter .2s ease;
-    }
-
-    .primary:active,
-    .secondary:active,
-    .link-button:active {
-      transform: scale(.98);
-      filter: brightness(.92);
-    }
-
-    .primary span,
-    .secondary span {
-      font-size: 24px;
-      font-weight: 800;
-    }
-
-    .feature-card > .primary,
-    .feature-card > .secondary {
-      margin-top: auto;
-    }
-
-    .free-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 14px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 999px;
-      background: rgba(255,255,255,.035);
-      color: #d0ccd2;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .12em;
-    }
-
-    /* ВНУТРЕННИЕ СТРАНИЦЫ */
-
-    .back {
-      margin-bottom: 40px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: #c8c4cc;
-      font-size: 16px;
-    }
-
-    .detail-icon {
-      display: grid;
-      place-items: center;
-      width: 65px;
-      height: 65px;
-      margin-bottom: 28px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: #242127;
-      font-size: 32px;
-    }
-
-    #knowledge h1,
-    #reader h1 {
-      margin: 0 0 16px;
-      font-size: clamp(32px, 7vw, 45px);
-      line-height: 1.13;
-      letter-spacing: -.045em;
-    }
-
-    .detail-text {
-      color: #aaa5ae;
-      line-height: 1.7;
-      font-size: 16px;
-    }
-
-    .info-box {
-      margin: 30px 0;
-      padding: 23px;
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      background: #211e23;
-    }
-
-    .info-box p {
-      color: #aaa5ae;
-      line-height: 1.6;
-    }
-
-    .buy-button {
-      margin-top: 24px;
-    }
-
-    /* PDF */
-
-    .pdf-container {
-      margin: 25px 0;
-      overflow: hidden;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: #211e23;
-    }
-
-    .pdf-container iframe {
-      display: block;
-      width: 100%;
-      height: 65dvh;
-      min-height: 400px;
-      border: 0;
-      background: #fff;
-    }
-
-    .pdf-skeleton {
-      margin: 25px 0;
-      padding: 20px;
-      border-radius: 20px;
-      background: #211e23;
-      color: #aaa5ae;
-    }
-
-    .skeleton-line,
-    .skeleton-sheet {
-      border-radius: 8px;
-      background: linear-gradient(90deg, #303038, #42424c, #303038);
-      background-size: 200% 100%;
-      animation: skeleton 1.5s linear infinite;
-    }
-
-    .skeleton-line {
-      height: 14px;
-      margin-bottom: 12px;
-    }
-
-    .skeleton-line.short {
-      width: 60%;
-    }
-
-    .skeleton-sheet {
-      height: 230px;
-      margin: 22px 0;
-    }
-
-    @keyframes skeleton {
-      to {
-        background-position: -200% 0;
-      }
-    }
-
-    /* УВЕДОМЛЕНИЯ */
-
-    .toast {
-      position: fixed;
-      z-index: 1100;
-      left: 50%;
-      bottom: 28px;
-      width: max-content;
-      max-width: calc(100vw - 40px);
-      padding: 15px 20px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: rgba(38,34,40,.96);
-      color: #fff;
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.5;
-      opacity: 0;
-      visibility: hidden;
-      transform: translate(-50%, 15px);
-      transition: .3s ease;
-    }
-
-    .toast.visible {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(-50%, 0);
-    }
-
-    /* МОДАЛЬНОЕ ОКНО */
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0,0,0,.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .modal-panel {
-      width: 100%;
-      max-width: 390px;
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      background: #242027;
-    }
-
-    .modal-panel h2 {
-      margin: 0 0 12px;
-    }
-
-    .modal-panel p {
-      color: #b5afb8;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    footer {
-      margin-top: 48px;
-      padding: 24px 0;
-      color: #77717b;
-      text-align: center;
-      font-size: 12px;
-    }
-
-    @media (max-width: 380px) {
-      .app {
-        padding-inline: 17px;
-      }
-
-      .feature-card {
-        padding: 22px;
-      }
-
-      .intro h1 {
-        font-size: 34px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .crystal-splash-logo {
-        animation: none;
-        opacity: 1;
-        transform: none;
-        filter: none;
-      }
-
-      .page.enter {
-        animation: none;
-      }
-
-      .feature-card.knowledge::after,
-      .feature-card.book::after {
-        animation: none;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09080a">
+<title>Two Chance</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="/static/app.js?v=reader1" defer></script>
+<style>
+:root{color-scheme:dark;--bg:#09080a;--text:#f7f7f9;--muted:#a7a3ac;--border:rgba(255,255,255,.13)}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button,a{font:inherit;-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* Загрузка */
+.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;background:#000;opacity:1;transition:opacity .9s ease,visibility .9s ease}
+.splash.out{opacity:0;visibility:hidden;pointer-events:none}
+.splash-content{width:100%;display:flex;align-items:center;justify-content:center}
+.crystal-splash-logo{display:block;width:min(100vw,470px);max-height:85dvh;object-fit:contain;opacity:0;transform:scale(.94);filter:brightness(.65) blur(4px);animation:logoReveal 1.9s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes logoReveal{
+0%{opacity:0;transform:scale(.94);filter:brightness(.65) blur(4px)}
+55%{opacity:1;transform:scale(.98);filter:brightness(1.08) blur(0)}
+100%{opacity:1;transform:scale(1);filter:brightness(1) blur(0)}
+}
+
+/* Приложение */
+.app{position:relative;isolation:isolate;width:100%;max-width:680px;min-height:100dvh;margin:0 auto;padding:24px 20px 32px;background:radial-gradient(ellipse at 95% 22%,rgba(110,20,45,.15),transparent 42%),radial-gradient(ellipse at 0% 75%,rgba(85,15,35,.09),transparent 48%),#09080a}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:25px;border-bottom:1px solid rgba(255,255,255,.14)}
+.brand-symbol{font-size:48px;line-height:1;font-weight:900;letter-spacing:-.07em;color:#f4f4f6;text-shadow:0 0 25px rgba(255,255,255,.12)}
+.top-pill{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 18px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.035);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#c7c3cb;font-size:10px;font-weight:800;letter-spacing:.19em;white-space:nowrap}
+main{padding-top:68px}
+.page{display:none}
+.page.active{display:block}
+.page.enter{animation:pageEnter .35s ease both}
+@keyframes pageEnter{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+.intro{margin-bottom:48px}
+.intro h1{margin:0;font-size:clamp(35px,8vw,51px);line-height:1.13;font-weight:850;letter-spacing:-.055em}
+.intro h1 span{color:#c5c1c9}
+
+/* Карточки */
+.cards{display:grid;gap:20px}
+.feature-card{position:relative;display:flex;flex-direction:column;min-height:365px;padding:26px;overflow:hidden;border-radius:29px;border:1px solid var(--border);background:linear-gradient(145deg,#29272b,#18171b);box-shadow:0 20px 45px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.05)}
+.feature-card.knowledge{background:radial-gradient(ellipse at 85% 30%,rgba(125,35,60,.20),transparent 65%),linear-gradient(145deg,#2b2529 0%,#1c191d 55%,#121114 100%);border-color:rgba(176,87,108,.30);box-shadow:0 20px 50px rgba(0,0,0,.28),0 0 35px rgba(110,25,48,.07),inset 0 1px 0 rgba(255,255,255,.06)}
+.feature-card.book{background:linear-gradient(145deg,#2b292d,#19181c 75%)}
+
+/* Звёздочки в обеих карточках */
+.feature-card.knowledge::after,.feature-card.book::after{
+content:"✦";position:absolute;top:65px;right:35px;z-index:0;
+font-family:Arial,sans-serif;font-size:43px;font-weight:900;line-height:1;
+color:#ff8d9d;
+text-shadow:0 1px 0 #ffd0d7,0 3px 0 #bc4a64,0 5px 9px rgba(75,10,30,.35),0 0 20px rgba(255,111,143,.42);
+opacity:.85;pointer-events:none;transform-origin:center;
+animation:starWander 9s ease-in-out infinite;will-change:transform;
+}
+@keyframes starWander{
+0%,100%{transform:translate(0,0) rotate(-12deg) scale(1)}
+25%{transform:translate(-125px,55px) rotate(20deg) scale(1.13)}
+50%{transform:translate(-155px,170px) rotate(55deg) scale(.9)}
+75%{transform:translate(-30px,205px) rotate(90deg) scale(1.08)}
+}
+.feature-card.book::after{animation-delay:-4.5s;animation-duration:10.5s}
+
+.card-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.card-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:17px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.055);color:#e7e3e9;font-size:29px}
+.help{display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(255,255,255,.055);color:#e8e4e9;font-size:21px}
+.eyebrow{position:relative;z-index:1;display:block;margin-bottom:18px;color:#b99aa5;font-size:11px;font-weight:800;letter-spacing:.23em}
+.feature-card h2{position:relative;z-index:1;margin:0 0 15px;font-size:clamp(27px,6vw,35px);line-height:1.15;letter-spacing:-.04em;font-weight:850}
+.feature-card p{position:relative;z-index:1;margin:0 0 30px;color:#b2adb5;font-size:15px;line-height:1.65}
+
+/* Кнопки */
+.primary,.secondary,.link-button{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:60px;padding:14px 20px;border:1px solid rgba(255,255,255,.25);border-radius:18px;background:linear-gradient(115deg,#c9c8d0,#a9a8b2 48%,#858490);color:#101014;text-decoration:none;font-size:17px;font-weight:750;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 24px rgba(0,0,0,.20);transition:transform .2s ease,filter .2s ease}
+.primary:active,.secondary:active,.link-button:active{transform:scale(.98);filter:brightness(.92)}
+.primary span,.secondary span{font-size:24px;font-weight:800}
+.feature-card>.primary,.feature-card>.secondary{margin-top:auto}
+.free-pill{display:inline-flex;align-items:center;padding:10px 14px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.035);color:#d0ccd2;font-size:10px;font-weight:800;letter-spacing:.12em}
+
+/* Внутренние страницы */
+.back{margin-bottom:40px;padding:0;border:0;background:transparent;color:#c8c4cc;font-size:16px}
+.detail-icon{display:grid;place-items:center;width:65px;height:65px;margin-bottom:28px;border:1px solid var(--border);border-radius:20px;background:#242127;font-size:32px}
+#knowledge h1,#reader h1{margin:0 0 16px;font-size:clamp(32px,7vw,45px);line-height:1.13;letter-spacing:-.045em}
+.detail-text{color:#aaa5ae;line-height:1.7;font-size:16px}
+.info-box{margin:30px 0;padding:23px;border:1px solid var(--border);border-radius:22px;background:#211e23}
+.info-box p{color:#aaa5ae;line-height:1.6}
+.buy-button{margin-top:24px}
+
+/* Уведомления */
+.toast{position:fixed;z-index:1100;left:50%;bottom:28px;width:max-content;max-width:calc(100vw - 40px);padding:15px 20px;border:1px solid var(--border);border-radius:16px;background:rgba(38,34,40,.96);color:#fff;text-align:center;font-size:14px;line-height:1.5;opacity:0;visibility:hidden;transform:translate(-50%,15px);transition:.3s ease}
+.toast.visible{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.modal-panel{width:100%;max-width:390px;padding:28px;border:1px solid var(--border);border-radius:26px;background:#242027}
+.modal-panel h2{margin:0 0 12px}
+.modal-panel p{color:#b5afb8;line-height:1.6;margin-bottom:25px}
+footer{margin-top:48px;padding:24px 0;color:#77717b;text-align:center;font-size:12px}
+
+/* Встроенная читалка */
+.reader-heading{margin-bottom:22px}
+.reader-heading h1{margin-bottom:8px!important}
+.reader-heading .detail-text{margin:0;font-size:14px}
+.book-reader{border:1px solid rgba(255,255,255,.13);border-radius:27px;overflow:hidden;background:#171317;box-shadow:0 18px 45px rgba(0,0,0,.2)}
+.reader-progress{height:3px;background:rgba(255,255,255,.09)}
+.reader-progress>div{width:0;height:100%;background:linear-gradient(90deg,#a54c69,#ffb4c7);transition:width .3s ease}
+.reader-meta{display:flex;justify-content:space-between;gap:10px;padding:24px 23px 12px;color:#b68b9c;font-size:10px;font-weight:800;letter-spacing:.16em}
+.reader-sheet{min-height:380px;max-height:min(65dvh,680px);overflow-y:auto;padding:15px 23px 32px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#5c3b4b transparent}
+.reader-sheet h2{margin:4px 0 23px;color:#f9eef2;font-size:clamp(27px,6vw,35px);line-height:1.2;letter-spacing:-.035em}
+.reader-sheet p{margin:0 0 19px;color:#d5cbd0;font-size:16px;line-height:1.85;overflow-wrap:break-word}
+.reader-sheet p.practice{margin-top:25px;padding:18px;border:1px solid rgba(255,145,170,.19);border-radius:16px;background:rgba(185,80,110,.09);color:#f2cbd7}
+.reader-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 21px;border-top:1px solid rgba(255,255,255,.09)}
+.reader-actions button{width:51px;height:47px;flex-shrink:0;border:1px solid rgba(255,255,255,.16);border-radius:15px;background:#332830;color:#ffd7e3;font-size:25px}
+.reader-actions button:disabled{opacity:.25;cursor:default}
+.reader-actions span{color:#bcb0b8;font-size:12px;text-align:center}
+.reader-hint{margin:0;padding:0 18px 20px;color:#8f808a;font-size:11px;text-align:center}
+
+@media(max-width:380px){
+.app{padding-inline:17px}
+.feature-card{padding:22px}
+.intro h1{font-size:34px}
+}
+@media(prefers-reduced-motion:reduce){
+.crystal-splash-logo{animation:none;opacity:1;transform:none;filter:none}
+.page.enter,.feature-card.knowledge::after,.feature-card.book::after{animation:none}
+}
+</style>
 </head>
-
 <body>
 
-  <!-- ЗАГРУЗКА -->
-  <div id="splash" class="splash" aria-label="Загрузка приложения">
-    <div class="splash-content">
-      <img
-        class="crystal-splash-logo"
-        src="/static/logo.jpg?v=2"
-        alt="Two Chance"
-      >
-    </div>
+<!-- Загрузка -->
+<div id="splash" class="splash" aria-label="Загрузка приложения">
+  <div class="splash-content">
+    <img class="crystal-splash-logo" src="/static/logo.jpg?v=2" alt="Two Chance">
   </div>
+</div>
 
-  <!-- ПРИЛОЖЕНИЕ -->
-  <div id="application" class="app hidden">
+<!-- Приложение -->
+<div id="application" class="app hidden">
+  <header class="topbar">
+    <span class="brand-symbol">2</span>
+    <span class="top-pill">PRIVATE SPACE</span>
+  </header>
 
-    <header class="topbar">
-      <span class="brand-symbol">2</span>
-      <span class="top-pill">PRIVATE SPACE</span>
-    </header>
+  <main>
+    <!-- Главная -->
+    <section id="home" class="page active">
+      <div class="intro">
+        <h1>Твой второй шанс<br><span>начинается здесь.</span></h1>
+      </div>
 
-    <main>
+      <div class="cards">
+        <article class="feature-card knowledge">
+          <div class="card-top">
+            <span class="card-icon">✧</span>
+            <button id="helpBtn" class="help" type="button" aria-label="О разделе">?</button>
+          </div>
+          <span class="eyebrow">EXCLUSIVE ACCESS</span>
+          <h2>Покупка драгоценных материалов</h2>
+          <p>Особые знания для тех, кто стремится к большему.</p>
+          <button class="primary" type="button" data-go="knowledge">
+            Исследовать <span aria-hidden="true">↗</span>
+          </button>
+        </article>
 
-      <!-- ГЛАВНАЯ -->
-      <section id="home" class="page active">
+        <article class="feature-card book">
+          <div class="card-top">
+            <span class="card-icon">▤</span>
+            <span class="free-pill">FREE ACCESS</span>
+          </div>
+          <span class="eyebrow">PERSONAL GROWTH</span>
+          <h2>Почитать книгу:<br>как стать лучше</h2>
+          <p>Прочитав это - ты можешь стать в 2 раза лучше.</p>
+          <button class="secondary" type="button" data-go="reader">
+            Начать чтение <span aria-hidden="true">↗</span>
+          </button>
+        </article>
+      </div>
+    </section>
 
-        <div class="intro">
-          <h1>
-            Твой второй шанс<br>
-            <span>начинается здесь.</span>
-          </h1>
-        </div>
-
-        <div class="cards">
-
-          <!-- МАТЕРИАЛЫ -->
-          <article class="feature-card knowledge">
-
-            <div class="card-top">
-              <span class="card-icon">✧</span>
-
-              <button
-                id="helpBtn"
-                class="help"
-                type="button"
-                aria-label="О разделе"
-              >?</button>
-            </div>
-
-            <span class="eyebrow">EXCLUSIVE ACCESS</span>
-
-            <h2>Покупка драгоценных материалов</h2>
-
-            <p>
-              Особые знания для тех, кто стремится к большему.
-            </p>
-
-            <button class="primary" type="button" data-go="knowledge">
-              Исследовать
-              <span aria-hidden="true">↗</span>
-            </button>
-
-          </article>
-
-          <!-- КНИГА -->
-          <article class="feature-card book">
-
-            <div class="card-top">
-              <span class="card-icon">▤</span>
-              <span class="free-pill">FREE ACCESS</span>
-            </div>
-
-            <span class="eyebrow">PERSONAL GROWTH</span>
-
-            <h2>Почитать книгу:<br>как стать лучше</h2>
-
-            <p>
-              Прочитав это - ты можешь стать в 2 раза лучше.
-            </p>
-
-            <button class="secondary" type="button" data-go="reader">
-              Начать чтение
-              <span aria-hidden="true">↗</span>
-            </button>
-
-          </article>
-
-        </div>
-      </section>
-
-      <!-- ЗНАНИЯ -->
-      <section id="knowledge" class="page">
-
-        <button class="back" type="button" data-go="home">
-          ‹ На главную
-        </button>
-
-        <div class="detail-icon">✦</div>
-
-        <span class="eyebrow">EXCLUSIVE ACCESS</span>
-
-        <h1>Драгоценные знания</h1>
-
-        <p class="detail-text">
-          Здесь скоро появятся подборки полезных материалов
-          и обучающие программы.
-        </p>
-
-        <div class="info-box">
-          <strong>Материалы готовятся</strong>
-          <p>
-            Следи за обновлениями — новые возможности появятся здесь.
-          </p>
-        </div>
-
-        <button id="buyBtn" class="primary buy-button" type="button">
-          Перейти к оплате
-        </button>
-
-      </section>
-
-      <!-- КНИГА -->
-      <section id="reader" class="page">
-
-        <button class="back" type="button" data-go="home">
-          ‹ На главную
-        </button>
-
-        <span class="eyebrow">FREE ACCESS</span>
-
-        <h1>Как стать лучше</h1>
-
-        <p class="detail-text">Автор: Two Chance</p>
-
-        <div id="pdfMissing" class="info-box hidden">
-          <strong>Книга пока не загружена</strong>
-          <p>Книга появится здесь в ближайшее время.</p>
-        </div>
-
-        <div
-          id="pdfSkeleton"
-          class="pdf-skeleton hidden"
-          role="status"
-          aria-label="Загрузка книги"
-        >
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line short"></div>
-          <div class="skeleton-sheet"></div>
-          <span>Загружаем книгу…</span>
-        </div>
-
-        <div id="pdfContainer" class="pdf-container hidden">
-          <iframe
-            id="pdfFrame"
-            title="Чтение книги"
-            loading="lazy"
-          ></iframe>
-        </div>
-
-        <a
-          id="pdfLink"
-          class="primary link-button hidden"
-          href="/static/book.pdf"
-          target="_blank"
-          rel="noopener"
-        >
-          Открыть PDF отдельно ↗
-        </a>
-
-      </section>
-
-    </main>
-
-    <footer>
-      Two Chance · Каждый день — новая возможность
-    </footer>
-
-  </div>
-
-  <!-- УВЕДОМЛЕНИЯ -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <!-- МОДАЛЬНОЕ ОКНО -->
-  <div
-    id="modal"
-    class="modal hidden"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitle"
-  >
-    <div class="modal-panel">
-      <h2 id="modalTitle">О разделе</h2>
-
-      <p>
-        Здесь будут доступны расширенные материалы
-        для личного развития.
+    <!-- Материалы -->
+    <section id="knowledge" class="page">
+      <button class="back" type="button" data-go="home">‹ На главную</button>
+      <div class="detail-icon">✦</div>
+      <span class="eyebrow">EXCLUSIVE ACCESS</span>
+      <h1>Драгоценные знания</h1>
+      <p class="detail-text">
+        Здесь скоро появятся подборки полезных материалов
+        и обучающие программы.
       </p>
-
-      <button id="modalClose" class="primary" type="button">
-        Понятно
+      <div class="info-box">
+        <strong>Материалы готовятся</strong>
+        <p>Следи за обновлениями — новые возможности появятся здесь.</p>
+      </div>
+      <button id="buyBtn" class="primary buy-button" type="button">
+        Перейти к оплате
       </button>
-    </div>
+    </section>
+
+    <!-- Читалка -->
+    <section id="reader" class="page">
+      <button class="back" type="button" data-go="home">‹ На главную</button>
+
+      <div class="reader-heading">
+        <span class="eyebrow">TWO CHANCE · DIGITAL BOOK</span>
+        <h1>Как стать лучше</h1>
+        <p class="detail-text">Автор: Two Chance</p>
+      </div>
+
+      <div class="book-reader" id="bookReader" aria-label="Книга Как стать лучше">
+        <div class="reader-progress">
+          <div id="readerProgressBar"></div>
+        </div>
+
+        <div class="reader-meta">
+          <span>КНИГА TWO CHANCE</span>
+          <span id="readerCount">1 / 9</span>
+        </div>
+
+        <div class="reader-sheet" id="readerSheet" tabindex="0" aria-live="polite">
+          <div id="readerContent"></div>
+        </div>
+
+        <div class="reader-actions">
+          <button type="button" id="readerPrev" aria-label="Предыдущая глава">←</button>
+          <span id="readerPosition">Глава 1 из 9</span>
+          <button type="button" id="readerNext" aria-label="Следующая глава">→</button>
+        </div>
+
+        <p class="reader-hint">Листай главы свайпом влево и вправо</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>Two Chance · Каждый день — новая возможность</footer>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-panel">
+    <h2 id="modalTitle">О разделе</h2>
+    <p>Здесь будут доступны расширенные материалы для личного развития.</p>
+    <button id="modalClose" class="primary" type="button">Понятно</button>
   </div>
+</div>
 
 </body>
 </html>
