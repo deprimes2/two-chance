@@ -1,20 +1,17 @@
 
-from contextlib import asynccontextmanager
+"""Two Chance — FastAPI, Telegram webhook and Neon."""
 
-from aiogram import Bot
-from aiogram.types import Update
-
-from bot import create_dispatcher, configure_bot
-from database import connect_db, close_db
-"""FastAPI web service for the Telegram Mini App."""
 import hashlib
 import hmac
 import json
 import os
 import time
+from contextlib import asynccontextmanager
 from pathlib import Path
 from urllib.parse import parse_qsl
 
+from aiogram import Bot
+from aiogram.types import Update
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -22,7 +19,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
+from bot import create_dispatcher, configure_bot
+from database import connect_db, close_db, save_webapp_user
+
 load_dotenv()
+
 BASE = Path(__file__).resolve().parent
 
 bot = None
@@ -34,7 +35,6 @@ async def lifespan(app: FastAPI):
     global bot
 
     await connect_db()
-
     bot = Bot(token=os.environ["BOT_TOKEN"])
 
     try:
@@ -48,6 +48,7 @@ async def lifespan(app: FastAPI):
         )
 
         yield
+
     finally:
         if bot is not None:
             await bot.session.close()
@@ -61,6 +62,29 @@ app = FastAPI(
     redoc_url=None,
     lifespan=lifespan,
 )
+
+app.mount(
+    "/static",
+    StaticFiles(directory=BASE / "static"),
+    name="static",
+)
+
+templates = Jinja2Templates(
+    directory=str(BASE / "templates")
+)
+
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+    )
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 
 @app.post("/telegram/webhook")
@@ -87,51 +111,99 @@ async def telegram_webhook(request: Request):
 
     return {"ok": True}
 
-app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
-templates = Jinja2Templates(directory=str(BASE / "templates"))
-
-
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
-
-
-@app.get("/health")
-async def health():
-    return {"status": "ok"}
-
 
 class AuthPayload(BaseModel):
     init_data: str
 
 
 def verify_init_data(init_data: str, bot_token: str) -> dict:
-    """Validate Telegram WebApp initData HMAC and freshness."""
+    """Verify Telegram Mini App initData signature."""
+
     if not init_data or not bot_token:
         raise ValueError("Missing credentials")
-    pairs = dict(parse_qsl(init_data, keep_blank_values=True))
+
+    pairs = dict(
+        parse_qsl(init_data, keep_blank_values=True)
+    )
+
     received_hash = pairs.pop("hash", "")
+
     if not received_hash:
         raise ValueError("Missing hash")
-    data_check_string = "\n".join(f"{key}={value}" for key, value in sorted(pairs.items()))
-    secret_key = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()
-    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(received_hash, calculated_hash):
+
+    data_check_string = "\n".join(
+        f"{key}={value}"
+        for key, value in sorted(pairs.items())
+    )
+
+    secret_key = hmac.new(
+        b"WebAppData",
+        bot_token.encode(),
+        hashlib.sha256,
+    ).digest()
+
+    calculated_hash = hmac.new(
+        secret_key,
+        data_check_string.encode(),
+        hashlib.sha256,
+    ).hexdigest()
+
+    if not hmac.compare_digest(
+        received_hash, calculated_hash
+    ):
         raise ValueError("Invalid signature")
+
     auth_date = int(pairs.get("auth_date", "0"))
     now = int(time.time())
-    max_age = int(os.getenv("INITDATA_MAX_AGE", "86400"))
-    if auth_date <= 0 or auth_date > now + 60 or (max_age > 0 and now - auth_date > max_age):
-        raise ValueError("Expired or invalid auth_date")
+
+    max_age = int(
+        os.getenv("INITDATA_MAX_AGE", "86400")
+    )
+
+    if (
+        auth_date <= 0
+        or auth_date > now + 60
+        or (
+            max_age > 0
+            and now - auth_date > max_age
+        )
+    ):
+        raise ValueError("Expired auth_date")
+
     return json.loads(pairs.get("user", "{}"))
 
 
 @app.post("/api/auth")
 async def authenticate(payload: AuthPayload):
     try:
-        user = verify_init_data(payload.init_data, os.environ.get("BOT_TOKEN", ""))
-        if not isinstance(user, dict) or not isinstance(user.get("id"), int):
+        user = verify_init_data(
+            payload.init_data,
+            os.environ.get("BOT_TOKEN", ""),
+        )
+
+        if (
+            not isinstance(user, dict)
+            or not isinstance(user.get("id"), int)
+        ):
             raise ValueError("Invalid user")
-    except (ValueError, TypeError, json.JSONDecodeError):
-        raise HTTPException(status_code=401, detail="Не удалось подтвердить вход через Telegram")
-    return {"ok": True, "user": {"id": user["id"], "first_name": user.get("first_name", "")}}
+
+    except (
+        ValueError,
+        TypeError,
+        json.JSONDecodeError,
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Не удалось подтвердить вход через Telegram",
+        )
+
+    # Save authenticated Telegram user to Neon.
+    await save_webapp_user(user)
+
+    return {
+        "ok": True,
+        "user": {
+            "id": user["id"],
+            "first_name": user.get("first_name", ""),
+        },
+    }
