@@ -395,3 +395,6 @@ button:focus-visible, a:focus-visible {
 /* The same ruby crystal, enlarged for the loading screen. */
 .splash-content .brand-symbol { width: 200px; height: 250px; padding: 5px; margin: auto; perspective: 750px; }
 .splash-content .crystal-object { width: 190px; height: 240px; animation-duration: 10s; }
+
+/* Move the splash crystal slightly above the optical center. */
+.splash { box-sizing: border-box; padding-bottom: 64px; }

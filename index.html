@@ -14,8 +14,53 @@
     </script>
     <script src="https://telegram.org/js/telegram-web-app.js">
     </script>
-    <link rel="stylesheet" href="/static/style.css?v=ruby4">
-  </head>
+    <link rel="stylesheet" href="/static/style.css?v=ruby5">
+  <style>
+body::before{background:radial-gradient(ellipse at 50% 8%,#a0254938,transparent 42%),radial-gradient(ellipse at 100% 58%,#70254525,transparent 48%)}
+#application main{max-width:510px;padding:0 22px}
+#application .home-nav{position:relative;border-bottom:0;padding:24px 0 18px}
+#application .home-nav::after{content:"";position:absolute;bottom:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,#e77b9c70,transparent)}
+#application .brand-symbol::before{content:"";position:absolute;inset:8px -34px -4px;border:1px solid #ed8ca51c;border-radius:50%;transform:rotateX(68deg) rotate(-25deg);box-shadow:0 0 30px #ec477e12}
+#application .crystal-object{filter:drop-shadow(0 10px 20px #e43c6c35)}
+#application .intro{padding:42px 0 35px;text-align:center}
+#application .intro h1{font-size:clamp(34px,8.7vw,44px);line-height:1.12;letter-spacing:-.055em}
+#application .intro h1 span{background:linear-gradient(110deg,#fcf0f4,#dfb3c6 55%,#99899f);background-clip:text;-webkit-background-clip:text;color:transparent}
+#application .cards{gap:22px}
+#application .feature-card{position:relative;isolation:isolate;padding:30px;border:1px solid #dfb3c625;border-radius:32px;background:radial-gradient(ellipse at 100% 0,#c4547b20,transparent 60%),linear-gradient(150deg,#30232c,#18151c 70%);box-shadow:inset 0 1px #fff1,inset 0 -1px #0006,0 22px 45px #0005;transition:transform .4s,border-color .4s;overflow:hidden}
+#application .feature-card.book{background:radial-gradient(ellipse at 0 0,#b89dc11a,transparent 60%),linear-gradient(145deg,#28232e,#151319)}
+#application .feature-card::before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 15%,#ffffff09 38%,transparent 62%);transform:translateX(-110%);animation:glass-light 10s ease-in-out infinite}
+#application .feature-card.book::before{animation-delay:3s}
+#application .feature-card:hover{transform:translateY(-3px);border-color:#dfb3c650}
+#application .card-icon{width:50px;height:50px;border-radius:17px;background:linear-gradient(135deg,#e08aa21a,#ffffff03);border-color:#eeb5c72c;box-shadow:inset 0 1px #fff1}
+#application .card-top{margin-bottom:28px}
+#application .feature-card .eyebrow{color:#d8a0b5;font-size:9px;letter-spacing:.25em;margin-bottom:18px}
+#application .feature-card h2{font-size:clamp(29px,7.5vw,36px);line-height:1.13;letter-spacing:-.045em}
+#application .feature-card p{color:#b9a9b9;margin:18px 0 28px;font-size:13px;line-height:1.8}
+#application .primary,#application .secondary{min-height:58px;border-radius:18px;background:linear-gradient(115deg,#fff4f8,#ddc9d6 55%,#bfaabf);border-color:#fff7;box-shadow:inset 0 1px #fff,0 8px 22px #0004;font-size:14px}
+#application .primary span,#application .secondary span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#3424360c;font-size:20px}
+#application .feature-card::after{font-size:49px;top:130px;right:23px;color:#f7a3bc;text-shadow:0 1px #ffe5ed,0 3px #a93d62,0 0 30px #ee729b80;opacity:.9}
+.preview-return{display:block;width:max-content;margin:18px auto 0;padding:9px 14px;border:1px solid #ffffff15;border-radius:30px;color:#bca4b7;font:10px Manrope,system-ui,sans-serif;text-decoration:none}
+@keyframes glass-light{0%,60%{transform:translateX(-110%)}90%,100%{transform:translateX(110%)}}
+@media(prefers-reduced-motion:reduce){ #application .feature-card::before{animation:none}#application .feature-card:hover{transform:none}}
+</style>
+<style>
+#application .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+#application .cards .feature-card { display:flex; flex-direction:column; min-width:0; padding:22px 14px 16px; border-radius:25px; }
+#application .cards .card-top { gap:8px; margin-bottom:22px; }
+#application .cards .card-icon { width:38px; height:38px; border-radius:13px; font-size:24px; }
+#application .cards .help { width:28px; height:28px; }
+#application .cards .free-pill { font-size:7px; padding:6px 8px; letter-spacing:.08em; }
+#application .cards .eyebrow { min-height:25px; margin-bottom:14px; font-size:8px; line-height:1.6; letter-spacing:.13em; }
+#application .cards .feature-card h2 { max-width:100%; font-size:clamp(20px,5.3vw,25px); line-height:1.17; letter-spacing:-.04em; overflow-wrap:break-word; }
+#application .cards .feature-card p { font-size:12px; line-height:1.75; margin:17px 0 24px; }
+#application .cards .primary, #application .cards .secondary { margin-top:auto; min-height:48px; padding:11px 9px; border-radius:14px; font-size:11px; gap:4px; }
+#application .cards .primary span, #application .cards .secondary span { width:21px; height:21px; flex-shrink:0; font-size:16px; }
+#application .cards .feature-card::after { right:13px; top:140px; font-size:35px; }
+#application .intro { padding:30px 0; }
+#application .intro h1 { font-size:clamp(30px,8vw,39px); }
+#application footer { padding-top:26px; }
+</style>
+</head>
   <body>
     <div id="splash" class="splash" aria-label="Загрузка приложения">
       <div class="splash-shimmer" aria-hidden="true">
@@ -53,7 +98,7 @@
               </div>
 <span class="eyebrow">EXCLUSIVE ACCESS</span>
               <h2>
-                Покупка драгоценных материалов
+                Драгоценные материалы
               </h2>
               <p>
                 Особые знания для тех, кто стремится к большему.
@@ -78,15 +123,13 @@
                 PERSONAL GROWTH
               </span>
               <h2>
-                Почитать книгу:
-                <br>
-                как стать лучше
+                Как стать<br>лучше
 </h2>
               <p>
                 Оригинальная книга Two Chance: маленькие шаги к большим переменам.
               </p>
               <button class="secondary" data-go="reader">
-                Начать чтение
+                Читать
                 <span aria-hidden="true">
                   ↗
                 </span>
@@ -189,7 +232,7 @@
         </button>
       </div>
     </div>
-    <script src="/static/app.js?v=ruby4" defer>
+    <script src="/static/app.js?v=ruby5" defer>
     </script>
   </body>
 </html>
