@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#09080a">
+
   <title>Two Chance</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -19,8 +20,13 @@
       --border: rgba(255,255,255,.13);
     }
 
-    * { box-sizing: border-box; }
-    html { background: var(--bg); }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
 
     body {
       margin: 0;
@@ -36,8 +42,13 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    button { cursor: pointer; }
-    .hidden { display: none !important; }
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
 
     /* ЗАГРУЗКА */
 
@@ -83,11 +94,13 @@
         transform: scale(.94);
         filter: brightness(.65) blur(4px);
       }
+
       55% {
         opacity: 1;
         transform: scale(.98);
         filter: brightness(1.08) blur(0);
       }
+
       100% {
         opacity: 1;
         transform: scale(1);
@@ -147,10 +160,17 @@
       white-space: nowrap;
     }
 
-    main { padding-top: 68px; }
+    main {
+      padding-top: 68px;
+    }
 
-    .page { display: none; }
-    .page.active { display: block; }
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
 
     .page.enter {
       animation: pageEnter .35s ease both;
@@ -161,6 +181,7 @@
         opacity: 0;
         transform: translateY(10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -169,7 +190,9 @@
 
     /* ЗАГОЛОВОК */
 
-    .intro { margin-bottom: 48px; }
+    .intro {
+      margin-bottom: 48px;
+    }
 
     .intro h1 {
       margin: 0;
@@ -179,7 +202,9 @@
       letter-spacing: -.055em;
     }
 
-    .intro h1 span { color: #c5c1c9; }
+    .intro h1 span {
+      color: #c5c1c9;
+    }
 
     /* КАРТОЧКИ */
 
@@ -214,64 +239,57 @@
         inset 0 1px 0 rgba(255,255,255,.06);
     }
 
-    .feature-card.book {
-      background: linear-gradient(145deg, #2b292d, #19181c 75%);
-    }
+    /* ПАРЯЩИЕ ЗВЁЗДЫ — ПО ВСЕЙ ПЛОЩАДИ ОБЕИХ КАРТОЧЕК */
 
-    /* ПЕРВЫЙ БЛОК — МАЛЕНЬКАЯ ЖИРНАЯ ДВОЙКА */
-
-    .feature-card.knowledge::after {
-      content: "2";
-      position: absolute;
-      top: 112px;
-      right: 44px;
-      font-family: Arial, sans-serif;
-      font-size: 49px;
-      font-weight: 900;
-      line-height: 1;
-      color: #ff8791;
-      text-shadow:
-        0 1px 0 #ffd0d3,
-        0 3px 0 #c64d60,
-        0 5px 6px rgba(80,12,30,.35),
-        0 0 13px rgba(255,115,135,.25);
-      opacity: .96;
-      pointer-events: none;
-      transform-origin: center;
-      animation: floatingSymbol 3.8s ease-in-out infinite;
-    }
-
-    /* ВТОРОЙ БЛОК — МАЛЕНЬКАЯ ЖИРНАЯ ЗВЁЗДОЧКА */
-
+    .feature-card.knowledge::after,
     .feature-card.book::after {
       content: "✦";
       position: absolute;
-      top: 108px;
-      right: 44px;
+      top: 65px;
+      right: 35px;
+      z-index: 0;
       font-family: Arial, sans-serif;
-      font-size: 48px;
+      font-size: 43px;
       font-weight: 900;
       line-height: 1;
-      color: #ff8791;
+      color: #ff8d9d;
       text-shadow:
-        0 1px 0 #ffd0d3,
-        0 3px 0 #c64d60,
-        0 5px 6px rgba(80,12,30,.35),
-        0 0 13px rgba(255,115,135,.25);
-      opacity: .96;
+        0 1px 0 #ffd0d7,
+        0 3px 0 #bc4a64,
+        0 5px 9px rgba(75, 10, 30, .35),
+        0 0 20px rgba(255, 111, 143, .42);
+      opacity: .85;
       pointer-events: none;
       transform-origin: center;
-      animation: floatingSymbol 3.8s ease-in-out infinite;
-      animation-delay: -1.3s;
+      animation: starWander 9s ease-in-out infinite;
+      will-change: transform;
     }
 
-    @keyframes floatingSymbol {
+    @keyframes starWander {
       0%, 100% {
-        transform: translateY(0) rotate(-5deg) scale(1);
+        transform: translate(0, 0) rotate(-12deg) scale(1);
       }
+
+      25% {
+        transform: translate(-125px, 55px) rotate(20deg) scale(1.13);
+      }
+
       50% {
-        transform: translateY(-7px) rotate(5deg) scale(1.07);
+        transform: translate(-155px, 170px) rotate(55deg) scale(.9);
       }
+
+      75% {
+        transform: translate(-30px, 205px) rotate(90deg) scale(1.08);
+      }
+    }
+
+    .feature-card.book::after {
+      animation-delay: -4.5s;
+      animation-duration: 10.5s;
+    }
+
+    .feature-card.book {
+      background: linear-gradient(145deg, #2b292d, #19181c 75%);
     }
 
     .card-top {
@@ -445,7 +463,9 @@
       line-height: 1.6;
     }
 
-    .buy-button { margin-top: 24px; }
+    .buy-button {
+      margin-top: 24px;
+    }
 
     /* PDF */
 
@@ -487,7 +507,9 @@
       margin-bottom: 12px;
     }
 
-    .skeleton-line.short { width: 60%; }
+    .skeleton-line.short {
+      width: 60%;
+    }
 
     .skeleton-sheet {
       height: 230px;
@@ -495,7 +517,9 @@
     }
 
     @keyframes skeleton {
-      to { background-position: -200% 0; }
+      to {
+        background-position: -200% 0;
+      }
     }
 
     /* УВЕДОМЛЕНИЯ */
@@ -551,7 +575,9 @@
       background: #242027;
     }
 
-    .modal-panel h2 { margin: 0 0 12px; }
+    .modal-panel h2 {
+      margin: 0 0 12px;
+    }
 
     .modal-panel p {
       color: #b5afb8;
@@ -568,9 +594,17 @@
     }
 
     @media (max-width: 380px) {
-      .app { padding-inline: 17px; }
-      .feature-card { padding: 22px; }
-      .intro h1 { font-size: 34px; }
+      .app {
+        padding-inline: 17px;
+      }
+
+      .feature-card {
+        padding: 22px;
+      }
+
+      .intro h1 {
+        font-size: 34px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -581,7 +615,10 @@
         filter: none;
       }
 
-      .page.enter,
+      .page.enter {
+        animation: none;
+      }
+
       .feature-card.knowledge::after,
       .feature-card.book::after {
         animation: none;
@@ -720,9 +757,9 @@
 
         <span class="eyebrow">FREE ACCESS</span>
 
-        <h1>Бесплатный самоучитель счастья</h1>
+        <h1>Как стать лучше</h1>
 
-        <p class="detail-text">Автор: Дмитрий Гаун</p>
+        <p class="detail-text">Автор: Two Chance · Практическое руководство</p>
 
         <div id="pdfMissing" class="info-box hidden">
           <strong>Книга пока не загружена</strong>
