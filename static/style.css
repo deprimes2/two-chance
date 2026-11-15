@@ -53,90 +53,25 @@ button:focus-visible, a:focus-visible {
 .circle:hover { background: #ffffff14; }
 .circle:active { transform: scale(.94); }
 
-/* Telegram-style header and compact navigation. */
-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #0a0a0ae6;
-  border-bottom: 1px solid #ffffff08;
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-}
-.topbar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  max-width: 480px;
-  margin: auto;
-  padding: max(16px, env(safe-area-inset-top)) 20px 16px;
-}
-.brand { font-size: 15px; font-weight: 800; letter-spacing: -.03em; }
-.brand small {
-  display: block;
-  margin-top: 3px;
-  color: #817b88;
-  text-align: center;
-  font-size: 10px;
-  font-weight: 500;
-}
-.app main { max-width: 480px; margin: auto; padding: 0 20px; }
-.home-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 26px 0;
-  border-bottom: 1px solid #ffffff14;
-}
-.brand-symbol {
-  font-size: 68px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -.09em;
-  background: linear-gradient(140deg, #fff, #8c8595);
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-.top-pill {
-  padding: 12px 15px;
-  border: 1px solid #ffffff22;
-  border-radius: 40px;
-  background: #ffffff03;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: .16em;
-  transition: background .2s;
-}
+/* The Telegram client supplies its own native header. */
+.app main { max-width: 540px; margin: auto; padding: 0 20px; }
+.home-nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0 28px; border-bottom: 1px solid #ffffff20; }
+.brand-symbol { position: relative; display: block; flex: 0 0 84px; width: 84px; height: 104px; padding: 5px; perspective: 500px; overflow: visible; }
+.crystal-object { position: relative; display: block; width: 74px; height: 94px; transform-style: preserve-3d; animation: crystal-turn 18s linear infinite; }
+.crystal-face { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; backface-visibility: visible; }
+.face-0 { transform: translateZ(-4px); opacity: .65; }
+.face-1 { transform: translateZ(-1px); opacity: .45; }
+.face-2 { transform: translateZ(2px); opacity: .45; }
+.face-3 { transform: translateZ(5px); filter: drop-shadow(0 0 9px #d3b3d32a); }
+.top-pill { padding: 13px 19px; border: 1px solid #ffffff29; border-radius: 40px; background: #ffffff03; color: #d5ced9; font-size: 10px; font-weight: 800; letter-spacing: .18em; transition: background .2s; }
 .top-pill:hover { background: #ffffff0a; }
-.menu-panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 20px;
-  width: 225px;
-  padding: 6px;
-  border-radius: 18px;
-  background: #201b24f5;
-  box-shadow: 0 20px 60px #0008;
-}
-.menu-panel button {
-  width: 100%;
-  padding: 13px;
-  border-radius: 12px;
-  color: #d5c9da;
-  text-align: left;
-  font-size: 12px;
-}
-.menu-panel button:hover { background: #ffffff08; }
+@keyframes crystal-turn { from { transform: rotateY(-18deg) rotateZ(-3deg); } to { transform: rotateY(342deg) rotateZ(-3deg); } }
 
 /* Home and glass cards. */
 .page { display: none; }
 .page.active { display: block; }
 .page.enter { animation: page-in .35s both; }
-.intro { padding: 38px 0 32px; }
+.intro { padding: 58px 0 44px; }
 .eyebrow {
   display: block;
   margin-bottom: 14px;
@@ -146,25 +81,28 @@ header {
   letter-spacing: .2em;
   text-transform: uppercase;
 }
-h1 {
-  font-size: clamp(34px, 9.2vw, 44px);
+.intro h1, #knowledge h1, #reader h1 {
+  font-size: clamp(34px, 8.7vw, 46px);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -.055em;
 }
-h1 span { color: #b4afb9; }
+.intro h1 span { color: #c7c1cc; }
 .intro p, .detail-text {
   margin: 18px 0 0;
   color: #a39ba9;
   font-size: 13px;
   line-height: 1.9;
 }
-.cards { display: flex; flex-direction: column; gap: 16px; }
+.cards { display: flex; flex-direction: column; gap: 20px; }
 .feature-card {
-  padding: clamp(22px, 6vw, 30px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(24px, 6vw, 32px);
   border: 1px solid var(--line);
-  border-radius: 28px;
-  background: linear-gradient(140deg, #ffffff0b, #ffffff03);
+  border-radius: 30px;
+  background: linear-gradient(145deg, #28252c, #141316);
   box-shadow: 0 18px 45px #0004, inset 0 1px #ffffff07;
   -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
@@ -214,13 +152,13 @@ h1 span { color: #b4afb9; }
   color: #bfb4c3;
 }
 .feature-card h2 {
-  font-size: clamp(25px, 7vw, 31px);
+  font-size: clamp(27px, 7.1vw, 35px);
   font-weight: 800;
-  line-height: 1.24;
+  line-height: 1.18;
   letter-spacing: -.04em;
 }
 .feature-card p {
-  margin: 16px 0 26px;
+  margin: 20px 0 30px;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.85;
@@ -376,7 +314,7 @@ h1 span { color: #b4afb9; }
   max-height: 85dvh;
   padding: 28px;
   border: 1px solid #ffffff22;
-  border-radius: 28px;
+  border-radius: 30px;
   background: #19161c;
 }
 .modal-panel h2 { font-size: 26px; font-weight: 800; letter-spacing: -.04em; }
@@ -423,6 +361,35 @@ h1 span { color: #b4afb9; }
   from { opacity: 0; transform: translateY(7px); }
   to { opacity: 1; transform: none; }
 }
+
+/* Returning star effect: slow floating facets, confined to each card. */
+.feature-card::after {
+  content: "✦";
+  position: absolute;
+  z-index: -1;
+  top: 140px;
+  right: 24px;
+  color: #ef8fa9;
+  font-family: Arial, sans-serif;
+  font-size: 48px;
+  line-height: 1;
+  text-shadow: 0 1px #ffd7df, 0 3px #a14d68, 0 0 24px #ed6e9a70;
+  opacity: .85;
+  pointer-events: none;
+  animation: star-wander 10s ease-in-out infinite;
+}
+.feature-card.book::after { animation-delay: -5s; font-size: 38px; }
+.feature-card .card-top { margin-bottom: 30px; }
+.feature-card .eyebrow { margin-bottom: 20px; }
+.feature-card h2 { max-width: 94%; }
+.primary, .secondary { position: relative; z-index: 1; }
+@keyframes star-wander {
+  0%, 100% { transform: translate(0, 0) rotate(-12deg) scale(1); }
+  35% { transform: translate(-35px, 42px) rotate(35deg) scale(1.12); }
+  70% { transform: translate(-12px, 90px) rotate(75deg) scale(.9); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .crystal-object { transform: rotateY(-18deg) rotateZ(-3deg); }
 }

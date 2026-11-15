@@ -83,7 +83,6 @@ const modalClose = document.getElementById('modalClose');
 
 let modalOpener;
 function openInfo(title, text) {
-  closeMenu();
   modalOpener = document.activeElement;
   document.getElementById('modalTitle').textContent = title;
   modal.querySelector('p').textContent = text;
@@ -396,7 +395,6 @@ let splashRunning = false;
 function showSplash() {
   clearTimeout(splashTimer);
   splashRunning = true;
-  closeMenu();
   app.inert = true;
   splash.classList.remove('out');
   splash.removeAttribute('aria-hidden');
@@ -411,19 +409,7 @@ function showSplash() {
     splashRunning = false;
   }, 1800);
 }
-const appMenu = document.getElementById('appMenu');
-const moreBtn = document.getElementById('moreBtn');
-function closeMenu() { appMenu.classList.add('hidden'); moreBtn.setAttribute('aria-expanded', 'false'); }
-moreBtn.addEventListener('click', () => {
-  const isHidden = appMenu.classList.toggle('hidden');
-  moreBtn.setAttribute('aria-expanded', String(!isHidden));
-});
-document.addEventListener('click', event => { if (!event.target.closest('.topbar')) closeMenu(); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape' && !appMenu.classList.contains('hidden')) { closeMenu(); moreBtn.focus(); } });
-document.getElementById('showSplash').addEventListener('click', showSplash);
-document.getElementById('aboutBtn').addEventListener('click', () => openInfo('Two Chance', 'Каждый день — новая возможность. Пространство для знаний и маленьких шагов к большим переменам.'));
 document.getElementById('privateBtn').addEventListener('click', () => openInfo('Private Space', 'Личное пространство готовится. Здесь появятся сохранённые материалы и твой прогресс.'));
-document.getElementById('closeApp').addEventListener('click', () => { if (tg?.initData) tg.close(); else showToast('В браузере приложение можно закрыть вместе с вкладкой.'); });
 tg?.BackButton?.onClick(() => { if (splashRunning) return; if (!modal.classList.contains('hidden')) closeModal(); else navigate('home'); });
 if (tg?.initData) tg.BackButton?.hide();
 document.querySelectorAll('.page').forEach(page => { page.inert = !page.classList.contains('active'); });
