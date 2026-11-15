@@ -46,3 +46,25 @@ async def save_user(user):
             user.username,
         )
 
+async def save_webapp_user(user: dict):
+    if pool is None:
+        raise RuntimeError("База данных недоступна")
+
+    async with pool.acquire() as conn:
+        await conn.execute(
+            """
+            INSERT INTO users (
+                telegram_id, first_name, username
+            )
+            VALUES ($1, $2, $3)
+            ON CONFLICT (telegram_id)
+            DO UPDATE SET
+                first_name = EXCLUDED.first_name,
+                username = EXCLUDED.username,
+                last_seen_at = NOW()
+            """,
+            user["id"],
+            user.get("first_name", ""),
+            user.get("username"),
+        )
+
