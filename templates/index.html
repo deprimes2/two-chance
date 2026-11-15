@@ -1,133 +1,77 @@
 
 <!doctype html>
-<html lang="ru">  
-<style>
-/* TWO CHANCE — CINEMATIC LOADING */
-
-.splash {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 1000 !important;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: #000 !important;
-  opacity: 1;
-  transition:
-    opacity .9s cubic-bezier(.4, 0, .2, 1),
-    visibility .9s ease !important;
-}
-
-.splash.out {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-.splash-content {
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: none !important;
-}
-
-.crystal-splash-logo {
-  display: block;
-  width: min(100vw, 470px);
-  max-height: 85dvh;
-  height: auto;
-  object-fit: contain;
-
-  opacity: 0;
-  transform: scale(.94);
-  filter: brightness(.65) blur(4px);
-
-  animation: cinematicLogo 1.9s
-    cubic-bezier(.16, 1, .3, 1) forwards !important;
-}
-
-@keyframes cinematicLogo {
-  0% {
-    opacity: 0;
-    transform: scale(.94);
-    filter: brightness(.65) blur(4px);
-  }
-
-  55% {
-    opacity: 1;
-    transform: scale(.98);
-    filter: brightness(1.08) blur(0);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: brightness(1) blur(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .crystal-splash-logo {
-    animation: none !important;
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-}
-</style>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#080809">
+
   <title>Two Chance</title>
 
+  <link
+    rel="stylesheet"
+    href="/static/style.css?v=cinematic3"
+  >
+
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="/static/app.js?v=cinematic2" defer></script>
+
+  <script
+    src="/static/app.js?v=cinematic3"
+    defer
+  ></script>
+
   <style>
     :root {
       color-scheme: dark;
       --bg: #080809;
-      --text: #f7f7f8;
-      --muted: #aaa7ae;
-      --silver: #c3c1ca;
+      --surface: #202024;
+      --text: #f7f7fa;
+      --muted: #a5a5af;
+      --line: rgba(255,255,255,.12);
+      --blue: #087cf5;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html, body {
-      margin: 0;
-      min-height: 100%;
+    html {
       background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont,
-        "SF Pro Display", "Segoe UI", Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      min-height: 100vh;
-      overflow-x: hidden;
+      margin: 0;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
     }
 
     button {
       font: inherit;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    a {
-      -webkit-tap-highlight-color: transparent;
     }
 
     .hidden {
       display: none !important;
     }
 
-    /* ЗАГРУЗКА */
+    /* CINEMATIC SPLASH */
 
     .splash {
       position: fixed;
@@ -136,9 +80,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       background: #000;
-      transition: opacity .5s ease, visibility .5s ease;
+      overflow: hidden;
+      opacity: 1;
+      transition:
+        opacity .9s cubic-bezier(.4,0,.2,1),
+        visibility .9s ease;
     }
 
     .splash.out {
@@ -152,7 +99,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: logoAppear .8s ease both;
     }
 
     .crystal-splash-logo {
@@ -161,87 +107,99 @@
       max-height: 85dvh;
       height: auto;
       object-fit: contain;
+      opacity: 0;
+      transform: scale(.94);
+      filter: brightness(.65) blur(4px);
+      animation: cinematicLogo 1.9s
+        cubic-bezier(.16,1,.3,1) forwards;
     }
 
-    @keyframes logoAppear {
-      from {
+    @keyframes cinematicLogo {
+      0% {
         opacity: 0;
-        transform: scale(.93);
+        transform: scale(.94);
+        filter: brightness(.65) blur(4px);
       }
-      to {
+      55% {
+        opacity: 1;
+        transform: scale(.98);
+        filter: brightness(1.08) blur(0);
+      }
+      100% {
         opacity: 1;
         transform: scale(1);
+        filter: brightness(1) blur(0);
       }
     }
 
-    /* ОСНОВА */
+    /* APPLICATION */
 
     .app {
-      max-width: 740px;
-      min-height: 100vh;
+      position: relative;
+      width: 100%;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      background: #080809;
+      min-height: 100dvh;
+      padding: 24px 20px 32px;
+      overflow: hidden;
+      isolation: isolate;
     }
 
-    /* ВЕРХНЯЯ ПАНЕЛЬ */
+    .app::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 420px;
+      left: -160px;
+      width: 480px;
+      height: 560px;
+      background: radial-gradient(
+        ellipse,
+        rgba(48,74,139,.16),
+        transparent 68%
+      );
+      pointer-events: none;
+      filter: blur(40px);
+    }
 
     .topbar {
       display: flex;
       align-items: center;
-      gap: 12px;
-      min-height: 86px;
-      border-bottom: 1px solid #28272b;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 2px 0 24px;
+      border-bottom: 1px solid var(--line);
     }
 
     .brand-symbol {
-      width: 41px;
-      height: 41px;
-      flex: none;
-      display: grid;
-      place-items: center;
-      border: 1px solid #525057;
-      border-radius: 13px;
-      background: linear-gradient(135deg, #28272b, #111114);
-      color: #e8e7ed;
-      font-size: 27px;
-      font-weight: 850;
+      font-size: 43px;
       line-height: 1;
-    }
-
-    .brand {
-      color: #f5f5f7;
-      font-size: 17px;
-      font-weight: 850;
-      letter-spacing: .21em;
+      font-weight: 900;
+      letter-spacing: -.07em;
+      color: #f4f4f7;
+      text-shadow: 0 0 22px rgba(255,255,255,.14);
     }
 
     .top-pill {
-      margin-left: auto;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-height: 38px;
-      padding: 0 13px;
-      border: 1px solid #38353b;
+      padding: 0 17px;
+      border: 1px solid rgba(255,255,255,.17);
       border-radius: 999px;
-      background: rgba(255,255,255,.025);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      color: #b9b4be;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: .15em;
+      background: rgba(255,255,255,.045);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: #c3c3cc;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .2em;
       white-space: nowrap;
     }
 
-    /* СТРАНИЦЫ */
-
     main {
-      flex: 1;
-      padding-top: 49px;
+      padding-top: 66px;
     }
 
     .page {
@@ -253,13 +211,13 @@
     }
 
     .page.enter {
-      animation: pageEnter .3s ease both;
+      animation: pageEnter .35s ease both;
     }
 
     @keyframes pageEnter {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(10px);
       }
       to {
         opacity: 1;
@@ -267,355 +225,363 @@
       }
     }
 
-    /* ЗАГОЛОВОК */
-
     .intro {
-      margin-bottom: 58px;
+      margin-bottom: 42px;
     }
 
     .intro h1 {
       margin: 0;
-      font-size: clamp(34px, 8vw, 49px);
+      font-size: clamp(35px, 8vw, 51px);
       font-weight: 850;
-      line-height: 1.16;
-      letter-spacing: -.05em;
-      color: #f6f6f7;
+      line-height: 1.12;
+      letter-spacing: -.055em;
     }
 
     .intro h1 span {
-      display: block;
-      color: #b8b5bd;
+      color: #c5c5ce;
     }
-
-    /* КАРТОЧКИ */
 
     .cards {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 20px;
     }
+
+    /* PREMIUM CARDS */
 
     .feature-card {
       position: relative;
       display: flex;
       flex-direction: column;
-      min-height: 375px;
+      min-height: 355px;
       padding: 26px;
-      overflow: hidden;
-      border: 1px solid rgba(181,111,130,.25);
       border-radius: 29px;
+      border: 1px solid rgba(255,255,255,.12);
       background: linear-gradient(
         145deg,
-        #292629 0%,
-        #201c20 45%,
-        #151416 100%
+        #29292f 0%,
+        #202025 52%,
+        #17171b 100%
       );
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      overflow: hidden;
+      box-shadow:
+        0 20px 45px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.045);
     }
 
-    .feature-card.book {
-      min-height: 355px;
-      border-color: #3b3a3e;
-      background: linear-gradient(
-        145deg,
-        #2b2b2d,
-        #1b1b1e 75%,
-        #151517
+    .feature-card.knowledge::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -125px;
+      top: -100px;
+      background: radial-gradient(
+        circle,
+        rgba(97,117,195,.20),
+        transparent 70%
       );
+      filter: blur(25px);
+      pointer-events: none;
+    }
+
+    .feature-card.book::before {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      left: -120px;
+      top: -120px;
+      background: radial-gradient(
+        circle,
+        rgba(78,118,169,.15),
+        transparent 70%
+      );
+      pointer-events: none;
     }
 
     .card-top {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      min-height: 46px;
-      margin-bottom: 27px;
+      align-items: center;
+      margin-bottom: 29px;
     }
 
     .card-icon {
       display: grid;
       place-items: center;
-      width: 47px;
-      height: 47px;
-      border: 1px solid #535057;
-      border-radius: 15px;
-      background: rgba(255,255,255,.065);
-      color: #d5d1d9;
-      font-size: 27px;
+      width: 54px;
+      height: 54px;
+      border-radius: 17px;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.055);
+      color: #e7e7ef;
+      font-size: 29px;
+      font-weight: 300;
     }
 
     .help {
       display: grid;
       place-items: center;
-      width: 34px;
-      height: 34px;
-      border: 1px solid #514c53;
+      width: 39px;
+      height: 39px;
       border-radius: 50%;
-      background: rgba(255,255,255,.045);
-      color: #ddd8df;
-      font-size: 17px;
+      border: 1px solid rgba(255,255,255,.17);
+      background: rgba(255,255,255,.055);
+      color: #e5e5eb;
+      font-size: 20px;
     }
 
-    .card-label {
+    .eyebrow {
       display: block;
-      margin-bottom: 13px;
-      color: #b99ca6;
-      font-size: 10px;
+      margin-bottom: 17px;
+      color: #aaaab8;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: .21em;
+      letter-spacing: .23em;
     }
 
     .feature-card h2 {
       position: relative;
       z-index: 1;
-      margin: 0 0 15px;
-      max-width: 450px;
-      color: #f7f7f8;
-      font-size: clamp(24px, 6vw, 31px);
-      font-weight: 800;
-      line-height: 1.17;
+      margin: 0 0 14px;
+      font-size: clamp(27px, 6vw, 36px);
+      line-height: 1.15;
       letter-spacing: -.04em;
+      font-weight: 850;
     }
 
     .feature-card p {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 29px;
-      max-width: 420px;
-      color: #aaa6ae;
-      font-size: 14px;
+      margin: 0 0 28px;
+      color: #b1b1bb;
+      font-size: 15px;
       line-height: 1.65;
     }
-
-    /* КРИСТАЛЛ */
-
-    .crystal-animation {
-      position: absolute;
-      top: 77px;
-      right: 27px;
-      display: grid;
-      place-items: center;
-      width: 69px;
-      height: 69px;
-      pointer-events: none;
-      opacity: .78;
-    }
-
-    .crystal-object {
-      color: #b76b80;
-      font-size: 56px;
-      text-shadow: 0 0 22px rgba(185,107,128,.18);
-      animation: crystalRotate 9s linear infinite;
-    }
-
-    @keyframes crystalRotate {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* КНОПКИ */
 
     .primary,
     .secondary,
     .link-button {
-      position: relative;
-      z-index: 1;
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 13px;
+      align-items: center;
+      gap: 14px;
       width: 100%;
-      min-height: 58px;
-      margin-top: auto;
-      padding: 13px 18px;
-      border: 1px solid rgba(255,255,255,.24);
-      border-radius: 16px;
+      min-height: 60px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 18px;
       background: linear-gradient(
-        110deg,
-        #c4c2cb 0%,
-        #a7a5af 45%,
-        #85838f 100%
+        135deg,
+        #075dc9,
+        #087cf5 58%,
+        #388df7
       );
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.32);
-      color: #101015;
-      font-size: 16px;
-      font-weight: 800;
+      color: #fff;
       text-decoration: none;
-      transition: transform .2s ease, filter .2s ease;
+      font-size: 17px;
+      font-weight: 750;
+      box-shadow:
+        0 8px 30px rgba(0,104,255,.20),
+        inset 0 1px 0 rgba(255,255,255,.20);
+      transition:
+        transform .2s ease,
+        filter .2s ease;
     }
 
     .primary:active,
     .secondary:active,
     .link-button:active {
       transform: scale(.98);
-      filter: brightness(.93);
+      filter: brightness(.92);
     }
 
-    .primary span,
-    .secondary span {
-      font-size: 23px;
-      font-weight: 600;
+    .feature-card > .primary,
+    .feature-card > .secondary {
+      margin-top: auto;
     }
 
     .free-pill {
       display: inline-flex;
       align-items: center;
-      padding: 9px 12px;
-      border: 1px solid #49474d;
+      padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.025);
-      color: #d0ccd3;
+      border: 1px solid rgba(109,202,157,.22);
+      background: rgba(55,137,99,.12);
+      color: #8cd7ae;
       font-size: 10px;
-      font-weight: 750;
+      font-weight: 800;
       letter-spacing: .12em;
     }
 
-    /* ВНУТРЕННИЕ РАЗДЕЛЫ */
+    /* DETAIL PAGES */
 
     .back {
-      margin: 0 0 32px;
-      padding: 10px 0;
+      margin-bottom: 40px;
+      padding: 0;
       border: 0;
-      background: none;
-      color: #b8b3bb;
-      font-size: 15px;
+      background: transparent;
+      color: #c8c8d0;
+      font-size: 16px;
     }
 
     .detail-icon {
       display: grid;
       place-items: center;
-      width: 58px;
-      height: 58px;
-      margin-bottom: 25px;
-      border: 1px solid #454047;
-      border-radius: 17px;
-      background: #282429;
-      color: #d5c7d0;
-      font-size: 30px;
+      width: 65px;
+      height: 65px;
+      margin-bottom: 28px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #24242a;
+      font-size: 32px;
     }
 
-    .eyebrow {
-      display: block;
-      color: #b99ca6;
-      font-size: 11px;
-      font-weight: 750;
-      letter-spacing: .17em;
-    }
-
-    .page h1 {
-      margin: 16px 0;
-      color: #f7f7f8;
-      font-size: clamp(30px, 8vw, 45px);
-      font-weight: 800;
-      line-height: 1.14;
-      letter-spacing: -.04em;
+    #knowledge h1,
+    #reader h1 {
+      margin: 0 0 16px;
+      font-size: clamp(32px, 7vw, 45px);
+      line-height: 1.13;
+      letter-spacing: -.045em;
     }
 
     .detail-text {
-      color: #aaa6ae;
-      font-size: 15px;
+      color: #aaaab5;
       line-height: 1.7;
+      font-size: 16px;
     }
 
     .info-box {
-      margin: 28px 0;
+      margin: 30px 0;
       padding: 23px;
-      border: 1px solid #3d393f;
+      border: 1px solid var(--line);
       border-radius: 22px;
-      background: linear-gradient(145deg, #29262b, #19171a);
+      background: #202025;
     }
 
     .info-box strong {
-      font-size: 15px;
+      font-size: 17px;
     }
 
     .info-box p {
-      color: #aaa6ae;
-      font-size: 14px;
-      line-height: 1.65;
+      color: #aaaab5;
+      line-height: 1.6;
     }
 
     .buy-button {
       margin-top: 24px;
     }
 
-    /* PDF */
-
-    .pdf-skeleton {
-      padding: 24px;
-      border-radius: 20px;
-      background: #222124;
-      color: #aaa6ae;
-    }
-
-    .skeleton-line {
-      width: 80%;
-      height: 12px;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      background: #3b383d;
-      animation: pulse 1.4s infinite alternate;
-    }
-
-    .skeleton-line.short {
-      width: 45%;
-    }
-
-    .skeleton-sheet {
-      height: 220px;
-      margin: 20px 0;
-      border-radius: 10px;
-      background: #333136;
-      animation: pulse 1.4s infinite alternate;
-    }
-
-    @keyframes pulse {
-      to {
-        opacity: .4;
-      }
-    }
+    /* PDF READER */
 
     .pdf-container {
-      margin-top: 20px;
+      margin: 25px 0;
       overflow: hidden;
-      border: 1px solid #3c393e;
-      border-radius: 17px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: #202025;
     }
 
     .pdf-container iframe {
       display: block;
       width: 100%;
-      height: 68vh;
-      min-height: 420px;
+      height: 65dvh;
+      min-height: 400px;
       border: 0;
       background: #fff;
     }
 
-    #pdfLink {
-      margin-top: 16px;
+    .pdf-skeleton {
+      margin: 25px 0;
+      padding: 20px;
+      border-radius: 20px;
+      background: #202025;
+      color: #aaaab5;
     }
 
-    /* МОДАЛЬНОЕ ОКНО */
+    .skeleton-line,
+    .skeleton-sheet {
+      border-radius: 8px;
+      background: linear-gradient(
+        90deg,
+        #303038,
+        #42424c,
+        #303038
+      );
+      background-size: 200% 100%;
+      animation: skeleton 1.5s linear infinite;
+    }
+
+    .skeleton-line {
+      height: 14px;
+      margin-bottom: 12px;
+    }
+
+    .skeleton-line.short {
+      width: 60%;
+    }
+
+    .skeleton-sheet {
+      height: 230px;
+      margin: 22px 0;
+    }
+
+    @keyframes skeleton {
+      to {
+        background-position: -200% 0;
+      }
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      z-index: 1100;
+      left: 50%;
+      bottom: 28px;
+      width: max-content;
+      max-width: calc(100vw - 40px);
+      padding: 15px 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(38,38,44,.96);
+      color: #fff;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 15px);
+      transition: .3s ease;
+      box-shadow: 0 15px 40px rgba(0,0,0,.35);
+    }
+
+    .toast.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    /* MODAL */
 
     .modal {
       position: fixed;
       inset: 0;
-      z-index: 1100;
-      display: grid;
-      place-items: center;
-      padding: 22px;
-      background: rgba(0,0,0,.8);
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.75);
       backdrop-filter: blur(12px);
     }
 
     .modal-panel {
       width: 100%;
-      max-width: 400px;
-      padding: 26px;
-      border: 1px solid #49444c;
-      border-radius: 24px;
-      background: #242126;
+      max-width: 390px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: #232329;
+      box-shadow: 0 25px 70px rgba(0,0,0,.5);
     }
 
     .modal-panel h2 {
@@ -623,83 +589,43 @@
     }
 
     .modal-panel p {
-      color: #aaa6ae;
-      line-height: 1.65;
-    }
-
-    .modal-panel .primary {
-      margin-top: 24px;
-    }
-
-    /* УВЕДОМЛЕНИЯ */
-
-    .toast {
-      position: fixed;
-      z-index: 1200;
-      bottom: 30px;
-      left: 50%;
-      width: max-content;
-      max-width: calc(100% - 36px);
-      padding: 15px 20px;
-      border: 1px solid #4a454d;
-      border-radius: 15px;
-      background: #302c33;
-      color: #fff;
-      font-size: 13px;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-      transform: translate(-50%, 15px);
-      transition: opacity .25s, transform .25s;
-    }
-
-    .toast.visible {
-      opacity: 1;
-      transform: translate(-50%, 0);
+      color: #b5b5be;
+      line-height: 1.6;
+      margin-bottom: 25px;
     }
 
     footer {
-      padding: 45px 0 25px;
-      color: #6d6870;
-      font-size: 10px;
+      margin-top: 48px;
+      padding: 24px 0;
+      color: #686873;
       text-align: center;
-      letter-spacing: .12em;
+      font-size: 12px;
     }
 
-    @media (min-width: 620px) {
-      .cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .feature-card,
-      .feature-card.book {
-        min-height: 420px;
-      }
-    }
-
-    @media (max-width: 370px) {
+    @media (max-width: 380px) {
       .app {
-        padding: 0 15px;
+        padding-inline: 17px;
       }
 
       .feature-card {
-        padding: 21px;
+        padding: 22px;
       }
 
       .intro h1 {
-        font-size: 31px;
-      }
-
-      .top-pill {
-        padding: 0 9px;
-        font-size: 8px;
+        font-size: 34px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
+      .crystal-splash-logo {
+        animation: none;
+        opacity: 1;
+        transform: none;
+        filter: none;
+      }
+
+      .page.enter {
+        animation: none;
       }
     }
   </style>
@@ -709,12 +635,16 @@
 
   <!-- ЗАГРУЗКА -->
 
-  <div id="splash" class="splash" aria-label="Загрузка приложения">
+  <div
+    id="splash"
+    class="splash"
+    aria-label="Загрузка приложения"
+  >
     <div class="splash-content">
       <img
         class="crystal-splash-logo"
-        src="/static/logo.png?v=5"
-        alt="2 CHANCE"
+        src="/static/photo_2026-11-15_23-08-09.jpg"
+        alt="Two Chance"
       >
     </div>
   </div>
@@ -725,7 +655,6 @@
 
     <header class="topbar">
       <span class="brand-symbol">2</span>
-      <span class="brand">CHANCE</span>
       <span class="top-pill">PRIVATE SPACE</span>
     </header>
 
@@ -737,14 +666,14 @@
 
         <div class="intro">
           <h1>
-            Твой второй шанс
+            Твой второй шанс<br>
             <span>начинается здесь.</span>
           </h1>
         </div>
 
         <div class="cards">
 
-          <!-- МАТЕРИАЛЫ -->
+          <!-- ПОКУПКА -->
 
           <article class="feature-card knowledge">
 
@@ -752,18 +681,14 @@
               <span class="card-icon">✧</span>
 
               <button
-                id="helpBtn"
                 class="help"
+                id="helpBtn"
                 type="button"
                 aria-label="О разделе знаний"
               >?</button>
             </div>
 
-            <div class="crystal-animation" aria-hidden="true">
-              <div class="crystal-object">✦</div>
-            </div>
-
-            <span class="card-label">
+            <span class="eyebrow">
               EXCLUSIVE ACCESS
             </span>
 
@@ -772,13 +697,14 @@
             </h2>
 
             <p>
-              Особые знания для тех, кто стремится к большему.
+              Особые знания для тех, кто
+              стремится к большему.
             </p>
 
             <button
               class="primary"
-              data-go="knowledge"
               type="button"
+              data-go="knowledge"
             >
               Исследовать
               <span aria-hidden="true">↗</span>
@@ -795,22 +721,24 @@
               <span class="free-pill">FREE ACCESS</span>
             </div>
 
-            <span class="card-label">
+            <span class="eyebrow">
               PERSONAL GROWTH
             </span>
 
             <h2>
-              Почитать книгу: как стать лучше
+              Почитать книгу:<br>
+              как стать лучше
             </h2>
 
             <p>
-              Всего прочитав это ты можешь стать в 2 раза лучше
+              Всего прочитав это ты можешь
+              стать в 2 раза лучше
             </p>
 
             <button
               class="secondary"
-              data-go="reader"
               type="button"
+              data-go="reader"
             >
               Начать чтение
               <span aria-hidden="true">↗</span>
@@ -822,31 +750,38 @@
 
       </section>
 
-      <!-- РАЗДЕЛ МАТЕРИАЛОВ -->
+      <!-- РАЗДЕЛ ЗНАНИЙ -->
 
       <section id="knowledge" class="page">
 
-        <button class="back" data-go="home" type="button">
+        <button
+          class="back"
+          type="button"
+          data-go="home"
+        >
           ‹ На главную
         </button>
 
-        <div class="detail-icon">✧</div>
+        <div class="detail-icon">✦</div>
 
         <span class="eyebrow">
-          EXCLUSIVE MATERIALS
+          EXCLUSIVE ACCESS
         </span>
 
-        <h1>Драгоценные материалы</h1>
+        <h1>Драгоценные знания</h1>
 
         <p class="detail-text">
-          Коллекция знаний, способных изменить твой подход
-          к жизни и развитию.
+          Здесь скоро появятся подборки
+          полезных материалов и
+          обучающие программы.
         </p>
 
         <div class="info-box">
           <strong>Материалы готовятся</strong>
+
           <p>
-            Скоро здесь появятся новые возможности.
+            Следи за обновлениями —
+            новые возможности появятся здесь.
           </p>
         </div>
 
@@ -860,27 +795,42 @@
 
       </section>
 
-      <!-- РАЗДЕЛ КНИГИ -->
+      <!-- ЧТЕНИЕ КНИГИ -->
 
       <section id="reader" class="page">
 
-        <button class="back" data-go="home" type="button">
+        <button
+          class="back"
+          type="button"
+          data-go="home"
+        >
           ‹ На главную
         </button>
 
         <span class="eyebrow">
-          THE BOOK / FREE
+          FREE ACCESS
         </span>
 
-        <h1>Бесплатный самоучитель счастья</h1>
+        <h1>
+          Бесплатный самоучитель счастья
+        </h1>
 
         <p class="detail-text">
-          Дмитрий Гаун
+          Автор: Дмитрий Гаун
         </p>
 
-        <div id="pdfMissing" class="info-box hidden">
-          <strong>Книга пока не загружена</strong>
-          <p>Книга появится здесь в ближайшее время.</p>
+        <div
+          id="pdfMissing"
+          class="info-box hidden"
+        >
+          <strong>
+            Книга пока не загружена
+          </strong>
+
+          <p>
+            Книга появится здесь
+            в ближайшее время.
+          </p>
         </div>
 
         <div
@@ -892,10 +842,14 @@
           <div class="skeleton-line"></div>
           <div class="skeleton-line short"></div>
           <div class="skeleton-sheet"></div>
+
           <span>Загружаем книгу…</span>
         </div>
 
-        <div id="pdfContainer" class="pdf-container hidden">
+        <div
+          id="pdfContainer"
+          class="pdf-container hidden"
+        >
           <iframe
             id="pdfFrame"
             title="Чтение книги"
@@ -918,12 +872,12 @@
     </main>
 
     <footer>
-      TWO CHANCE · THE SECOND CHANCE
+      Two Chance · Каждый день — новая возможность
     </footer>
 
   </div>
 
-  <!-- УВЕДОМЛЕНИЕ -->
+  <!-- УВЕДОМЛЕНИЯ -->
 
   <div
     id="toast"
@@ -932,7 +886,7 @@
     aria-live="polite"
   ></div>
 
-  <!-- МОДАЛЬНОЕ ОКНО -->
+  <!-- ИНФОРМАЦИОННОЕ ОКНО -->
 
   <div
     id="modal"
@@ -941,12 +895,14 @@
     aria-modal="true"
     aria-labelledby="modalTitle"
   >
+
     <div class="modal-panel">
+
       <h2 id="modalTitle">О разделе</h2>
 
       <p>
-        Здесь будут доступны эксклюзивные материалы
-        для личного развития.
+        Здесь будут доступны расширенные
+        материалы для личного развития.
       </p>
 
       <button
@@ -956,7 +912,9 @@
       >
         Понятно
       </button>
+
     </div>
+
   </div>
 
 </body>
