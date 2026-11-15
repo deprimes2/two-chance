@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>
+      Two Chance
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://telegram.org/js/telegram-web-app.js">
+    </script>
+    <link rel="stylesheet" href="/static/style.css?v=ruby4">
+  <style>
+body::before{background:radial-gradient(ellipse at 50% 8%,#a0254938,transparent 42%),radial-gradient(ellipse at 100% 58%,#70254525,transparent 48%)}
+#application main{max-width:510px;padding:0 22px}
+#application .home-nav{position:relative;border-bottom:0;padding:24px 0 18px}
+#application .home-nav::after{content:"";position:absolute;bottom:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,#e77b9c70,transparent)}
+#application .brand-symbol::before{content:"";position:absolute;inset:8px -34px -4px;border:1px solid #ed8ca51c;border-radius:50%;transform:rotateX(68deg) rotate(-25deg);box-shadow:0 0 30px #ec477e12}
+#application .crystal-object{filter:drop-shadow(0 10px 20px #e43c6c35)}
+#application .intro{padding:42px 0 35px;text-align:center}
+#application .intro h1{font-size:clamp(34px,8.7vw,44px);line-height:1.12;letter-spacing:-.055em}
+#application .intro h1 span{background:linear-gradient(110deg,#fcf0f4,#dfb3c6 55%,#99899f);background-clip:text;-webkit-background-clip:text;color:transparent}
+#application .cards{gap:22px}
+#application .feature-card{position:relative;isolation:isolate;padding:30px;border:1px solid #dfb3c625;border-radius:32px;background:radial-gradient(ellipse at 100% 0,#c4547b20,transparent 60%),linear-gradient(150deg,#30232c,#18151c 70%);box-shadow:inset 0 1px #fff1,inset 0 -1px #0006,0 22px 45px #0005;transition:transform .4s,border-color .4s;overflow:hidden}
+#application .feature-card.book{background:radial-gradient(ellipse at 0 0,#b89dc11a,transparent 60%),linear-gradient(145deg,#28232e,#151319)}
+#application .feature-card::before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 15%,#ffffff09 38%,transparent 62%);transform:translateX(-110%);animation:glass-light 10s ease-in-out infinite}
+#application .feature-card.book::before{animation-delay:3s}
+#application .feature-card:hover{transform:translateY(-3px);border-color:#dfb3c650}
+#application .card-icon{width:50px;height:50px;border-radius:17px;background:linear-gradient(135deg,#e08aa21a,#ffffff03);border-color:#eeb5c72c;box-shadow:inset 0 1px #fff1}
+#application .card-top{margin-bottom:28px}
+#application .feature-card .eyebrow{color:#d8a0b5;font-size:9px;letter-spacing:.25em;margin-bottom:18px}
+#application .feature-card h2{font-size:clamp(29px,7.5vw,36px);line-height:1.13;letter-spacing:-.045em}
+#application .feature-card p{color:#b9a9b9;margin:18px 0 28px;font-size:13px;line-height:1.8}
+#application .primary,#application .secondary{min-height:58px;border-radius:18px;background:linear-gradient(115deg,#fff4f8,#ddc9d6 55%,#bfaabf);border-color:#fff7;box-shadow:inset 0 1px #fff,0 8px 22px #0004;font-size:14px}
+#application .primary span,#application .secondary span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#3424360c;font-size:20px}
+#application .feature-card::after{font-size:49px;top:130px;right:23px;color:#f7a3bc;text-shadow:0 1px #ffe5ed,0 3px #a93d62,0 0 30px #ee729b80;opacity:.9}
+.preview-return{display:block;width:max-content;margin:18px auto 0;padding:9px 14px;border:1px solid #ffffff15;border-radius:30px;color:#bca4b7;font:10px Manrope,system-ui,sans-serif;text-decoration:none}
+@keyframes glass-light{0%,60%{transform:translateX(-110%)}90%,100%{transform:translateX(110%)}}
+@media(prefers-reduced-motion:reduce){#application .feature-card::before{animation:none}#application .feature-card:hover{transform:none}}
+</style>
+<style>
+#application .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+#application .cards .feature-card { display:flex; flex-direction:column; min-width:0; padding:22px 14px 16px; border-radius:25px; }
+#application .cards .card-top { gap:8px; margin-bottom:22px; }
+#application .cards .card-icon { width:38px; height:38px; border-radius:13px; font-size:24px; }
+#application .cards .help { width:28px; height:28px; }
+#application .cards .free-pill { font-size:7px; padding:6px 8px; letter-spacing:.08em; }
+#application .cards .eyebrow { min-height:25px; margin-bottom:14px; font-size:8px; line-height:1.6; letter-spacing:.13em; }
+#application .cards .feature-card h2 { max-width:100%; font-size:clamp(20px,5.3vw,25px); line-height:1.17; letter-spacing:-.04em; overflow-wrap:break-word; }
+#application .cards .feature-card p { font-size:12px; line-height:1.75; margin:17px 0 24px; }
+#application .cards .primary, #application .cards .secondary { margin-top:auto; min-height:48px; padding:11px 9px; border-radius:14px; font-size:11px; gap:4px; }
+#application .cards .primary span, #application .cards .secondary span { width:21px; height:21px; flex-shrink:0; font-size:16px; }
+#application .cards .feature-card::after { right:13px; top:140px; font-size:35px; }
+#application .intro { padding:30px 0; }
+#application .intro h1 { font-size:clamp(30px,8vw,39px); }
+#application footer { padding-top:26px; }
+</style>
+</head>
+  <body>
+    <div id="splash" class="splash" aria-label="Загрузка приложения">
+      <div class="splash-shimmer" aria-hidden="true">
+      </div>
+      <div class="splash-content">
+        <span class="brand-symbol" role="img" aria-label="Рубиновая кристальная двойка"><span class="crystal-object"><svg class="crystal-face face-0" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="splash-glass-0" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="splash-facet-0"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#splash-glass-0)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#splash-facet-0)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg><svg class="crystal-face face-1" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="splash-glass-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="splash-facet-1"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#splash-glass-1)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#splash-facet-1)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg><svg class="crystal-face face-2" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="splash-glass-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="splash-facet-2"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#splash-glass-2)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#splash-facet-2)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg><svg class="crystal-face face-3" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="splash-glass-3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="splash-facet-3"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#splash-glass-3)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#splash-facet-3)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg></span></span>
+        <div class="loader">
+        </div>
+      </div>
+    </div>
+    <div id="application" class="app hidden">
+      <a class="preview-return" href="/static/atelier-preview.html">Рубиновое стекло · Две карточки рядом</a><main>
+        <section id="home" class="page active" aria-labelledby="homeTitle">
+          <nav class="home-nav" aria-label="Основная навигация">
+            <span class="brand-symbol" role="img" aria-label="Рубиновая кристальная двойка"><span class="crystal-object"><svg class="crystal-face face-0" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="glass-0" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="facet-0"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#glass-0)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#facet-0)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg><svg class="crystal-face face-1" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="glass-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="facet-1"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#glass-1)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#facet-1)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg><svg class="crystal-face face-2" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="glass-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="facet-2"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#glass-2)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#facet-2)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg><svg class="crystal-face face-3" viewBox="0 0 106 130" aria-hidden="true"><defs><linearGradient id="glass-3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4e6" stop-opacity=".95"/><stop offset=".2" stop-color="#d34a60" stop-opacity=".25"/><stop offset=".42" stop-color="#ffb6c4" stop-opacity=".8"/><stop offset=".57" stop-color="#4b0d25" stop-opacity=".4"/><stop offset=".8" stop-color="#f67d9c" stop-opacity=".9"/><stop offset="1" stop-color="#a52d53" stop-opacity=".5"/></linearGradient><clipPath id="facet-3"><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z"/></clipPath></defs><path d="M18 39C18 18 32 8 53 8C75 8 88 21 88 40C88 56 77 66 64 77L40 97H89V117H16V99L51 69C62 59 67 52 67 42C67 32 62 27 53 27C44 27 38 32 38 41Z" fill="url(#glass-3)" stroke="#ffb2c4" stroke-opacity=".8" stroke-width="1.2"/><g clip-path="url(#facet-3)" fill="none" stroke="#ffe4e6" stroke-opacity=".38" stroke-width=".8"><path d="M0 45L81 0L47 62L104 122L13 109L80 83M10 14L96 62L19 100M33 0L51 35L93 21"/></g></svg></span></span>
+          </nav>
+          <div class="intro">
+<h1 id="homeTitle">
+              Твой второй шанс
+              <br>
+              <span>
+                начинается здесь.
+              </span>
+            </h1>
+</div>
+          <div class="cards">
+            <article class="feature-card knowledge">
+              <div class="card-top">
+                <span class="card-icon" aria-hidden="true">
+                  ✦
+                </span>
+<button class="help" id="helpBtn" aria-label="О разделе знаний">
+                  ?
+                </button>
+              </div>
+<span class="eyebrow">EXCLUSIVE ACCESS</span>
+              <h2>
+                Драгоценные материалы
+              </h2>
+              <p>
+                Особые знания для тех, кто стремится к большему.
+              </p>
+              <button class="primary" data-go="knowledge">
+                Исследовать
+                <span aria-hidden="true">
+                  ↗
+                </span>
+              </button>
+            </article>
+            <article class="feature-card book">
+              <div class="card-top">
+                <span class="card-icon book-icon" aria-hidden="true">
+                  ▤
+                </span>
+                <span class="free-pill">
+                  FREE ACCESS
+                </span>
+              </div>
+              <span class="eyebrow">
+                PERSONAL GROWTH
+              </span>
+              <h2>
+                Как стать<br>лучше
+</h2>
+              <p>
+                Оригинальная книга Two Chance: маленькие шаги к большим переменам.
+              </p>
+              <button class="secondary" data-go="reader">
+                Читать
+                <span aria-hidden="true">
+                  ↗
+                </span>
+              </button>
+            </article>
+          </div>
+        </section>
+        <section id="knowledge" class="page" aria-labelledby="knowledgeTitle">
+          <button class="back" data-go="home">
+            ‹ На главную
+          </button>
+          <div class="detail-icon" aria-hidden="true">
+            ✦
+          </div>
+          <span class="eyebrow">
+            РАЗДЕЛ ЗНАНИЙ
+          </span>
+          <h1 id="knowledgeTitle">
+            Драгоценные знания
+          </h1>
+          <p class="detail-text">
+            Здесь скоро появятся подборки полезных материалов и обучающие программы.
+          </p>
+          <div class="info-box">
+            <strong>
+              Материалы готовятся
+            </strong>
+            <p>
+              Следи за обновлениями — новые возможности появятся здесь.
+            </p>
+          </div>
+          <button id="buyBtn" class="primary buy-button" type="button">
+            Перейти к оплате
+            <span aria-hidden="true">
+              ↗
+            </span>
+          </button>
+        </section>
+        <section id="reader" class="page" aria-labelledby="readerTitle">
+          <button class="back" data-go="home">
+            ‹ На главную
+          </button>
+          <span class="eyebrow">
+            TWO CHANCE · DIGITAL BOOK
+          </span>
+          <h1 id="readerTitle">
+            Как стать лучше
+          </h1>
+          <p class="detail-text">
+            Автор: Two Chance
+          </p>
+          <div class="reader-card">
+            <div class="reader-progress" role="progressbar" aria-label="Прогресс чтения" aria-valuemin="1" aria-valuemax="9">
+              <span id="readerProgressBar">
+              </span>
+            </div>
+            <div class="reader-meta">
+              <span>
+                КНИГА TWO CHANCE
+              </span>
+              <span id="readerCount" aria-live="polite">
+              </span>
+            </div>
+            <div id="readerSheet" class="reader-sheet" tabindex="0" role="region" aria-label="Текст главы">
+              <div id="readerContent" class="reader-content">
+              </div>
+            </div>
+            <div class="reader-controls">
+              <button id="readerPrev" aria-label="Предыдущая глава">
+                ←
+              </button>
+              <span id="readerPosition" class="reader-position" aria-live="polite">
+              </span>
+              <button id="readerNext" aria-label="Следующая глава">
+                →
+              </button>
+            </div>
+          </div>
+          <p class="reader-hint">
+            Листай главы свайпом или кнопками
+          </p>
+        </section>
+      </main>
+      <footer>
+        Two Chance · Каждый день — новая возможность
+      </footer>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite">
+    </div>
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-panel">
+        <h2 id="modalTitle">
+          О разделе
+        </h2>
+        <p>
+          Здесь будут доступны расширенные материалы для личного развития.
+        </p>
+        <button id="modalClose" class="primary">
+          Понятно
+        </button>
+      </div>
+    </div>
+    <script src="/static/app.js?v=ruby4" defer>
+    </script>
+  </body>
+</html>
