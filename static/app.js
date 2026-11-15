@@ -1,51 +1,33 @@
-
 'use strict';
 
-/* =========================================
-   TWO CHANCE — TELEGRAM MINI APP
-   ========================================= */
+/* TWO CHANCE — MINI APP */
 
 const tg = window.Telegram?.WebApp;
 
-const themeQuery = window.matchMedia(
-  '(prefers-color-scheme: dark)'
-);
-
-/* =========================================
-   THEME
-   ========================================= */
+/* ТЁМНАЯ ТЕМА */
 
 function applyTheme() {
-  // Приложение всегда в тёмной теме
   document.documentElement.dataset.theme = 'dark';
 
-  const meta = document.querySelector(
-    'meta[name="theme-color"]'
-  );
+  const meta = document.querySelector('meta[name="theme-color"]');
 
   if (meta) {
-    meta.content = '#080809';
+    meta.content = '#09080a';
   }
 
   try {
-    tg?.setHeaderColor?.('#080809');
-    tg?.setBackgroundColor?.('#080809');
-  } catch (_) {
-    // Не все версии Telegram поддерживают методы
-  }
+    tg?.setHeaderColor?.('#09080a');
+    tg?.setBackgroundColor?.('#09080a');
+  } catch (_) {}
 }
 
 applyTheme();
-
-themeQuery.addEventListener?.('change', applyTheme);
 
 tg?.onEvent?.('themeChanged', applyTheme);
 tg?.ready?.();
 tg?.expand?.();
 
-/* =========================================
-   HAPTIC FEEDBACK
-   ========================================= */
+/* ВИБРАЦИЯ */
 
 function haptic(type = 'light') {
   try {
@@ -59,13 +41,7 @@ document.addEventListener('click', event => {
   }
 });
 
-/* =========================================
-   PAGE NAVIGATION
-   ========================================= */
-
-const pages = [
-  ...document.querySelectorAll('.page')
-];
+/* НАВИГАЦИЯ */
 
 let currentPage = 'home';
 
@@ -104,18 +80,14 @@ document.querySelectorAll('[data-go]').forEach(button => {
   });
 });
 
-/* =========================================
-   INFORMATION MODAL
-   ========================================= */
+/* МОДАЛЬНОЕ ОКНО */
 
 const modal = document.getElementById('modal');
 const helpBtn = document.getElementById('helpBtn');
 const modalClose = document.getElementById('modalClose');
 
 function closeModal() {
-  if (!modal) return;
-
-  modal.classList.add('hidden');
+  modal?.classList.add('hidden');
   helpBtn?.focus();
 }
 
@@ -142,12 +114,9 @@ document.addEventListener('keydown', event => {
   }
 });
 
-/* =========================================
-   TOAST NOTIFICATIONS
-   ========================================= */
+/* УВЕДОМЛЕНИЯ */
 
 const toast = document.getElementById('toast');
-
 let toastTimer;
 
 function showToast(message) {
@@ -163,25 +132,13 @@ function showToast(message) {
   }, 3500);
 }
 
-/* =========================================
-   PURCHASE SECTION
-   ========================================= */
+/* ПОКУПКА */
 
-document.getElementById('buyBtn')?.addEventListener(
-  'click',
-  () => {
-    // Здесь позже будет серверная интеграция оплаты.
-    // Успешность платежа должна проверяться сервером.
+document.getElementById('buyBtn')?.addEventListener('click', () => {
+  showToast('Оплата скоро появится. Мы уже работаем над этим!');
+});
 
-    showToast(
-      'Оплата скоро появится. Мы уже работаем над этим!'
-    );
-  }
-);
-
-/* =========================================
-   PDF BOOK READER
-   ========================================= */
+/* КНИГА */
 
 let bookChecked = false;
 let bookLoading = false;
@@ -191,54 +148,35 @@ async function loadBook() {
 
   bookLoading = true;
 
-  const skeleton = document.getElementById(
-    'pdfSkeleton'
-  );
-
-  const missing = document.getElementById(
-    'pdfMissing'
-  );
-
-  const container = document.getElementById(
-    'pdfContainer'
-  );
-
-  const link = document.getElementById(
-    'pdfLink'
-  );
+  const skeleton = document.getElementById('pdfSkeleton');
+  const missing = document.getElementById('pdfMissing');
+  const container = document.getElementById('pdfContainer');
+  const link = document.getElementById('pdfLink');
 
   skeleton?.classList.remove('hidden');
   missing?.classList.add('hidden');
 
   try {
-    const response = await fetch(
-      '/static/book.pdf',
-      { method: 'HEAD' }
-    );
+    const response = await fetch('/static/book.pdf', {
+      method: 'HEAD'
+    });
 
     if (
       !response.ok ||
-      !(response.headers.get('content-type') || '')
-        .includes('pdf')
+      !(response.headers.get('content-type') || '').includes('pdf')
     ) {
       throw new Error('PDF unavailable');
     }
 
-    const frame = document.getElementById(
-      'pdfFrame'
-    );
+    const frame = document.getElementById('pdfFrame');
 
     if (!frame) {
       throw new Error('PDF frame unavailable');
     }
 
-    frame.addEventListener(
-      'load',
-      () => {
-        skeleton?.classList.add('hidden');
-      },
-      { once: true }
-    );
+    frame.addEventListener('load', () => {
+      skeleton?.classList.add('hidden');
+    }, { once: true });
 
     frame.src = '/static/book.pdf#toolbar=1';
 
@@ -247,7 +185,6 @@ async function loadBook() {
 
     bookChecked = true;
 
-    // Резервный таймер для встроенного браузера
     setTimeout(() => {
       skeleton?.classList.add('hidden');
     }, 8000);
@@ -261,63 +198,39 @@ async function loadBook() {
   }
 }
 
-/* =========================================
-   TELEGRAM AUTHENTICATION
-   ========================================= */
-
-// Авторизация только через проверенные сервером
-// данные Telegram initData.
+/* TELEGRAM AUTH */
 
 if (tg?.initData) {
   fetch('/api/auth', {
     method: 'POST',
-
     headers: {
       'Content-Type': 'application/json'
     },
-
     body: JSON.stringify({
       init_data: tg.initData
     })
-  }).catch(() => {
-    // Ошибка авторизации не блокирует интерфейс
-  });
+  }).catch(() => {});
 }
 
-/* =========================================
-   CINEMATIC SPLASH SCREEN
-   ========================================= */
-
-// Логотип плавно появляется из темноты.
-// Через 2.5 секунды начинается переход в меню.
-// Экран загрузки исчезает за 0.9 секунды.
+/* ПЛАВНАЯ ЗАГРУЗКА */
 
 function finishSplash() {
   const splash = document.getElementById('splash');
-  const application = document.getElementById(
-    'application'
-  );
+  const application = document.getElementById('application');
 
   if (!application) return;
 
-  if (!splash) {
-    application.classList.remove('hidden');
-    return;
-  }
-
-  // Показываем меню под экраном загрузки
   application.classList.remove('hidden');
 
-  // Запускаем плавное исчезновение
+  if (!splash) return;
+
   requestAnimationFrame(() => {
     splash.classList.add('out');
   });
 
-  // Удаляем экран после анимации
   setTimeout(() => {
     splash.remove();
   }, 950);
 }
 
-// Запуск перехода
 setTimeout(finishSplash, 2500);
