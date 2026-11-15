@@ -1,3 +1,11 @@
+
+from contextlib import asynccontextmanager
+
+from aiogram import Bot
+from aiogram.types import Update
+
+from bot import create_dispatcher, configure_bot
+from database import connect_db, close_db
 """FastAPI web service for the Telegram Mini App."""
 import hashlib
 import hmac
