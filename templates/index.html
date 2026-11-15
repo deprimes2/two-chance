@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <title>Two Chance</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div id="splash" class="splash" aria-label="Загрузка приложения">
+    <div class="splash-shimmer" aria-hidden="true"></div><div class="splash-content"><div class="two">2</div><div class="splash-name">Two Chance</div></div>
+  </div>
+  <div id="application" class="app hidden">
+    <header class="topbar"><span class="brand-symbol">2</span><span class="brand">Two Chance</span><span class="top-pill">Твой новый шаг</span></header>
+    <main>
+      <section id="home" class="page active">
+        <div class="intro"><span class="eyebrow">ПРОСТРАНСТВО РАЗВИТИЯ</span><h1>Твой второй<br><span>шанс начинается здесь.</span></h1><p>Выбирай то, что поможет двигаться вперёд.</p></div>
+        <div class="cards">
+          <article class="feature-card knowledge">
+            <div class="card-top"><span class="card-icon">✦</span><button class="help" id="helpBtn" aria-label="О разделе знаний">?</button></div>
+            <h2>Покупка драгоценных знаний</h2><p>Углублённые материалы для тех, кто хочет большего.</p>
+            <button class="primary" data-go="knowledge">Перейти <span aria-hidden="true">→</span></button>
+          </article>
+          <article class="feature-card book">
+            <div class="card-top"><span class="card-icon book-icon">▤</span><span class="free-pill">БЕСПЛАТНО</span></div>
+            <h2>Почитать книгу:<br>как стать лучше</h2><p>«Бесплатный самоучитель счастья» — Дмитрий Гаун.</p>
+            <button class="secondary" data-go="reader">Читать бесплатно <span aria-hidden="true">↗</span></button>
+          </article>
+        </div>
+      </section>
+      <section id="knowledge" class="page">
+        <button class="back" data-go="home">‹ На главную</button>
+        <div class="detail-icon">✦</div><span class="eyebrow">РАЗДЕЛ ЗНАНИЙ</span><h1>Драгоценные знания</h1><p class="detail-text">Здесь скоро появятся подборки полезных материалов и обучающие программы.</p>
+        <div class="info-box"><strong>Материалы готовятся</strong><p>Следи за обновлениями — новые возможности появятся здесь.</p></div><button id="buyBtn" class="primary buy-button" type="button">Перейти к оплате</button>
+      </section>
+      <section id="reader" class="page">
+        <button class="back" data-go="home">‹ На главную</button>
+        <span class="eyebrow">БЕСПЛАТНАЯ КНИГА</span><h1>Бесплатный самоучитель счастья</h1><p class="detail-text">Автор: Дмитрий Гаун</p>
+        <div id="pdfMissing" class="info-box hidden"><strong>Книга пока не загружена</strong><p>Книга появится здесь в ближайшее время.</p></div>
+        <div id="pdfSkeleton" class="pdf-skeleton hidden" role="status" aria-label="Загрузка книги"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-sheet"></div><span>Загружаем книгу…</span></div>
+        <div id="pdfContainer" class="pdf-container hidden"><iframe id="pdfFrame" title="Чтение книги" loading="lazy"></iframe></div>
+        <a id="pdfLink" class="primary link-button hidden" href="/static/book.pdf" target="_blank" rel="noopener">Открыть PDF отдельно ↗</a>
+      </section>
+    </main>
+    <footer>Two Chance · Каждый день — новая возможность</footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-panel"><h2 id="modalTitle">О разделе</h2><p>Здесь будут доступны расширенные материалы для личного развития.</p><button id="modalClose" class="primary">Понятно</button></div></div>
+</body>
+</html>
