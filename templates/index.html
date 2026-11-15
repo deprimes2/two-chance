@@ -214,67 +214,64 @@
         inset 0 1px 0 rgba(255,255,255,.06);
     }
 
-    /* ДВЕ АНИМИРОВАННЫЕ СТЕКЛЯННЫЕ ДВОЙКИ */
+    .feature-card.book {
+      background: linear-gradient(145deg, #2b292d, #19181c 75%);
+    }
 
-    .feature-card.knowledge::after,
-    .feature-card.book::after {
+    /* ПЕРВЫЙ БЛОК — МАЛЕНЬКАЯ ЖИРНАЯ ДВОЙКА */
+
+    .feature-card.knowledge::after {
       content: "2";
       position: absolute;
       top: 112px;
       right: 44px;
-      font-size: 82px;
-      line-height: 1;
+      font-family: Arial, sans-serif;
+      font-size: 49px;
       font-weight: 900;
-      letter-spacing: -.08em;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-      color: #c47790;
-      background: linear-gradient(
-        135deg,
-        #ffe2ed 5%,
-        #e5a2b8 23%,
-        #b75a79 48%,
-        #6e2948 72%,
-        #f0b6ca 96%
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter:
-        drop-shadow(0 5px 9px rgba(15,0,8,.5))
-        drop-shadow(0 0 16px rgba(190,68,111,.36));
-      opacity: .95;
-      transform-origin: 50% 50%;
-      animation: floatingCrystalTwo 3.8s ease-in-out infinite;
+      line-height: 1;
+      color: #ff8791;
+      text-shadow:
+        0 1px 0 #ffd0d3,
+        0 3px 0 #c64d60,
+        0 5px 6px rgba(80,12,30,.35),
+        0 0 13px rgba(255,115,135,.25);
+      opacity: .96;
       pointer-events: none;
-      will-change: transform, filter;
+      transform-origin: center;
+      animation: floatingSymbol 3.8s ease-in-out infinite;
     }
 
-    @keyframes floatingCrystalTwo {
-      0%, 100% {
-        transform: translateY(0) rotate(-5deg) scale(1);
-        filter:
-          drop-shadow(0 5px 9px rgba(15,0,8,.5))
-          drop-shadow(0 0 12px rgba(190,68,111,.30));
-      }
-
-      50% {
-        transform: translateY(-10px) rotate(5deg) scale(1.06);
-        filter:
-          drop-shadow(0 13px 13px rgba(15,0,8,.4))
-          drop-shadow(0 0 25px rgba(215,94,139,.58));
-      }
-    }
-
-    /* ДВОЙКА В КАРТОЧКЕ КНИГИ */
+    /* ВТОРОЙ БЛОК — МАЛЕНЬКАЯ ЖИРНАЯ ЗВЁЗДОЧКА */
 
     .feature-card.book::after {
+      content: "✦";
+      position: absolute;
       top: 108px;
       right: 44px;
+      font-family: Arial, sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+      color: #ff8791;
+      text-shadow:
+        0 1px 0 #ffd0d3,
+        0 3px 0 #c64d60,
+        0 5px 6px rgba(80,12,30,.35),
+        0 0 13px rgba(255,115,135,.25);
+      opacity: .96;
+      pointer-events: none;
+      transform-origin: center;
+      animation: floatingSymbol 3.8s ease-in-out infinite;
       animation-delay: -1.3s;
     }
 
-    .feature-card.book {
-      background: linear-gradient(145deg, #2b292d, #19181c 75%);
+    @keyframes floatingSymbol {
+      0%, 100% {
+        transform: translateY(0) rotate(-5deg) scale(1);
+      }
+      50% {
+        transform: translateY(-7px) rotate(5deg) scale(1.07);
+      }
     }
 
     .card-top {
@@ -584,8 +581,7 @@
         filter: none;
       }
 
-      .page.enter { animation: none; }
-
+      .page.enter,
       .feature-card.knowledge::after,
       .feature-card.book::after {
         animation: none;
@@ -671,7 +667,7 @@
             <h2>Почитать книгу:<br>как стать лучше</h2>
 
             <p>
-              Прочитав это - ты можешь стать в 2 раза лучше.
+              Всего прочитав это ты можешь стать в 2 раза лучше
             </p>
 
             <button class="secondary" type="button" data-go="reader">
