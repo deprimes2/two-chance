@@ -1,39 +1,22 @@
-
 <!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-
-  <meta name="theme-color" content="#080809">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09080a">
 
   <title>Two Chance</title>
 
-  <link
-    rel="stylesheet"
-    href="/static/style.css?v=cinematic3"
-  >
-
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <script
-    src="/static/app.js?v=cinematic3"
-    defer
-  ></script>
+  <script src="/static/app.js?v=redcrystal5" defer></script>
 
   <style>
     :root {
       color-scheme: dark;
-      --bg: #080809;
-      --surface: #202024;
-      --text: #f7f7fa;
-      --muted: #a5a5af;
-      --line: rgba(255,255,255,.12);
-      --blue: #087cf5;
+      --bg: #09080a;
+      --text: #f7f7f9;
+      --muted: #a7a3ac;
+      --border: rgba(255,255,255,.13);
     }
 
     * {
@@ -49,21 +32,16 @@
       min-height: 100dvh;
       background: var(--bg);
       color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
     button, a {
+      font: inherit;
       -webkit-tap-highlight-color: transparent;
     }
 
     button {
-      font: inherit;
       cursor: pointer;
     }
 
@@ -71,31 +49,28 @@
       display: none !important;
     }
 
-    /* CINEMATIC SPLASH */
+    /* ЗАГРУЗКА */
 
     .splash {
       position: fixed;
       inset: 0;
       z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
+      display: grid;
+      place-items: center;
       overflow: hidden;
+      background: #000;
       opacity: 1;
-      transition:
-        opacity .9s cubic-bezier(.4,0,.2,1),
-        visibility .9s ease;
+      transition: opacity .9s ease, visibility .9s ease;
     }
 
     .splash.out {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
 
     .splash-content {
       width: 100%;
-      min-height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -105,26 +80,26 @@
       display: block;
       width: min(100vw, 470px);
       max-height: 85dvh;
-      height: auto;
       object-fit: contain;
       opacity: 0;
       transform: scale(.94);
       filter: brightness(.65) blur(4px);
-      animation: cinematicLogo 1.9s
-        cubic-bezier(.16,1,.3,1) forwards;
+      animation: logoReveal 1.9s cubic-bezier(.16,1,.3,1) forwards;
     }
 
-    @keyframes cinematicLogo {
+    @keyframes logoReveal {
       0% {
         opacity: 0;
         transform: scale(.94);
         filter: brightness(.65) blur(4px);
       }
+
       55% {
         opacity: 1;
         transform: scale(.98);
         filter: brightness(1.08) blur(0);
       }
+
       100% {
         opacity: 1;
         transform: scale(1);
@@ -132,34 +107,20 @@
       }
     }
 
-    /* APPLICATION */
+    /* ПРИЛОЖЕНИЕ */
 
     .app {
       position: relative;
+      isolation: isolate;
       width: 100%;
       max-width: 680px;
-      margin: 0 auto;
       min-height: 100dvh;
+      margin: 0 auto;
       padding: 24px 20px 32px;
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .app::before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      top: 420px;
-      left: -160px;
-      width: 480px;
-      height: 560px;
-      background: radial-gradient(
-        ellipse,
-        rgba(48,74,139,.16),
-        transparent 68%
-      );
-      pointer-events: none;
-      filter: blur(40px);
+      background:
+        radial-gradient(ellipse at 95% 22%, rgba(110,20,45,.15), transparent 42%),
+        radial-gradient(ellipse at 0% 75%, rgba(85,15,35,.09), transparent 48%),
+        #09080a;
     }
 
     .topbar {
@@ -167,39 +128,39 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 2px 0 24px;
-      border-bottom: 1px solid var(--line);
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
     }
 
     .brand-symbol {
-      font-size: 43px;
+      font-size: 48px;
       line-height: 1;
       font-weight: 900;
       letter-spacing: -.07em;
-      color: #f4f4f7;
-      text-shadow: 0 0 22px rgba(255,255,255,.14);
+      color: #f4f4f6;
+      text-shadow: 0 0 25px rgba(255,255,255,.12);
     }
 
     .top-pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 38px;
-      padding: 0 17px;
-      border: 1px solid rgba(255,255,255,.17);
+      min-height: 40px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.18);
       border-radius: 999px;
-      background: rgba(255,255,255,.045);
+      background: rgba(255,255,255,.035);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      color: #c3c3cc;
+      color: #c7c3cb;
       font-size: 10px;
       font-weight: 800;
-      letter-spacing: .2em;
+      letter-spacing: .19em;
       white-space: nowrap;
     }
 
     main {
-      padding-top: 66px;
+      padding-top: 68px;
     }
 
     .page {
@@ -219,91 +180,88 @@
         opacity: 0;
         transform: translateY(10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
+    /* ЗАГОЛОВОК */
+
     .intro {
-      margin-bottom: 42px;
+      margin-bottom: 48px;
     }
 
     .intro h1 {
       margin: 0;
       font-size: clamp(35px, 8vw, 51px);
+      line-height: 1.13;
       font-weight: 850;
-      line-height: 1.12;
       letter-spacing: -.055em;
     }
 
     .intro h1 span {
-      color: #c5c5ce;
+      color: #c5c1c9;
     }
+
+    /* КАРТОЧКИ */
 
     .cards {
       display: grid;
       gap: 20px;
     }
 
-    /* PREMIUM CARDS */
-
     .feature-card {
       position: relative;
       display: flex;
       flex-direction: column;
-      min-height: 355px;
+      min-height: 365px;
       padding: 26px;
-      border-radius: 29px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(
-        145deg,
-        #29292f 0%,
-        #202025 52%,
-        #17171b 100%
-      );
       overflow: hidden;
+      border-radius: 29px;
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, #29272b, #18171b);
       box-shadow:
-        0 20px 45px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.045);
+        0 20px 45px rgba(0,0,0,.24),
+        inset 0 1px 0 rgba(255,255,255,.05);
     }
 
-    .feature-card.knowledge::before {
-      content: "";
+    .feature-card.knowledge {
+      background:
+        radial-gradient(ellipse at 85% 30%, rgba(125,35,60,.20), transparent 65%),
+        linear-gradient(145deg, #2b2529 0%, #1c191d 55%, #121114 100%);
+      border-color: rgba(176,87,108,.30);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,.28),
+        0 0 35px rgba(110,25,48,.07),
+        inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .feature-card.knowledge::after {
+      content: "✦";
       position: absolute;
-      width: 280px;
-      height: 280px;
-      right: -125px;
-      top: -100px;
-      background: radial-gradient(
-        circle,
-        rgba(97,117,195,.20),
-        transparent 70%
-      );
-      filter: blur(25px);
+      top: 112px;
+      right: 44px;
+      color: #b75a70;
+      font-size: 76px;
+      line-height: 1;
+      opacity: .85;
+      text-shadow: 0 0 25px rgba(180,60,95,.20);
       pointer-events: none;
     }
 
-    .feature-card.book::before {
-      content: "";
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      left: -120px;
-      top: -120px;
-      background: radial-gradient(
-        circle,
-        rgba(78,118,169,.15),
-        transparent 70%
-      );
-      pointer-events: none;
+    .feature-card.book {
+      background: linear-gradient(145deg, #2b292d, #19181c 75%);
     }
 
     .card-top {
+      position: relative;
+      z-index: 1;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 29px;
+      justify-content: space-between;
+      margin-bottom: 28px;
     }
 
     .card-icon {
@@ -312,29 +270,30 @@
       width: 54px;
       height: 54px;
       border-radius: 17px;
-      border: 1px solid rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.055);
-      color: #e7e7ef;
+      color: #e7e3e9;
       font-size: 29px;
-      font-weight: 300;
     }
 
     .help {
       display: grid;
       place-items: center;
-      width: 39px;
-      height: 39px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255,255,255,.18);
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.17);
       background: rgba(255,255,255,.055);
-      color: #e5e5eb;
-      font-size: 20px;
+      color: #e8e4e9;
+      font-size: 21px;
     }
 
     .eyebrow {
+      position: relative;
+      z-index: 1;
       display: block;
-      margin-bottom: 17px;
-      color: #aaaab8;
+      margin-bottom: 18px;
+      color: #b99aa5;
       font-size: 11px;
       font-weight: 800;
       letter-spacing: .23em;
@@ -343,48 +302,47 @@
     .feature-card h2 {
       position: relative;
       z-index: 1;
-      margin: 0 0 14px;
-      font-size: clamp(27px, 6vw, 36px);
+      margin: 0 0 15px;
+      font-size: clamp(27px, 6vw, 35px);
       line-height: 1.15;
       letter-spacing: -.04em;
       font-weight: 850;
     }
 
     .feature-card p {
-      margin: 0 0 28px;
-      color: #b1b1bb;
+      position: relative;
+      z-index: 1;
+      margin: 0 0 30px;
+      color: #b2adb5;
       font-size: 15px;
       line-height: 1.65;
     }
 
+    /* КНОПКИ */
+
     .primary,
     .secondary,
     .link-button {
+      position: relative;
+      z-index: 1;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: space-between;
       gap: 14px;
       width: 100%;
       min-height: 60px;
       padding: 14px 20px;
-      border: 0;
+      border: 1px solid rgba(255,255,255,.25);
       border-radius: 18px;
-      background: linear-gradient(
-        135deg,
-        #075dc9,
-        #087cf5 58%,
-        #388df7
-      );
-      color: #fff;
+      background: linear-gradient(115deg, #c9c8d0, #a9a8b2 48%, #858490);
+      color: #101014;
       text-decoration: none;
       font-size: 17px;
       font-weight: 750;
       box-shadow:
-        0 8px 30px rgba(0,104,255,.20),
-        inset 0 1px 0 rgba(255,255,255,.20);
-      transition:
-        transform .2s ease,
-        filter .2s ease;
+        inset 0 1px 0 rgba(255,255,255,.45),
+        0 8px 24px rgba(0,0,0,.20);
+      transition: transform .2s ease, filter .2s ease;
     }
 
     .primary:active,
@@ -392,6 +350,12 @@
     .link-button:active {
       transform: scale(.98);
       filter: brightness(.92);
+    }
+
+    .primary span,
+    .secondary span {
+      font-size: 24px;
+      font-weight: 800;
     }
 
     .feature-card > .primary,
@@ -403,23 +367,23 @@
       display: inline-flex;
       align-items: center;
       padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.18);
       border-radius: 999px;
-      border: 1px solid rgba(109,202,157,.22);
-      background: rgba(55,137,99,.12);
-      color: #8cd7ae;
+      background: rgba(255,255,255,.035);
+      color: #d0ccd2;
       font-size: 10px;
       font-weight: 800;
       letter-spacing: .12em;
     }
 
-    /* DETAIL PAGES */
+    /* ВНУТРЕННИЕ СТРАНИЦЫ */
 
     .back {
       margin-bottom: 40px;
       padding: 0;
       border: 0;
       background: transparent;
-      color: #c8c8d0;
+      color: #c8c4cc;
       font-size: 16px;
     }
 
@@ -429,9 +393,9 @@
       width: 65px;
       height: 65px;
       margin-bottom: 28px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: 20px;
-      background: #24242a;
+      background: #242127;
       font-size: 32px;
     }
 
@@ -444,7 +408,7 @@
     }
 
     .detail-text {
-      color: #aaaab5;
+      color: #aaa5ae;
       line-height: 1.7;
       font-size: 16px;
     }
@@ -452,17 +416,13 @@
     .info-box {
       margin: 30px 0;
       padding: 23px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: 22px;
-      background: #202025;
-    }
-
-    .info-box strong {
-      font-size: 17px;
+      background: #211e23;
     }
 
     .info-box p {
-      color: #aaaab5;
+      color: #aaa5ae;
       line-height: 1.6;
     }
 
@@ -470,14 +430,14 @@
       margin-top: 24px;
     }
 
-    /* PDF READER */
+    /* PDF */
 
     .pdf-container {
       margin: 25px 0;
       overflow: hidden;
       border-radius: 20px;
-      border: 1px solid var(--line);
-      background: #202025;
+      border: 1px solid var(--border);
+      background: #211e23;
     }
 
     .pdf-container iframe {
@@ -493,19 +453,14 @@
       margin: 25px 0;
       padding: 20px;
       border-radius: 20px;
-      background: #202025;
-      color: #aaaab5;
+      background: #211e23;
+      color: #aaa5ae;
     }
 
     .skeleton-line,
     .skeleton-sheet {
       border-radius: 8px;
-      background: linear-gradient(
-        90deg,
-        #303038,
-        #42424c,
-        #303038
-      );
+      background: linear-gradient(90deg, #303038, #42424c, #303038);
       background-size: 200% 100%;
       animation: skeleton 1.5s linear infinite;
     }
@@ -530,7 +485,7 @@
       }
     }
 
-    /* TOAST */
+    /* УВЕДОМЛЕНИЯ */
 
     .toast {
       position: fixed;
@@ -540,9 +495,9 @@
       width: max-content;
       max-width: calc(100vw - 40px);
       padding: 15px 20px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: 16px;
-      background: rgba(38,38,44,.96);
+      background: rgba(38,34,40,.96);
       color: #fff;
       text-align: center;
       font-size: 14px;
@@ -551,7 +506,6 @@
       visibility: hidden;
       transform: translate(-50%, 15px);
       transition: .3s ease;
-      box-shadow: 0 15px 40px rgba(0,0,0,.35);
     }
 
     .toast.visible {
@@ -560,7 +514,7 @@
       transform: translate(-50%, 0);
     }
 
-    /* MODAL */
+    /* МОДАЛЬНОЕ ОКНО */
 
     .modal {
       position: fixed;
@@ -572,16 +526,16 @@
       padding: 20px;
       background: rgba(0,0,0,.75);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .modal-panel {
       width: 100%;
       max-width: 390px;
       padding: 28px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: 26px;
-      background: #232329;
-      box-shadow: 0 25px 70px rgba(0,0,0,.5);
+      background: #242027;
     }
 
     .modal-panel h2 {
@@ -589,7 +543,7 @@
     }
 
     .modal-panel p {
-      color: #b5b5be;
+      color: #b5afb8;
       line-height: 1.6;
       margin-bottom: 25px;
     }
@@ -597,7 +551,7 @@
     footer {
       margin-top: 48px;
       padding: 24px 0;
-      color: #686873;
+      color: #77717b;
       text-align: center;
       font-size: 12px;
     }
@@ -634,23 +588,17 @@
 <body>
 
   <!-- ЗАГРУЗКА -->
-
-  <div
-    id="splash"
-    class="splash"
-    aria-label="Загрузка приложения"
-  >
+  <div id="splash" class="splash" aria-label="Загрузка приложения">
     <div class="splash-content">
       <img
         class="crystal-splash-logo"
-        src="/static/photo_2026-11-15_23-08-09.jpg"
+        src="/static/logo.jpg?v=2"
         alt="Two Chance"
       >
     </div>
   </div>
 
   <!-- ПРИЛОЖЕНИЕ -->
-
   <div id="application" class="app hidden">
 
     <header class="topbar">
@@ -661,7 +609,6 @@
     <main>
 
       <!-- ГЛАВНАЯ -->
-
       <section id="home" class="page active">
 
         <div class="intro">
@@ -673,39 +620,29 @@
 
         <div class="cards">
 
-          <!-- ПОКУПКА -->
-
+          <!-- МАТЕРИАЛЫ -->
           <article class="feature-card knowledge">
 
             <div class="card-top">
               <span class="card-icon">✧</span>
 
               <button
-                class="help"
                 id="helpBtn"
+                class="help"
                 type="button"
-                aria-label="О разделе знаний"
+                aria-label="О разделе"
               >?</button>
             </div>
 
-            <span class="eyebrow">
-              EXCLUSIVE ACCESS
-            </span>
+            <span class="eyebrow">EXCLUSIVE ACCESS</span>
 
-            <h2>
-              Покупка драгоценных материалов
-            </h2>
+            <h2>Покупка драгоценных материалов</h2>
 
             <p>
-              Особые знания для тех, кто
-              стремится к большему.
+              Особые знания для тех, кто стремится к большему.
             </p>
 
-            <button
-              class="primary"
-              type="button"
-              data-go="knowledge"
-            >
+            <button class="primary" type="button" data-go="knowledge">
               Исследовать
               <span aria-hidden="true">↗</span>
             </button>
@@ -713,7 +650,6 @@
           </article>
 
           <!-- КНИГА -->
-
           <article class="feature-card book">
 
             <div class="card-top">
@@ -721,25 +657,15 @@
               <span class="free-pill">FREE ACCESS</span>
             </div>
 
-            <span class="eyebrow">
-              PERSONAL GROWTH
-            </span>
+            <span class="eyebrow">PERSONAL GROWTH</span>
 
-            <h2>
-              Почитать книгу:<br>
-              как стать лучше
-            </h2>
+            <h2>Почитать книгу:<br>как стать лучше</h2>
 
             <p>
-              Всего прочитав это ты можешь
-              стать в 2 раза лучше
+              Всего прочитав это ты можешь стать в 2 раза лучше
             </p>
 
-            <button
-              class="secondary"
-              type="button"
-              data-go="reader"
-            >
+            <button class="secondary" type="button" data-go="reader">
               Начать чтение
               <span aria-hidden="true">↗</span>
             </button>
@@ -747,90 +673,55 @@
           </article>
 
         </div>
-
       </section>
 
-      <!-- РАЗДЕЛ ЗНАНИЙ -->
-
+      <!-- ЗНАНИЯ -->
       <section id="knowledge" class="page">
 
-        <button
-          class="back"
-          type="button"
-          data-go="home"
-        >
+        <button class="back" type="button" data-go="home">
           ‹ На главную
         </button>
 
         <div class="detail-icon">✦</div>
 
-        <span class="eyebrow">
-          EXCLUSIVE ACCESS
-        </span>
+        <span class="eyebrow">EXCLUSIVE ACCESS</span>
 
         <h1>Драгоценные знания</h1>
 
         <p class="detail-text">
-          Здесь скоро появятся подборки
-          полезных материалов и
-          обучающие программы.
+          Здесь скоро появятся подборки полезных материалов
+          и обучающие программы.
         </p>
 
         <div class="info-box">
           <strong>Материалы готовятся</strong>
-
           <p>
-            Следи за обновлениями —
-            новые возможности появятся здесь.
+            Следи за обновлениями — новые возможности появятся здесь.
           </p>
         </div>
 
-        <button
-          id="buyBtn"
-          class="primary buy-button"
-          type="button"
-        >
+        <button id="buyBtn" class="primary buy-button" type="button">
           Перейти к оплате
         </button>
 
       </section>
 
-      <!-- ЧТЕНИЕ КНИГИ -->
-
+      <!-- КНИГА -->
       <section id="reader" class="page">
 
-        <button
-          class="back"
-          type="button"
-          data-go="home"
-        >
+        <button class="back" type="button" data-go="home">
           ‹ На главную
         </button>
 
-        <span class="eyebrow">
-          FREE ACCESS
-        </span>
+        <span class="eyebrow">FREE ACCESS</span>
 
-        <h1>
-          Бесплатный самоучитель счастья
-        </h1>
+        <h1>Бесплатный самоучитель счастья</h1>
 
-        <p class="detail-text">
-          Автор: Дмитрий Гаун
-        </p>
+        <p class="detail-text">Автор: Дмитрий Гаун</p>
 
-        <div
-          id="pdfMissing"
-          class="info-box hidden"
-        >
-          <strong>
-            Книга пока не загружена
-          </strong>
-
-          <p>
-            Книга появится здесь
-            в ближайшее время.
-          </p>
+        <div id="pdfMissing" class="info-box hidden">
+          <strong>Книга пока не загружена</strong>
+          <p>Книга появится здесь в ближайшее время.</p>
         </div>
 
         <div
@@ -842,14 +733,10 @@
           <div class="skeleton-line"></div>
           <div class="skeleton-line short"></div>
           <div class="skeleton-sheet"></div>
-
           <span>Загружаем книгу…</span>
         </div>
 
-        <div
-          id="pdfContainer"
-          class="pdf-container hidden"
-        >
+        <div id="pdfContainer" class="pdf-container hidden">
           <iframe
             id="pdfFrame"
             title="Чтение книги"
@@ -878,16 +765,9 @@
   </div>
 
   <!-- УВЕДОМЛЕНИЯ -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
-
-  <!-- ИНФОРМАЦИОННОЕ ОКНО -->
-
+  <!-- МОДАЛЬНОЕ ОКНО -->
   <div
     id="modal"
     class="modal hidden"
@@ -895,26 +775,18 @@
     aria-modal="true"
     aria-labelledby="modalTitle"
   >
-
     <div class="modal-panel">
-
       <h2 id="modalTitle">О разделе</h2>
 
       <p>
-        Здесь будут доступны расширенные
-        материалы для личного развития.
+        Здесь будут доступны расширенные материалы
+        для личного развития.
       </p>
 
-      <button
-        id="modalClose"
-        class="primary"
-        type="button"
-      >
+      <button id="modalClose" class="primary" type="button">
         Понятно
       </button>
-
     </div>
-
   </div>
 
 </body>
