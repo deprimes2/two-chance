@@ -2,242 +2,557 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#09090b">
-  <title>Two Chance</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080808">
+<title>Two Chance</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="/static/app.js?v=20261115fix2" defer></script>
 
-  <link rel="stylesheet" href="/static/style.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="/static/app.js" defer></script>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #080808;
+  --card: #222225;
+  --text: #f7f7f8;
+  --muted: #a2a2aa;
+  --blue: #0877eb;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont,
+    "SF Pro Display", "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; }
+.hidden { display: none !important; }
+
+/* ЗАГРУЗКА */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+  transition: opacity .5s ease, visibility .5s ease;
+}
+
+.splash.out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.splash-content {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoIn .7s ease both;
+}
+
+.crystal-splash-logo {
+  display: block;
+  width: min(100vw, 480px);
+  height: auto;
+  max-height: calc(100dvh - 110px);
+  object-fit: contain;
+  object-position: center;
+}
+
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ПРИЛОЖЕНИЕ */
+
+.app {
+  max-width: 740px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar { display: none; }
+
+main {
+  flex: 1;
+  padding-top: clamp(125px, 19vh, 190px);
+}
+
+.page { display: none; }
+.page.active { display: block; }
+.page.enter { animation: pageIn .3s ease both; }
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ГЛАВНЫЙ ЭКРАН */
+
+.intro { margin-bottom: 56px; }
+
+.intro .eyebrow,
+.intro p { display: none; }
+
+.intro h1 {
+  margin: 0;
+  font-size: clamp(32px, 8vw, 49px);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -.045em;
+}
+
+.intro h1 span {
+  display: block;
+  color: #f7f7f8;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+
+/* КАРТОЧКИ */
+
+.feature-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 305px;
+  padding: 28px 24px 24px;
+  border: 1px solid #29292c;
+  border-radius: 30px;
+  background: #222225;
+  overflow: hidden;
+}
+
+.feature-card.knowledge { min-height: 305px; }
+.feature-card.book { min-height: 275px; }
+
+.card-top,
+.card-label,
+.crystal-animation,
+.feature-card.knowledge p {
+  display: none;
+}
+
+.feature-card h2 {
+  margin: 0 0 40px;
+  font-size: clamp(24px, 6.2vw, 32px);
+  line-height: 1.13;
+  letter-spacing: -.035em;
+  font-weight: 750;
+  max-width: 430px;
+}
+
+.feature-card.book h2 { margin-bottom: 14px; }
+
+.feature-card.book p {
+  display: block;
+  margin: 0 0 28px;
+  color: #c0c0c6;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* КНОПКИ */
+
+.primary,
+.secondary,
+.link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  transition: transform .2s, background .2s;
+}
+
+.primary span,
+.secondary span { font-size: 21px; }
+
+.primary:active,
+.secondary:active {
+  transform: scale(.98);
+  background: #0866cb;
+}
+
+/* ВНУТРЕННИЕ СТРАНИЦЫ */
+
+.back {
+  margin: 0 0 32px;
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  color: #b7b7c0;
+  font-size: 15px;
+}
+
+.detail-icon { display: none; }
+
+.eyebrow {
+  display: block;
+  color: #7b9fd2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .17em;
+}
+
+.page h1 {
+  margin: 16px 0;
+  font-size: clamp(30px, 8vw, 44px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+.detail-text {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.info-box {
+  margin: 26px 0;
+  padding: 22px;
+  background: var(--card);
+  border: 1px solid #343439;
+  border-radius: 20px;
+}
+
+.info-box strong { font-size: 15px; }
+
+.info-box p {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.buy-button { margin-top: 24px; }
+
+/* PDF */
+
+.pdf-skeleton {
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--muted);
+}
+
+.skeleton-line {
+  width: 80%;
+  height: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: #38383d;
+  animation: pulse 1.4s infinite alternate;
+}
+
+.skeleton-line.short { width: 45%; }
+
+.skeleton-sheet {
+  height: 220px;
+  margin: 20px 0;
+  background: #333339;
+  border-radius: 10px;
+  animation: pulse 1.4s infinite alternate;
+}
+
+@keyframes pulse { to { opacity: .4; } }
+
+.pdf-container {
+  margin-top: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.pdf-container iframe {
+  display: block;
+  width: 100%;
+  height: 68vh;
+  min-height: 420px;
+  border: 0;
+  background: white;
+}
+
+#pdfLink { margin-top: 16px; }
+
+/* МОДАЛЬНОЕ ОКНО */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(12px);
+}
+
+.modal-panel {
+  width: 100%;
+  max-width: 400px;
+  padding: 26px;
+  border-radius: 24px;
+  background: #222225;
+  border: 1px solid #37373b;
+}
+
+.modal-panel h2 { margin: 0 0 12px; }
+
+.modal-panel p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.modal-panel .primary { margin-top: 24px; }
+
+/* УВЕДОМЛЕНИЯ */
+
+.toast {
+  position: fixed;
+  z-index: 1200;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%,15px);
+  max-width: calc(100% - 35px);
+  width: max-content;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: #303037;
+  color: #fff;
+  text-align: center;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translate(-50%,0);
+}
+
+footer {
+  padding: 45px 0 24px;
+  color: #55555a;
+  font-size: 10px;
+  text-align: center;
+  letter-spacing: .1em;
+}
+
+@media (min-width: 620px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .feature-card,
+  .feature-card.knowledge,
+  .feature-card.book {
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 370px) {
+  .app { padding: 0 15px; }
+  .feature-card { padding: 22px; }
+  .intro h1 { font-size: 31px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- ЗАГРУЗКА -->
-  <div id="splash" class="splash" aria-label="Загрузка приложения">
-    <div class="splash-shimmer" aria-hidden="true"></div>
-
-    <div class="splash-content">
-      <img
-        class="splash-logo"
-        src="/static/logo.jpg"
-        alt="2 CHANCE"
-      >
-      <div class="splash-caption">THE SECOND CHANCE</div>
-    </div>
+<div id="splash" class="splash" aria-label="Загрузка приложения">
+  <div class="splash-content">
+    <img
+      class="crystal-splash-logo"
+      src="/static/logo.png?v=2"
+      alt="2 CHANCE"
+      width="1024"
+      height="1536"
+    >
   </div>
+</div>
 
-  <!-- ПРИЛОЖЕНИЕ -->
-  <div id="application" class="app hidden">
+<div id="application" class="app hidden">
+  <header class="topbar">
+    <span class="brand-symbol">2</span>
+    <span class="brand">CHANCE</span>
+    <span class="top-pill">PRIVATE SPACE</span>
+  </header>
 
-    <header class="topbar">
-      <span class="brand-symbol">2</span>
-      <span class="brand">CHANCE</span>
-      <span class="top-pill">PRIVATE SPACE</span>
-    </header>
+  <main>
+    <section id="home" class="page active">
+      <div class="intro">
+        <span class="eyebrow">TWO CHANCE / 001</span>
+        <h1>
+          Твой второй шанс
+          <span>начинается здесь.</span>
+        </h1>
+        <p>Знания. Развитие. Новые возможности.</p>
+      </div>
 
-    <main>
+      <div class="cards">
+        <article class="feature-card knowledge">
+          <div class="card-top">
+            <span class="card-icon">✧</span>
+            <button
+              class="help"
+              id="helpBtn"
+              type="button"
+              aria-label="О разделе знаний"
+            >?</button>
+          </div>
 
-      <!-- ГЛАВНАЯ -->
-      <section id="home" class="page active">
+          <div class="crystal-animation" aria-hidden="true">
+            <div class="crystal-object">✦</div>
+          </div>
 
-        <div class="intro">
-          <span class="eyebrow">TWO CHANCE / 001</span>
+          <span class="card-label">EXCLUSIVE ACCESS</span>
+          <h2>Покупка драгоценных материалов</h2>
+          <p>Особые знания для тех, кто стремится к большему.</p>
+          <button class="primary" data-go="knowledge">
+            Исследовать <span aria-hidden="true">↗</span>
+          </button>
+        </article>
 
-          <h1>
-            Твой второй шанс
-            <span>начинается здесь.</span>
-          </h1>
+        <article class="feature-card book">
+          <div class="card-top">
+            <span class="card-icon">▤</span>
+            <span class="free-pill">FREE ACCESS</span>
+          </div>
 
-          <p>
-            Знания. Развитие. Новые возможности.
-          </p>
-        </div>
+          <span class="card-label">PERSONAL GROWTH</span>
+          <h2>Почитать книгу: как стать лучше</h2>
+          <p>Всего прочитав это ты можешь стать в 2 раза лучше</p>
+          <button class="secondary" data-go="reader">
+            Начать чтение <span aria-hidden="true">↗</span>
+          </button>
+        </article>
+      </div>
+    </section>
 
-        <div class="cards">
-
-          <!-- МАТЕРИАЛЫ -->
-          <article class="feature-card knowledge">
-
-            <div class="card-top">
-              <span class="card-icon crystal-icon">✧</span>
-
-              <button
-                class="help"
-                id="helpBtn"
-                type="button"
-                aria-label="О разделе знаний"
-              >?</button>
-            </div>
-
-            <div class="crystal-animation" aria-hidden="true">
-              <div class="crystal-object">✦</div>
-            </div>
-
-            <span class="card-label">EXCLUSIVE ACCESS</span>
-
-            <h2>Покупка драгоценных материалов</h2>
-
-            <p>
-              Особые знания для тех, кто стремится к большему.
-            </p>
-
-            <button class="primary" data-go="knowledge">
-              Исследовать
-              <span aria-hidden="true">↗</span>
-            </button>
-          </article>
-
-          <!-- КНИГА -->
-          <article class="feature-card book">
-
-            <div class="card-top">
-              <span class="card-icon book-icon">▤</span>
-              <span class="free-pill">FREE ACCESS</span>
-            </div>
-
-            <span class="card-label">PERSONAL GROWTH</span>
-
-            <h2>Почитать книгу: как стать лучше</h2>
-
-            <p>
-              Всего прочитав это ты можешь стать в 2 раза лучше
-            </p>
-
-            <button class="secondary" data-go="reader">
-              Начать чтение
-              <span aria-hidden="true">↗</span>
-            </button>
-
-          </article>
-        </div>
-      </section>
-
-      <!-- ПОКУПКА -->
-      <section id="knowledge" class="page">
-
-        <button class="back" data-go="home">
-          ‹ На главную
-        </button>
-
-        <div class="detail-icon">✧</div>
-
-        <span class="eyebrow">EXCLUSIVE MATERIALS</span>
-
-        <h1>Драгоценные материалы</h1>
-
-        <p class="detail-text">
-          Коллекция знаний, способных изменить твой подход
-          к жизни и развитию.
-        </p>
-
-        <div class="info-box">
-          <strong>Материалы готовятся</strong>
-          <p>
-            Скоро здесь появятся новые возможности.
-          </p>
-        </div>
-
-        <button
-          id="buyBtn"
-          class="primary buy-button"
-          type="button"
-        >
-          Перейти к оплате
-        </button>
-      </section>
-
-      <!-- ЧТЕНИЕ -->
-      <section id="reader" class="page">
-
-        <button class="back" data-go="home">
-          ‹ На главную
-        </button>
-
-        <span class="eyebrow">THE BOOK / FREE</span>
-
-        <h1>Бесплатный самоучитель счастья</h1>
-
-        <p class="detail-text">
-          Дмитрий Гаун
-        </p>
-
-        <div id="pdfMissing" class="info-box hidden">
-          <strong>Книга пока не загружена</strong>
-          <p>Книга появится здесь в ближайшее время.</p>
-        </div>
-
-        <div
-          id="pdfSkeleton"
-          class="pdf-skeleton hidden"
-          role="status"
-          aria-label="Загрузка книги"
-        >
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line short"></div>
-          <div class="skeleton-sheet"></div>
-          <span>Загружаем книгу…</span>
-        </div>
-
-        <div id="pdfContainer" class="pdf-container hidden">
-          <iframe
-            id="pdfFrame"
-            title="Чтение книги"
-            loading="lazy"
-          ></iframe>
-        </div>
-
-        <a
-          id="pdfLink"
-          class="primary link-button hidden"
-          href="/static/book.pdf"
-          target="_blank"
-          rel="noopener"
-        >
-          Открыть PDF отдельно ↗
-        </a>
-
-      </section>
-
-    </main>
-
-    <footer>
-      TWO CHANCE · THE SECOND CHANCE
-    </footer>
-
-  </div>
-
-  <!-- УВЕДОМЛЕНИЯ -->
-  <div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
-
-  <!-- МОДАЛЬНОЕ ОКНО -->
-  <div
-    id="modal"
-    class="modal hidden"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitle"
-  >
-    <div class="modal-panel">
-      <h2 id="modalTitle">О разделе</h2>
-
-      <p>
-        Здесь будут доступны эксклюзивные материалы
-        для личного развития.
+    <section id="knowledge" class="page">
+      <button class="back" data-go="home">‹ На главную</button>
+      <div class="detail-icon">✧</div>
+      <span class="eyebrow">EXCLUSIVE MATERIALS</span>
+      <h1>Драгоценные материалы</h1>
+      <p class="detail-text">
+        Коллекция знаний, способных изменить твой подход
+        к жизни и развитию.
       </p>
-
-      <button id="modalClose" class="primary">
-        Понятно
+      <div class="info-box">
+        <strong>Материалы готовятся</strong>
+        <p>Скоро здесь появятся новые возможности.</p>
+      </div>
+      <button id="buyBtn" class="primary buy-button" type="button">
+        Перейти к оплате
       </button>
-    </div>
+    </section>
+
+    <section id="reader" class="page">
+      <button class="back" data-go="home">‹ На главную</button>
+      <span class="eyebrow">THE BOOK / FREE</span>
+      <h1>Бесплатный самоучитель счастья</h1>
+      <p class="detail-text">Дмитрий Гаун</p>
+
+      <div id="pdfMissing" class="info-box hidden">
+        <strong>Книга пока не загружена</strong>
+        <p>Книга появится здесь в ближайшее время.</p>
+      </div>
+
+      <div
+        id="pdfSkeleton"
+        class="pdf-skeleton hidden"
+        role="status"
+        aria-label="Загрузка книги"
+      >
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-sheet"></div>
+        <span>Загружаем книгу…</span>
+      </div>
+
+      <div id="pdfContainer" class="pdf-container hidden">
+        <iframe
+          id="pdfFrame"
+          title="Чтение книги"
+          loading="lazy"
+        ></iframe>
+      </div>
+
+      <a
+        id="pdfLink"
+        class="primary link-button hidden"
+        href="/static/book.pdf"
+        target="_blank"
+        rel="noopener"
+      >
+        Открыть PDF отдельно ↗
+      </a>
+    </section>
+  </main>
+
+  <footer>TWO CHANCE · THE SECOND CHANCE</footer>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div
+  id="modal"
+  class="modal hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
+>
+  <div class="modal-panel">
+    <h2 id="modalTitle">О разделе</h2>
+    <p>
+      Здесь будут доступны эксклюзивные материалы
+      для личного развития.
+    </p>
+    <button id="modalClose" class="primary">
+      Понятно
+    </button>
   </div>
+</div>
 
 </body>
 </html>
