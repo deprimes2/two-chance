@@ -1,50 +1,59 @@
-"""Telegram bot: run separately from the FastAPI web service."""
-import asyncio
-import logging
+
 import os
 
 from aiogram import Bot, Dispatcher, Router
 from aiogram.filters import CommandStart
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, MenuButtonWebApp, Message, WebAppInfo
-from dotenv import load_dotenv
+from aiogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    MenuButtonWebApp,
+    Message,
+    WebAppInfo,
+)
 
-load_dotenv()
 router = Router()
 
 
-def get_webapp_url() -> str:
-    url = os.environ.get("WEBAPP_URL", "").strip().rstrip("/")
+def get_webapp_url():
+    url = os.environ["WEBAPP_URL"].strip().rstrip("/")
     if not url.startswith("https://"):
-        raise RuntimeError("WEBAPP_URL must be a public HTTPS URL")
+        raise RuntimeError("WEBAPP_URL должен использовать HTTPS")
     return url
 
 
 @router.message(CommandStart())
-async def start(message: Message) -> None:
-    url = get_webapp_url()
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="Открыть Two Chance", web_app=WebAppInfo(url=url))
-    ]])
+async def start(message: Message):
+    if message.from_user:
+        from database import save_user
+        await save_user(message.from_user)
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[[
+            InlineKeyboardButton(
+                text="Открыть Two Chance",
+                web_app=WebAppInfo(url=get_webapp_url()),
+            )
+        ]]
+    )
+
     await message.answer(
         "Добро пожаловать в Two Chance! ✨\n\n"
-        "Откройте приложение, чтобы изучить материалы или бесплатно почитать книгу.",
+        "Здесь вы можете изучить полезные материалы "
+        "и бесплатно почитать книгу.",
         reply_markup=keyboard,
     )
 
 
-async def main() -> None:
-    logging.basicConfig(level=logging.INFO)
-    token = os.environ.get("BOT_TOKEN", "").strip()
-    if not token:
-        raise RuntimeError("BOT_TOKEN is missing")
-    async with Bot(token=token) as bot:
-        await bot.set_chat_menu_button(menu_button=MenuButtonWebApp(
-            text="Открыть Two Chance", web_app=WebAppInfo(url=get_webapp_url())
-        ))
-        dp = Dispatcher()
-        dp.include_router(router)
-        await dp.start_polling(bot)
+def create_dispatcher():
+    dp = Dispatcher()
+    dp.include_router(router)
+    return dp
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+async def configure_bot(bot: Bot):
+    await bot.set_chat_menu_button(
+        menu_button=MenuButtonWebApp(
+            text="Открыть Two Chance",
+            web_app=WebAppInfo(url=get_webapp_url()),
+        )
+    )
