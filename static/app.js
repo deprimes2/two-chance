@@ -1,3 +1,4 @@
+(() => {
 
 'use strict';
 
@@ -5,18 +6,15 @@ const tg = window.Telegram?.WebApp;
 const themeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 function applyTheme() {
-  const dark = tg?.colorScheme
-    ? tg.colorScheme === 'dark'
-    : themeQuery.matches;
-
-  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const dark = true;
+  document.documentElement.dataset.theme = 'dark';
 
   document.querySelector('meta[name="theme-color"]').content =
-    dark ? '#09080a' : '#09080a';
+    dark ? '#0a0a0a' : '#0a0a0a';
 
   try {
-    tg?.setHeaderColor?.('#09080a');
-    tg?.setBackgroundColor?.('#09080a');
+    tg?.setHeaderColor?.('#0a0a0a');
+    tg?.setBackgroundColor?.('#0a0a0a');
   } catch (_) {}
 }
 
@@ -43,7 +41,7 @@ document.addEventListener('click', e => {
 let currentPage = 'home';
 
 function navigate(name) {
-  if (name === currentPage) return;
+  if (name === currentPage || !['home','knowledge','reader'].includes(name)) return;
 
   const old = document.getElementById(currentPage);
   const next = document.getElementById(name);
@@ -58,10 +56,12 @@ function navigate(name) {
   next.classList.add('enter');
 
   currentPage = name;
+  document.querySelectorAll('.page').forEach(page => { page.inert = page.id !== name; });
+  if (tg?.initData) { if (name === 'home') tg.BackButton?.hide(); else tg.BackButton?.show(); }
 
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
   });
 
   if (name === 'reader') {
@@ -81,31 +81,28 @@ const modal = document.getElementById('modal');
 const helpBtn = document.getElementById('helpBtn');
 const modalClose = document.getElementById('modalClose');
 
+let modalOpener;
+function openInfo(title, text) {
+  closeMenu();
+  modalOpener = document.activeElement;
+  document.getElementById('modalTitle').textContent = title;
+  modal.querySelector('p').textContent = text;
+  modal.classList.remove('hidden');
+  document.getElementById('application').inert = true;
+  modalClose.focus();
+}
 function closeModal() {
   modal.classList.add('hidden');
-  helpBtn.focus();
+  document.getElementById('application').inert = false;
+  modalOpener?.focus();
 }
-
-helpBtn.addEventListener('click', () => {
-  modal.classList.remove('hidden');
-  modalClose.focus();
-});
-
+helpBtn.addEventListener('click', () => openInfo('О разделе', 'Здесь будут доступны расширенные материалы для личного развития.'));
 modalClose.addEventListener('click', closeModal);
-
-modal.addEventListener('click', event => {
-  if (event.target === modal) {
-    closeModal();
-  }
-});
-
+modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
 document.addEventListener('keydown', event => {
-  if (
-    event.key === 'Escape' &&
-    !modal.classList.contains('hidden')
-  ) {
-    closeModal();
-  }
+  if (modal.classList.contains('hidden')) return;
+  if (event.key === 'Escape') closeModal();
+  if (event.key === 'Tab') { event.preventDefault(); modalClose.focus(); }
 });
 
 /* УВЕДОМЛЕНИЯ */
@@ -251,13 +248,8 @@ const READER_KEY = 'two_chance_reader_chapter_v1';
 let readerIndex = 0;
 
 try {
-  readerIndex = Math.max(
-    0,
-    Math.min(
-      bookChapters.length - 1,
-      Number(localStorage.getItem(READER_KEY)) || 0
-    )
-  );
+  const saved = Number(localStorage.getItem(READER_KEY));
+  if (Number.isFinite(saved)) readerIndex = Math.max(0, Math.min(bookChapters.length - 1, Math.trunc(saved)));
 } catch (_) {}
 
 /* ОТОБРАЖЕНИЕ ГЛАВ */
@@ -287,6 +279,7 @@ function renderChapter() {
   }
 
   readerSheet.scrollTop = 0;
+  document.querySelector('.reader-progress').setAttribute('aria-valuenow', String(readerIndex + 1));
 
   document.getElementById('readerCount').textContent =
     `${readerIndex + 1} / ${bookChapters.length}`;
@@ -319,8 +312,8 @@ function changeChapter(delta) {
 
   readerIndex = target;
   renderChapter();
-  haptic('light');
 }
+
 
 document.getElementById('readerPrev').addEventListener(
   'click',
@@ -334,27 +327,31 @@ document.getElementById('readerNext').addEventListener(
 
 /* СВАЙПЫ */
 
-let touchStartX = 0;
-let touchStartY = 0;
+let touchStartX = null;
+let touchStartY = null;
 
 readerSheet.addEventListener('touchstart', e => {
-  if (e.touches.length !== 1) return;
+  if (e.touches.length !== 1) { touchStartX = touchStartY = null; return; }
 
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
+readerSheet.addEventListener('touchcancel', () => { touchStartX = touchStartY = null; }, { passive: true });
+
 readerSheet.addEventListener('touchend', e => {
-  if (e.changedTouches.length !== 1) return;
+  if (e.changedTouches.length !== 1 || touchStartX === null || e.touches.length) { touchStartX = touchStartY = null; return; }
 
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
+  touchStartX = touchStartY = null;
 
   if (
     Math.abs(dx) > 55 &&
     Math.abs(dx) > Math.abs(dy) * 1.4
   ) {
     changeChapter(dx < 0 ? 1 : -1);
+    haptic();
   }
 }, { passive: true });
 
@@ -370,6 +367,7 @@ readerSheet.addEventListener('keydown', e => {
     changeChapter(
       e.key === 'ArrowRight' ? 1 : -1
     );
+    haptic();
   }
 });
 
@@ -389,24 +387,46 @@ if (tg?.initData) {
   }).catch(() => {});
 }
 
-/* ЗАГРУЗОЧНЫЙ ЭКРАН */
-
-setTimeout(() => {
-  const splash = document.getElementById('splash');
-  const app = document.getElementById('application');
-
-  if (!app) return;
-
-  app.classList.remove('hidden');
-
-  if (!splash) return;
-
-  requestAnimationFrame(() => {
+/* ОБОЛОЧКА И ЗАСТАВКА */
+// Логотип загружается из /static/logo.jpg в HTML-шаблоне.
+const app = document.getElementById('application');
+const splash = document.getElementById('splash');
+let splashTimer;
+let splashRunning = false;
+function showSplash() {
+  clearTimeout(splashTimer);
+  splashRunning = true;
+  closeMenu();
+  app.inert = true;
+  splash.classList.remove('out');
+  splash.removeAttribute('aria-hidden');
+  const content = splash.querySelector('.splash-content');
+  content.style.animation = 'none'; void content.offsetWidth; content.style.animation = '';
+  const loader = splash.querySelector('.loader'); loader.replaceWith(loader.cloneNode(true));
+  splashTimer = setTimeout(() => {
     splash.classList.add('out');
-  });
+    splash.setAttribute('aria-hidden', 'true');
+    app.classList.remove('hidden');
+    app.inert = false;
+    splashRunning = false;
+  }, 1800);
+}
+const appMenu = document.getElementById('appMenu');
+const moreBtn = document.getElementById('moreBtn');
+function closeMenu() { appMenu.classList.add('hidden'); moreBtn.setAttribute('aria-expanded', 'false'); }
+moreBtn.addEventListener('click', () => {
+  const isHidden = appMenu.classList.toggle('hidden');
+  moreBtn.setAttribute('aria-expanded', String(!isHidden));
+});
+document.addEventListener('click', event => { if (!event.target.closest('.topbar')) closeMenu(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && !appMenu.classList.contains('hidden')) { closeMenu(); moreBtn.focus(); } });
+document.getElementById('showSplash').addEventListener('click', showSplash);
+document.getElementById('aboutBtn').addEventListener('click', () => openInfo('Two Chance', 'Каждый день — новая возможность. Пространство для знаний и маленьких шагов к большим переменам.'));
+document.getElementById('privateBtn').addEventListener('click', () => openInfo('Private Space', 'Личное пространство готовится. Здесь появятся сохранённые материалы и твой прогресс.'));
+document.getElementById('closeApp').addEventListener('click', () => { if (tg?.initData) tg.close(); else showToast('В браузере приложение можно закрыть вместе с вкладкой.'); });
+tg?.BackButton?.onClick(() => { if (splashRunning) return; if (!modal.classList.contains('hidden')) closeModal(); else navigate('home'); });
+if (tg?.initData) tg.BackButton?.hide();
+document.querySelectorAll('.page').forEach(page => { page.inert = !page.classList.contains('active'); });
+showSplash();
 
-  setTimeout(() => {
-    splash.remove();
-  }, 950);
-
-}, 2500);
+})();
