@@ -56,6 +56,11 @@ function navigate(name) {
   next.classList.add('enter');
 
   currentPage = name;
+  document.querySelectorAll('.bottom-nav [data-go]').forEach(button => {
+    const selected = button.dataset.go === (name === 'profile' ? 'profile' : 'home');
+    if (selected) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  });
   document.querySelectorAll('.page').forEach(page => { page.inert = page.id !== name; });
   if (tg?.initData) { if (name === 'home') tg.BackButton?.hide(); else tg.BackButton?.show(); }
 
@@ -152,21 +157,40 @@ expandedCard.removeAttribute('id');
 expandedCard.setAttribute('aria-label', 'Свернуть карту профиля');
 document.getElementById('expandedCardSlot').append(expandedCard);
 let cardClosing = false;
-function closeCard() {
+let cardMotion;
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function cardOriginTransform() {
+  const origin = memberCard.getBoundingClientRect();
+  const target = expandedCard.getBoundingClientRect();
+  return `translate(${origin.left - target.left}px, ${origin.top - target.top}px) scale(${origin.width / target.width}, ${origin.height / target.height})`;
+}
+async function closeCard() {
   if (!cardDialog.open || cardClosing) return;
   cardClosing = true;
+  cardMotion?.cancel();
   cardDialog.classList.add('closing');
-  const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  setTimeout(() => {
-    cardDialog.close();
-    cardDialog.classList.remove('closing');
-    cardClosing = false;
-  }, motionReduced ? 0 : 240);
+  if (!reducedMotion()) {
+    cardMotion = expandedCard.animate([
+      { transform: 'none', borderRadius: '30px' },
+      { transform: cardOriginTransform(), borderRadius: '25px' }
+    ], { duration: 340, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+    try { await cardMotion.finished; } catch (_) {}
+  }
+  cardDialog.close();
+  cardMotion?.cancel();
+  cardDialog.classList.remove('closing');
+  cardClosing = false;
 }
 memberCard.addEventListener('click', () => {
   cardDialog.showModal();
   memberCard.setAttribute('aria-expanded', 'true');
   document.body.classList.add('card-open');
+  if (!reducedMotion()) {
+    cardMotion = expandedCard.animate([
+      { transform: cardOriginTransform(), borderRadius: '25px' },
+      { transform: 'none', borderRadius: '30px' }
+    ], { duration: 520, easing: 'cubic-bezier(.16,1,.3,1)' });
+  }
 });
 cardDialog.addEventListener('close', () => {
   memberCard.setAttribute('aria-expanded', 'false');
