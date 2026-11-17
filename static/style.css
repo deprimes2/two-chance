@@ -627,3 +627,42 @@ body::before { background:radial-gradient(ellipse at 70% 10%,#ff000008,transpare
 #application .cards .primary,#application .cards .secondary { min-height:46px; padding:10px 9px; gap:5px; font-size:10px; border-radius:13px; }
 #application .cards .button-arrow { width:16px; height:16px; }
 @media(max-width:320px) { #application .cards { gap:8px; } #application .cards .feature-card { padding:17px 10px 12px; } #application .cards .card-icon { width:26px; height:28px; font-size:18px; } #application .cards .free-pill { font-size:5px; padding:5px; } #application .cards .primary,#application .cards .secondary { padding:10px 6px; gap:3px; font-size:9px; } #application .cards .button-arrow { width:12px; height:12px; } }
+
+/* Keep the dock outside the scroll area; lift the loading crystal. */
+html,body { height:100%; }
+body { overflow:hidden; }
+#application { display:flex; flex-direction:column; height:100dvh; height:var(--tg-viewport-height,100dvh); min-height:0; padding:0; overflow:hidden; }
+#application main { flex:1; min-height:0; width:100%; padding-bottom:22px; overflow-y:auto; overflow-x:hidden; overscroll-behavior-y:contain; scrollbar-width:none; scroll-padding:20px 0; -webkit-overflow-scrolling:touch; }
+#application main::-webkit-scrollbar { display:none; }
+.bottom-nav { position:relative; inset:auto; flex-shrink:0; width:calc(100% - 28px); margin:8px auto calc(10px + env(safe-area-inset-bottom,0px)); }
+#application .home-nav { height:208px; margin-top:5px; }
+#application .intro { padding-top:5px; padding-bottom:24px; }
+#application .intro h1 { font-size:clamp(26px,7.2vw,35px); }
+#application .hero-signature { margin-top:19px; }
+#application .cards .card-top { margin-bottom:16px; }
+#application .cards .eyebrow { margin-bottom:9px; }
+#application .cards .feature-card p { margin:14px 0 18px; }
+.splash { display:flex; align-items:flex-start; justify-content:center; height:100dvh; height:var(--tg-viewport-height,100dvh); padding:0; }
+.splash-content { display:flex; flex-direction:column; align-items:center; width:100%; margin-top:clamp(24px,calc(30dvh - 100px),160px); }
+.splash-content .brand-symbol { width:168px; height:210px; padding:0; }
+.splash-content .crystal-object { width:168px; height:210px; animation:ruby-float 8s ease-in-out infinite; filter:drop-shadow(0 8px 20px #ff000035); }
+.splash-content .loader { margin:26px 0 0; height:2px; width:72px; border-radius:2px; background:#ffffff0b; }
+.splash-content .loader::after { background:linear-gradient(90deg,#9c1414,#ff4545); }
+
+/* Fine satin edges and engraved lettering, without a heavy outline. */
+.member-card { border-color:#9b9da345; background:radial-gradient(ellipse at var(--light-x,20%) var(--light-y,-15%),#d1d4db18,transparent 62%),repeating-linear-gradient(112deg,#ffffff01 0px,#ffffff01 1px,transparent 1px,transparent 3px),linear-gradient(125deg,#1f2124,#101113 53%,#181a1d); box-shadow:inset 0 1px 1px #f0f2f53b,inset 0 -1px 1px #000c,inset 1px 0 #ffffff07,0 14px 30px #0008; }
+.member-card-top strong { color:#b4b7bf; font-weight:600; }
+.card-edition { color:#a0a3ab; border-left:1px solid #acb0b977; padding-left:8px; }
+.card-emboss { top:22%; right:9%; color:#141518; -webkit-text-stroke:.5px #50535a; text-shadow:0 1px 1px #a8aeb32b,-1px -1px 1px #000,2px 3px 3px #0009; }
+.member-card-number { color:#d6d9df; text-shadow:0 1px 2px #000; letter-spacing:.12em; }
+.card-chip { background:linear-gradient(135deg,#62666c,#33373c 35%,#44494f 65%,#292c31); border-color:#8b90974f; box-shadow:inset 0 1px #b5bac230,0 2px 3px #0008; }
+.member-card-label { border-top-color:#d5d9e512; color:#858a93; }
+.member-card-bottom small { color:#858990; }
+.member-card-owner,.card-expiry strong { color:#b8bdc5; }
+.member-card-label>span { display:grid; place-items:center; width:16px; height:16px; border:1px solid #dce0ef1c; border-radius:50%; color:#c4c8d1; font-size:11px; line-height:1; }
+@media(max-width:320px) { #application .home-nav { height:190px; } .member-card-number { letter-spacing:.06em; } }
+@media(max-height:600px) { .splash-content { margin-top:clamp(18px,calc(27dvh - 78px),100px); } .splash-content .brand-symbol,.splash-content .crystal-object { width:136px; height:170px; } }
+@media(prefers-reduced-motion:reduce) { .splash-content .crystal-object { animation:none; } }
+.card-emboss { top:18%; font-size:clamp(52px,16vw,82px); }
+.card-dialog .card-emboss { font-size:clamp(52px,16vw,140px); }
+#application #topUpBtn>span { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:#292e3b0b; }
