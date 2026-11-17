@@ -74,7 +74,7 @@ function navigate(name) {
   document.querySelectorAll('.page').forEach(page => { page.inert = page.id !== name; });
   if (tg?.initData) { if (name === 'home') tg.BackButton?.hide(); else tg.BackButton?.show(); }
 
-  window.scrollTo({
+  document.querySelector('#application main').scrollTo({
     top: 0,
     behavior: !preferences.motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
   });
