@@ -41,7 +41,7 @@ document.addEventListener('click', e => {
 let currentPage = 'home';
 
 function navigate(name) {
-  if (name === currentPage || !['home','knowledge','reader'].includes(name)) return;
+  if (name === currentPage || !['home','knowledge','reader','profile'].includes(name)) return;
 
   const old = document.getElementById(currentPage);
   const next = document.getElementById(name);
@@ -127,6 +127,66 @@ document.getElementById('buyBtn').addEventListener('click', () => {
     'Оплата скоро появится. Мы уже работаем над этим!'
   );
 });
+
+/* ПРОФИЛЬ: декоративная карта, без финансовых данных. */
+const memberCard = document.getElementById('memberCard');
+const cardDialog = document.getElementById('cardDialog');
+const cardClose = document.getElementById('cardClose');
+const profileUser = tg?.initDataUnsafe?.user;
+// initDataUnsafe is used only for presentation, never for payment authorization.
+const displayName = [profileUser?.first_name, profileUser?.last_name].filter(Boolean).join(' ') || 'Участник Two Chance';
+document.getElementById('profileName').textContent = displayName;
+memberCard.querySelector('.member-card-owner').textContent = displayName;
+const cardKey = `two-chance:decorative-card:v1:${profileUser?.id || 'guest'}`;
+let cardNumber;
+try { cardNumber = localStorage.getItem(cardKey); } catch (_) {}
+if (!/^2222(?: \d{4}){3}$/.test(cardNumber || '')) {
+  const digits = crypto.getRandomValues(new Uint32Array(3));
+  cardNumber = '2222 ' + Array.from(digits, n => String(n % 10000).padStart(4, '0')).join(' ');
+  try { localStorage.setItem(cardKey, cardNumber); } catch (_) {}
+}
+memberCard.querySelector('.member-card-number').textContent = cardNumber;
+const expandedCard = memberCard.cloneNode(true);
+expandedCard.removeAttribute('id');
+['aria-haspopup', 'aria-controls', 'aria-expanded'].forEach(attr => expandedCard.removeAttribute(attr));
+expandedCard.setAttribute('aria-label', 'Свернуть карту профиля');
+document.getElementById('expandedCardSlot').append(expandedCard);
+let cardClosing = false;
+function closeCard() {
+  if (!cardDialog.open || cardClosing) return;
+  cardClosing = true;
+  cardDialog.classList.add('closing');
+  const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(() => {
+    cardDialog.close();
+    cardDialog.classList.remove('closing');
+    cardClosing = false;
+  }, motionReduced ? 0 : 240);
+}
+memberCard.addEventListener('click', () => {
+  cardDialog.showModal();
+  memberCard.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('card-open');
+});
+cardDialog.addEventListener('close', () => {
+  memberCard.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('card-open');
+  memberCard.focus();
+});
+cardDialog.addEventListener('cancel', event => { event.preventDefault(); closeCard(); });
+cardDialog.addEventListener('click', event => {
+  if (event.target === cardDialog || event.target.classList.contains('card-dialog-content')) closeCard();
+});
+cardClose.addEventListener('click', closeCard);
+expandedCard.addEventListener('click', closeCard);
+
+function requestTopUp() {
+  // Future integration point: call an authenticated server endpoint to create
+  // a provider checkout. Credit balance/subscription only from a verified webhook.
+  // The decorative card number must never be sent as payment credentials.
+  openInfo('Пополнение скоро появится', 'Приём платежей ещё не подключён. Когда он появится, здесь можно будет пополнить баланс и оплатить подписку. Сейчас деньги не списываются.');
+}
+document.getElementById('topUpBtn').addEventListener('click', requestTopUp);
 
 /* КНИГА TWO CHANCE */
 
@@ -409,7 +469,7 @@ function showSplash() {
     splashRunning = false;
   }, 1800);
 }
-tg?.BackButton?.onClick(() => { if (splashRunning) return; if (!modal.classList.contains('hidden')) closeModal(); else navigate('home'); });
+tg?.BackButton?.onClick(() => { if (splashRunning) return; if (cardDialog.open) closeCard(); else if (!modal.classList.contains('hidden')) closeModal(); else navigate('home'); });
 if (tg?.initData) tg.BackButton?.hide();
 document.querySelectorAll('.page').forEach(page => { page.inert = !page.classList.contains('active'); });
 showSplash();
