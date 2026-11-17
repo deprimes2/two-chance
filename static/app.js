@@ -3,6 +3,14 @@
 'use strict';
 
 const tg = window.Telegram?.WebApp;
+const preferenceKey = `two-chance:preferences:${tg?.initDataUnsafe?.user?.id || 'guest'}`;
+let preferences = { motion: true, haptic: true };
+try {
+  const stored = JSON.parse(localStorage.getItem(preferenceKey));
+  if (typeof stored?.motion === 'boolean') preferences.motion = stored.motion;
+  if (typeof stored?.haptic === 'boolean') preferences.haptic = stored.haptic;
+} catch (_) {}
+document.documentElement.dataset.motion = preferences.motion ? 'on' : 'off';
 const themeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 function applyTheme() {
@@ -25,6 +33,7 @@ tg?.ready?.();
 tg?.expand?.();
 
 function haptic(type = 'light') {
+  if (!preferences.haptic) return;
   try {
     tg?.HapticFeedback?.impactOccurred(type);
   } catch (_) {}
@@ -66,7 +75,7 @@ function navigate(name) {
 
   window.scrollTo({
     top: 0,
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
+    behavior: !preferences.motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
   });
 
   if (name === 'reader') {
@@ -141,6 +150,29 @@ const profileUser = tg?.initDataUnsafe?.user;
 // initDataUnsafe is used only for presentation, never for payment authorization.
 const displayName = [profileUser?.first_name, profileUser?.last_name].filter(Boolean).join(' ') || 'Участник Two Chance';
 document.getElementById('profileName').textContent = displayName;
+document.getElementById('profileAvatar').textContent = profileUser ? Array.from(displayName).slice(0, 2).join('').toUpperCase() : 'TC';
+const focusKey = `two-chance:daily-focus:${profileUser?.id || 'guest'}`;
+const dailyFocus = document.getElementById('dailyFocus');
+try { dailyFocus.value = localStorage.getItem(focusKey) || ''; } catch (_) {}
+dailyFocus.addEventListener('input', () => {
+  try {
+    localStorage.setItem(focusKey, dailyFocus.value);
+    document.getElementById('focusStatus').textContent = 'Сохранено на этом устройстве';
+  } catch (_) {
+    document.getElementById('focusStatus').textContent = 'Не удалось сохранить заметку на устройстве';
+  }
+});
+for (const [id, key] of [['motionSetting', 'motion'], ['hapticSetting', 'haptic']]) {
+  const input = document.getElementById(id);
+  input.checked = preferences[key];
+  input.addEventListener('change', () => {
+    preferences[key] = input.checked;
+    document.documentElement.dataset.motion = preferences.motion ? 'on' : 'off';
+    try { localStorage.setItem(preferenceKey, JSON.stringify(preferences)); } catch (_) {
+      showToast('Настройка действует до закрытия приложения');
+    }
+  });
+}
 memberCard.querySelector('.member-card-owner').textContent = displayName;
 const cardKey = `two-chance:decorative-card:v1:${profileUser?.id || 'guest'}`;
 let cardNumber;
@@ -158,7 +190,7 @@ expandedCard.setAttribute('aria-label', 'Свернуть карту профи�
 document.getElementById('expandedCardSlot').append(expandedCard);
 let cardClosing = false;
 let cardMotion;
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion = () => !preferences.motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function cardOriginTransform() {
   const origin = memberCard.getBoundingClientRect();
   const target = expandedCard.getBoundingClientRect();
@@ -342,6 +374,8 @@ const readerSheet = document.getElementById('readerSheet');
 
 function renderChapter() {
   const chapter = bookChapters[readerIndex];
+  document.getElementById('profileChapter').textContent = `Глава ${readerIndex + 1} из ${bookChapters.length}`;
+  document.getElementById('profileProgress').style.width = `${(readerIndex + 1) / bookChapters.length * 100}%`;
 
   readerContent.replaceChildren();
 
