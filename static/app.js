@@ -199,13 +199,15 @@ function cardOriginTransform() {
 async function closeCard() {
   if (!cardDialog.open || cardClosing) return;
   cardClosing = true;
+  // Reverse from the current frame, even when closing during the reveal.
+  const currentTransform = getComputedStyle(expandedCard).transform;
   cardMotion?.cancel();
   cardDialog.classList.add('closing');
   if (!reducedMotion()) {
     cardMotion = expandedCard.animate([
-      { transform: 'none', borderRadius: '30px' },
+      { transform: currentTransform, borderRadius: '30px' },
       { transform: cardOriginTransform(), borderRadius: '25px' }
-    ], { duration: 340, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+    ], { duration: 420, easing: 'cubic-bezier(.32,0,.2,1)', fill: 'forwards' });
     try { await cardMotion.finished; } catch (_) {}
   }
   cardDialog.close();
@@ -220,8 +222,9 @@ memberCard.addEventListener('click', () => {
   if (!reducedMotion()) {
     cardMotion = expandedCard.animate([
       { transform: cardOriginTransform(), borderRadius: '25px' },
+      { transform: 'translateY(-3px) scale(1.008)', borderRadius: '30px', offset: .78 },
       { transform: 'none', borderRadius: '30px' }
-    ], { duration: 520, easing: 'cubic-bezier(.16,1,.3,1)' });
+    ], { duration: 680, easing: 'cubic-bezier(.2,.85,.25,1)' });
   }
 });
 cardDialog.addEventListener('close', () => {
@@ -235,6 +238,18 @@ cardDialog.addEventListener('click', event => {
 });
 cardClose.addEventListener('click', closeCard);
 expandedCard.addEventListener('click', closeCard);
+for (const card of [memberCard, expandedCard]) {
+  card.addEventListener('pointermove', event => {
+    if (event.pointerType !== 'mouse' || reducedMotion()) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--light-x', `${(event.clientX - rect.left) / rect.width * 100}%`);
+    card.style.setProperty('--light-y', `${(event.clientY - rect.top) / rect.height * 100}%`);
+  });
+  card.addEventListener('pointerleave', () => {
+    card.style.removeProperty('--light-x');
+    card.style.removeProperty('--light-y');
+  });
+}
 
 function requestTopUp() {
   // Future integration point: call an authenticated server endpoint to create
