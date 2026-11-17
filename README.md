@@ -63,3 +63,21 @@ Telegram-бот + Mini App. Весь пользовательский интер
 - Payment placeholder: `Перейти к оплате` shows a Russian toast and does not initiate a charge. Integration point is marked in `static/app.js`.
 - Telegram haptic feedback, Telegram/system dark mode, screen transitions, shimmer splash, PDF skeleton loader, focus-visible styling and responsive layout.
 - **Complete free/free-tier deployment tutorial (English):** [`DEPLOY_EN.md`](DEPLOY_EN.md).
+
+## Профиль и карта участника
+
+Кнопка «Профиль» на главной открывает персональный раздел. Декоративная карта
+получает случайный номер и дату `22/02/2222`; номер хранится в localStorage
+отдельно для каждого Telegram ID (вне Telegram — гостевой профиль). На другом
+устройстве или после очистки хранилища номер изменится. Имя Telegram используется
+только для отображения, не для авторизации. Нажатие раскрывает карту поверх всего
+экрана; повторное нажатие, «Закрыть», Escape или Telegram Back сворачивают её.
+
+Кнопка «Пополнить» пока показывает информационное окно, не списывает деньги
+и не меняет баланс. Точка подключения платежей — `requestTopUp()` в
+`static/app.js`. Для реальных платежей потребуется серверный endpoint создания
+платежа с проверкой Telegram initData, платёжный провайдер и проверенный webhook.
+Цена и получатель определяются сервером; баланс/подписка обновляются только после
+подтверждения провайдера с защитой от повторной обработки. Декоративный номер
+не является платёжными реквизитами. Для цифрового контента внутри Telegram
+при выборе провайдера нужно учитывать оплату через Telegram Stars.
