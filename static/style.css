@@ -529,3 +529,41 @@ body.card-open #memberCard { visibility:hidden; }
 @keyframes metal-sheen { 0%,35% { transform:translateX(-32%); opacity:0; } 45% { opacity:1; } 70% { transform:translateX(32%); opacity:0; } 100% { transform:translateX(32%); opacity:0; } }
 @keyframes wallet-controls-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 @media(prefers-reduced-motion:reduce) { .member-card::before,.card-dialog[open]:not(.closing) .card-close,.card-dialog[open]:not(.closing) .wallet-hint { animation:none; } }
+
+/* Silver controls, pale-red crystal and matte black embossed card. */
+body::before { background:radial-gradient(ellipse at 50% 0,#e46d6d09,transparent 45%); }
+#application .intro h1 span { background:linear-gradient(110deg,#fff,#c5c5cc); background-clip:text; -webkit-background-clip:text; color:transparent; }
+#application .crystal-object { filter:drop-shadow(0 5px 16px #ff8b8b40); }
+#application .brand-symbol::before { border-color:#ffaaaa24; box-shadow:0 0 28px #ff9b9b14; }
+#application .home-nav::after { background:linear-gradient(90deg,transparent,#ffb0b047,transparent); }
+#application .cards { grid-template-columns:1fr; }
+#application .cards .feature-card { padding:28px; }
+#application .cards .feature-card h2 { font-size:32px; max-width:260px; }
+#application .cards .feature-card p { font-size:13px; max-width:300px; }
+#application .cards .primary { min-height:54px; padding:13px 17px; font-size:13px; }
+#application .cards .eyebrow { min-height:0; font-size:8px; }
+#application .feature-card { background:linear-gradient(140deg,#242427,#141416); }
+#application button.primary,#application button.secondary { color:#23252a; border:1px solid #fafaff65; background:linear-gradient(115deg,#f2f3f5 0%,#c4c6cd 40%,#e2e4e9 64%,#a8abb5 100%); box-shadow:inset 0 1px 1px #fff,inset 0 -1px 1px #686b7955,0 7px 18px #0004; text-shadow:0 1px #ffffff60; }
+#application button.primary:hover,#application button.secondary:hover { filter:brightness(1.06); }
+#application .primary span,#application .secondary span { background:#292e3b0b; box-shadow:inset 0 1px 2px #00000007; }
+.member-card { display:grid; grid-template-rows:auto 1fr auto auto auto; aspect-ratio:1.586; padding:clamp(17px,5vw,27px); border:1px solid #a4a4a43d; border-radius:25px; color:#bcbec1; background:radial-gradient(ellipse at var(--light-x,45%) var(--light-y,-10%),#80808019,transparent 65%),linear-gradient(120deg,#191a1b,#101112 47%,#1b1c1d); box-shadow:inset 0 1px 1px #dedede38,inset 1px 0 1px #ffffff08,inset 0 -2px 2px #000b,0 18px 32px #0009; }
+.member-card::before { background:linear-gradient(115deg,transparent 38%,#ffffff03 44%,#ffffff0a 50%,#ffffff03 56%,transparent 62%); }
+.member-card::after { content:none; }
+.member-card-top strong { color:#8e9093; text-shadow:0 1px #000; font-size:9px; letter-spacing:.18em; }
+.member-card-top strong>span { font-size:5px; margin-top:4px; color:#66696d; }
+.card-edition { color:#85888e; border-left-color:#73767b; font-size:6px; }
+.card-hardware,.card-dialog .card-hardware { height:auto; min-height:35px; margin:3px 0; }
+.card-chip { width:36px; height:28px; background:linear-gradient(135deg,#4e5052,#27292a 45%,#424446 75%,#252728); border-color:#67676766; box-shadow:inset 0 1px #a2a2a233,0 1px 2px #0009; }
+.card-chip::before { border-color:#0c0c0c99; box-shadow:0 1px #ffffff12; }
+.card-chip::after { background:linear-gradient(transparent 46%,#0a0a0aaa 47%,#0a0a0aaa 51%,transparent 52%); }
+.card-contactless { stroke:#65696c; width:17px; }
+.card-emboss { position:absolute; top:19%; right:9%; font-family:"Snell Roundhand","Brush Script MT","URW Chancery L",Georgia,serif; font-size:clamp(56px,18vw,88px); font-style:italic; font-weight:500; line-height:1.1; letter-spacing:-.08em; transform:rotate(-8deg); color:#151617; -webkit-text-stroke:.5px #383a3b; text-shadow:1px 1px 1px #66686a59,-1px -1px 1px #000,2px 3px 2px #0008; pointer-events:none; }
+.member-card-number { position:relative; font-size:clamp(16px,4.8vw,24px); color:#c1c3c7; letter-spacing:.1em; text-shadow:0 1px 1px #000; }
+.member-card-bottom { padding-top:10px; margin-top:0; }
+.member-card-owner,.card-expiry strong { color:#a1a3a7; }
+.member-card-bottom small { color:#696c70; }
+.member-card-label { margin-top:9px; padding-top:8px; border-top-color:#ffffff09; color:#6c7074; font-size:5px; }
+.member-card-label>span { color:#b5b7bd; }
+.card-dialog .card-emboss { font-size:clamp(56px,18vw,160px); }
+.card-dialog .card-chip { width:clamp(32px,8vw,52px); height:clamp(25px,6vw,40px); }
+@media(max-width:320px) { .member-card-top strong { font-size:7px; } .card-hardware { min-height:30px; } .member-card-bottom { padding-top:8px; } .card-emboss { font-size:52px; } .member-card-number { letter-spacing:.06em; } }
